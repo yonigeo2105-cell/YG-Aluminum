@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>יהונתן אלומיניום - Pro</title>
+    <title>יהונתן אלומיניום PRO</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #0d47a1; --primary-light: #42a5f5; --bg: #f0f4f8; --card: #ffffff; --text-dark: #1a202c; --whatsapp: #25D366; --border: #cbd5e0; --input-bg: #f7fafc; --danger: #e53e3e; }
@@ -31,22 +31,14 @@
         .result-body { padding: 20px; }
         .price-line { display: flex; justify-content: space-between; margin-bottom: 10px; }
         .total-line { font-size: 24px; font-weight: 800; color: var(--primary); border-top: 2px dashed #cbd5e0; padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; }
-        
-        /* עיצוב המודל והקנבס */
         .modal-overlay { position: fixed; top: 0; right: 0; left: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(5px); }
         .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
         .preview-text { background: #f7fafc; padding: 15px; border-radius: 10px; border: 1px solid #e2e8f0; white-space: pre-wrap; font-size: 13px; margin-bottom: 15px; line-height: 1.5; }
         .modal-btns { display: flex; gap: 10px; margin-top: 10px; }
         .btn-modal { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 700; font-size: 16px; }
         .btn-cancel { background: #edf2f7; } .btn-send { background: var(--whatsapp); color: white; }
-        
-        /* כפתור הורדת סקיצה */
-        .btn-download-sketch {
-            background-color: #4a5568; color: white; padding: 8px 15px; 
-            border-radius: 8px; font-size: 13px; border: none; cursor: pointer;
-            margin-top: 10px; display: inline-flex; align-items: center; gap: 5px;
-        }
-        /* קנבס נסתר */
+        .btn-download-sketch { background-color: #2d3748; color: white; padding: 10px 15px; border-radius: 8px; font-size: 14px; border: none; cursor: pointer; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-download-sketch:active { transform: scale(0.98); }
         canvas { display: none; } 
     </style>
 </head>
@@ -105,7 +97,7 @@ function addItem() {
     itemDiv.id = `item-${itemCount}`;
     itemDiv.innerHTML = `
         <div class="card-header-row"><div class="card-title">פריט #${itemCount} <span class="min-charge-tag">מינימום 1 מ"ר</span></div>${itemCount > 1 ? `<button class="btn-delete" onclick="removeItem('${itemDiv.id}')">מחק</button>` : ''}</div>
-        <label>סוג מוצר:</label><select class="item-product" onchange="updateItemProfiles(this)"><option value="" disabled selected>-- בחר --</option><option value="window_slide">חלון הזזה</option><option value="window_hinge">חלון פתיחה (ציר)</option><option value="window_drykeep">חלון דריי-קיפ</option><option value="vitrine">ויטרינה</option><option value="shutter">תריס גלילה</option><option value="door">דלתות</option><option value="screen">רשתות</option><option value="pergola">פרגולות</option></select>
+        <label>סוג מוצר:</label><select class="item-product" onchange="updateItemProfiles(this)"><option value="" disabled selected>-- בחר --</option><option value="window_slide">חלון הזזה</option><option value="window_hinge">חלון פתיחה (ציר)</option><option value="window_drykeep">חלון דריי-קיפ</option><option value="vitrine">ויטרינה</option><option value="shutter">תריס גלילה</option><option value="door">דלתות</option><option value="screen">רשתות</option><option value="pergola">פרגולות/גדרות</option></select>
         
         <div class="wings-section" style="display:none; background:#fffbe6; padding:15px; border-radius:10px; margin-bottom:15px; border:1px solid #ffe58f;">
             <div class="row">
@@ -116,15 +108,26 @@ function addItem() {
 
         <label>דגם:</label><select class="item-profile"><option value="">בחר קודם מוצר...</option></select>
         <label style="margin-top:10px">גוון:</label><div class="color-tabs"><div class="tab active" onclick="switchItemColor(this, 'ral')">RAL</div><div class="tab" onclick="switchItemColor(this, 'klil')">קליל</div></div>
-        <div class="ral-section"><select class="item-color"><optgroup label="נפוצים"><option value="לבן (9010)">לבן (9010)</option><option value="שמנת (1013)">שמנת (1013)</option><option value="אפור אנטרציט (7016)">אפור אנטרציט (7016)</option><option value="שחור (9005)">שחור (9005)</option><option value="אפור כסוף (9006)">אפור כסוף (9006)</option></optgroup><optgroup label="נוספים"><option value="אפור בהיר (7035)">אפור בהיר (7035)</option><option value="אפור בטון (7023)">אפור בטון (7023)</option><option value="חום כהה (8019)">חום כהה (8019)</option><option value="חום שוקולד (8017)">חום שוקולד (8017)</option><option value="כחול (5010)">כחול (5010)</option><option value="ירוק (6005)">ירוק (6005)</option><option value="אדום (3000)">אדום (3000)</option><option value="אלומיניום טבעי">אלומיניום טבעי</option></optgroup></select></div>
-        <div class="klil-section" style="display:none"><select class="item-color-klil"><optgroup label="IRON"><option value="IRON 100 לבן">IRON 100 לבן</option><option value="IRON 101 שמנת">IRON 101 שמנת</option><option value="IRON 400 אפור">IRON 400 אפור</option><option value="IRON 420 שחור">IRON 420 שחור</option><option value="IRON 415 אפור אבן">IRON 415 אפור אבן</option></optgroup><optgroup label="FINE IRON"><option value="FINE IRON 9010">FINE IRON 9010</option><option value="FINE IRON 7016">FINE IRON 7016</option><option value="FINE IRON 9005">FINE IRON 9005</option></optgroup><optgroup label="אנודייז"><option value="אנודייז טבעי">אנודייז טבעי</option><option value="אנודייז ברונזה">אנודייז ברונזה</option><option value="אנודייז שמפניה">אנודייז שמפניה</option><option value="אנודייז שחור">אנודייז שחור</option></optgroup></select></div>
+        <div class="ral-section"><select class="item-color">
+            <optgroup label="לבנים ושמנת"><option value="לבן (9010)">לבן (9010)</option><option value="לבן מבריק (9016)">לבן מבריק (9016)</option><option value="שמנת (1013)">שמנת (1013)</option><option value="בז' (1015)">בז' בהיר (1015)</option></optgroup>
+            <optgroup label="אפורים"><option value="אפור 7035 (בהיר)">אפור 7035</option><option value="אפור 7000">אפור 7000</option><option value="אפור 7012">אפור 7012</option><option value="אפור 7015">אפור 7015</option><option value="אפור 7016 (אנטרציט)">אפור אנטרציט (7016)</option><option value="אפור 7021 (כהה)">אפור 7021</option><option value="אפור 7023 (בטון)">אפור בטון (7023)</option><option value="אפור 7024 (גרפיט)">אפור גרפיט (7024)</option><option value="אפור 7040">אפור 7040</option><option value="אפור 9006 (כסוף)">כסוף (9006)</option><option value="אפור 9007">אלומיניום כהה (9007)</option></optgroup>
+            <optgroup label="שחורים וחומים"><option value="שחור (9005)">שחור (9005)</option><option value="חום 8014">חום 8014</option><option value="חום 8017 (שוקולד)">חום שוקולד (8017)</option><option value="חום 8019 (כהה)">חום כהה (8019)</option><option value="חום 8011 (אגוז)">חום אגוז (8011)</option></optgroup>
+            <optgroup label="צבעוני"><option value="כחול (5010)">כחול (5010)</option><option value="ירוק (6005)">ירוק בקבוק (6005)</option><option value="אדום (3000)">אדום (3000)</option><option value="אלומיניום טבעי">אלומיניום טבעי</option></optgroup>
+        </select></div>
+        <div class="klil-section" style="display:none"><select class="item-color-klil">
+            <optgroup label="קליל קלאסיק/בייסיק"><option value="לבן קלאסיק">לבן קלאסיק</option><option value="שמנת קלאסיק">שמנת קלאסיק</option></optgroup>
+            <optgroup label="קליל אופיס"><option value="לבן אופיס">לבן אופיס</option><option value="שמנת אופיס">שמנת אופיס</option><option value="אפור אופיס">אפור אופיס</option><option value="שחור אופיס">שחור אופיס</option></optgroup>
+            <optgroup label="קליל IRON (מגורען)"><option value="IRON 100 לבן">IRON 100 לבן</option><option value="IRON 101 שמנת">IRON 101 שמנת</option><option value="IRON 400 אפור כהה">IRON 400 אפור כהה</option><option value="IRON 415 אפור אבן">IRON 415 אפור אבן</option><option value="IRON 420 שחור גרפיט">IRON 420 שחור גרפיט</option><option value="IRON 700 אפור בהיר">IRON 700 אפור בהיר</option><option value="IRON 819 חום">IRON 819 חום</option></optgroup>
+            <optgroup label="קליל FINE IRON (חלק)"><option value="FINE IRON 9010">FINE IRON 9010 (לבן)</option><option value="FINE IRON 9005">FINE IRON 9005 (שחור)</option><option value="FINE IRON 7016">FINE IRON 7016 (אפור)</option><option value="FINE IRON 1013">FINE IRON 1013 (שמנת)</option></optgroup>
+            <optgroup label="קליל אנודייז"><option value="אנודייז טבעי (מט)">אנודייז טבעי (מט)</option><option value="אנודייז ברונזה">אנודייז ברונזה</option><option value="אנודייז שמפניה">אנודייז שמפניה</option><option value="אנודייז שחור">אנודייז שחור</option></optgroup>
+        </select></div>
         
         <label style="margin-top:10px">זכוכית:</label><div class="row"><div style="flex:2"><select class="item-glass-type"><option value="ללא זכוכית">ללא זכוכית</option><optgroup label="טריפלקס"><option value="טריפלקס 3+3">טריפלקס 3+3</option><option value="טריפלקס 3+4">טריפלקס 3+4</option><option value="טריפלקס 4+4">טריפלקס 4+4</option><option value="טריפלקס 4+5">טריפלקס 4+5</option><option value="טריפלקס 5+5">טריפלקס 5+5</option><option value="טריפלקס 5+6">טריפלקס 5+6</option><option value="טריפלקס 6+6">טריפלקס 6+6</option></optgroup><optgroup label="בידודית"><option value="בידודית 4-6-4">בידודית 4-6-4</option><option value="בידודית 4-9-4">בידודית 4-9-4</option><option value="בידודית 6-12-6">בידודית 6-12-6</option><option value="בידודית צלון">בידודית צלון</option></optgroup><optgroup label="מחוסמת"><option value="מחוסמת 6">מחוסמת 6 מ''מ</option><option value="מחוסמת 8">מחוסמת 8 מ''מ</option><option value="מחוסמת 10">מחוסמת 10 מ''מ</option></optgroup></select></div><div style="flex:1"><select class="item-glass-finish"><option value="שקוף">שקוף</option><option value="חלבי">חלבי</option><option value="אנטי-סאן">אנטי-סאן</option><option value="צ'ינצ'ילה">צ'ינצ'ילה</option><option value="סבתא">סבתא</option><option value="גרניט">גרניט</option></select></div></div>
         <div class="row" style="margin-top:15px"><div><label>רוחב (ס"מ):</label><input type="number" class="item-width" placeholder="150"></div><div><label>גובה (ס"מ):</label><input type="number" class="item-height" placeholder="200"></div></div>
         <label style="color:var(--primary)">מחיר למ"ר (לפני מע"מ):</label><input type="number" class="item-price" placeholder="₪">
         
         <button class="btn-download-sketch" onclick="generateAndDownloadSketch(this)">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
             הורד שרטוט אדריכלי
         </button>
     `;
@@ -223,7 +226,7 @@ function sendWhatsapp() {
     closePreview(); 
 }
 
-// --- מנוע הציור האדריכלי החדש להורדה ---
+// --- מנוע שרטוט אדריכלי מתקדם (PRO) ---
 function generateAndDownloadSketch(btn) {
     const card = btn.closest('.item-card');
     const wVal = parseFloat(card.querySelector('.item-width').value) || 100;
@@ -232,8 +235,9 @@ function generateAndDownloadSketch(btn) {
     const type = typeSelect.value;
     const typeText = typeSelect.options[typeSelect.selectedIndex].text;
     const profile = card.querySelector('.item-profile').value;
+    const client = document.getElementById('clientName').value || "";
     
-    // בדיקת כנפיים ומפגש
+    // פרמטרים
     let wings = 1;
     let mifgash = "";
     const wingsSec = card.querySelector('.wings-section');
@@ -242,134 +246,182 @@ function generateAndDownloadSketch(btn) {
         mifgash = card.querySelector('.item-mifgash').value;
     }
 
-    // יצירת קנבס זמני ברזולוציה גבוהה
+    // קנבס ברזולוציה גבוהה
     const canvas = document.createElement('canvas');
-    canvas.width = 1200; // רזולוציה גבוהה להדפסה
-    canvas.height = 800;
+    canvas.width = 1200; canvas.height = 900;
     const ctx = canvas.getContext('2d');
 
-    // רקע לבן
+    // רקע
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // הגדרות ציור
-    ctx.strokeStyle = "#333";
-    ctx.lineWidth = 5;
-    ctx.font = "bold 30px Arial";
-    ctx.fillStyle = "#333";
-
-    // כותרת
+    // לוגו/כותרת
+    ctx.fillStyle = "#0d47a1";
+    ctx.font = "bold 40px Arial";
     ctx.textAlign = "center";
-    ctx.fillText(`יהונתן אלומיניום | ${typeText}`, canvas.width/2, 50);
+    ctx.fillText("יהונתן אלומיניום", canvas.width/2, 60);
+    ctx.fillStyle = "#333";
     ctx.font = "24px Arial";
-    ctx.fillStyle = "#666";
-    ctx.fillText(profile, canvas.width/2, 90);
+    ctx.fillText(client ? `לקוח: ${client}` : "סקיצה לאישור", canvas.width/2, 100);
+    ctx.fillText(`${typeText} | ${profile}`, canvas.width/2, 140);
 
-    // שטח ציור (מרכז)
-    const margin = 150;
+    // אזור ציור
+    const margin = 180;
     const drawW = canvas.width - (margin * 2);
-    const drawH = canvas.height - (margin * 2);
+    const drawH = canvas.height - (margin * 2) - 50;
     const startX = margin;
-    const startY = margin;
+    const startY = 180;
 
-    // מסגרת חלון
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 8;
+    // מסגרת חלון ראשית
+    ctx.strokeStyle = "#222";
+    ctx.lineWidth = 6;
     ctx.strokeRect(startX, startY, drawW, drawH);
 
-    // לוגיקת ציור לפי סוג
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-
+    // לוגיקה גרפית
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#444";
+    
     if (type === 'window_slide' || type === 'vitrine') {
+        // מסגרת פנימית
+        ctx.strokeRect(startX + 10, startY + 10, drawW - 20, drawH - 20);
+        
         const wingW = drawW / wings;
         for (let i = 1; i < wings; i++) {
+            // עמודים אנכיים
+            ctx.beginPath();
             ctx.moveTo(startX + i * wingW, startY);
             ctx.lineTo(startX + i * wingW, startY + drawH);
+            ctx.stroke();
+            // סימון חפיפה
+            ctx.lineWidth = 1;
+            ctx.strokeRect(startX + i * wingW - 5, startY, 10, drawH);
+            ctx.lineWidth = 3;
         }
         
-        // חצים
+        // חיצים
         ctx.font = "50px Arial";
         ctx.fillStyle = "#0d47a1";
         const midY = startY + drawH/2;
-        if (mifgash === 'מפגש (מרכז)' && wings >= 2) {
-             ctx.fillText("→", startX + drawW/2 - 40, midY);
-             ctx.fillText("←", startX + drawW/2 + 40, midY);
+        if (mifgash.includes('מפגש') && wings >= 2) {
+             ctx.fillText("→", startX + drawW/2 - 50, midY);
+             ctx.fillText("←", startX + drawW/2 + 50, midY);
         } else {
-             ctx.fillText("←", startX + drawW/2 - 40, midY);
-             ctx.fillText("→", startX + drawW/2 + 40, midY);
+             ctx.fillText("← →", startX + drawW/2, midY);
         }
     }
     else if (type === 'window_hinge' || type === 'door') {
-        // משולש פתיחה
-        ctx.setLineDash([15, 10]); // קו מקווקו לסימון פתיחה
-        ctx.moveTo(startX, startY);
-        ctx.lineTo(startX + drawW, startY + drawH/2);
-        ctx.lineTo(startX, startY + drawH);
+        // משולש אדריכלי (קודקוד לידית)
+        ctx.strokeStyle = "#666";
+        ctx.setLineDash([20, 15]); 
+        ctx.beginPath();
+        // בסיס בציר (ימין), קודקוד בידית (שמאל)
+        ctx.moveTo(startX + drawW, startY); // ימין למעלה
+        ctx.lineTo(startX, startY + drawH/2); // שמאל אמצע (ידית)
+        ctx.lineTo(startX + drawW, startY + drawH); // ימין למטה
         ctx.stroke();
-        ctx.setLineDash([]); // איפוס
+        ctx.setLineDash([]);
         
         // ידית
-        ctx.fillStyle = "black";
-        ctx.fillRect(startX + 20, startY + drawH/2 - 20, 15, 60);
+        ctx.fillStyle = "#000";
+        ctx.fillRect(startX + 10, startY + drawH/2 - 25, 10, 50);
     }
     else if (type === 'window_drykeep') {
-        ctx.setLineDash([15, 10]);
-        ctx.moveTo(startX, startY + drawH);
+        // שני משולשים (דריי קיפ)
+        ctx.strokeStyle = "#666";
+        ctx.setLineDash([20, 15]);
+        
+        // 1. משולש פתיחה (קודקוד שמאלה)
+        ctx.beginPath();
+        ctx.moveTo(startX + drawW, startY);
+        ctx.lineTo(startX, startY + drawH/2);
+        ctx.lineTo(startX + drawW, startY + drawH);
+        ctx.stroke();
+        
+        // 2. משולש קיפ (קודקוד למעלה)
+        ctx.beginPath();
+        ctx.moveTo(startX, startY + drawH); 
         ctx.lineTo(startX + drawW/2, startY);
         ctx.lineTo(startX + drawW, startY + drawH);
         ctx.stroke();
+        
         ctx.setLineDash([]);
-        // ידית למעלה
-        ctx.fillStyle = "black";
-        ctx.fillRect(startX + drawW/2 - 10, startY + drawH - 60, 20, 40);
+        // ידית
+        ctx.fillStyle = "#000";
+        ctx.fillRect(startX + 15, startY + drawH/2 - 25, 10, 50);
+    }
+    else if (type === 'pergola') {
+        // ציור פרגולה (קורות)
+        ctx.fillStyle = "#eee";
+        ctx.fillRect(startX, startY, drawW, 40); // קורה ראשית
+        ctx.strokeStyle = "#444";
+        ctx.strokeRect(startX, startY, drawW, 40);
+        
+        // רפפות/שלבים
+        for (let i = 20; i < drawW; i+=60) {
+            ctx.fillStyle = "#ccc";
+            ctx.fillRect(startX + i, startY, 20, drawH);
+            ctx.strokeRect(startX + i, startY, 20, drawH);
+        }
+    }
+    else if (type.includes('screen') || type.includes('pergola')) { 
+        // גדר/רשת - פסים לרוחב
+        for (let i = 40; i < drawH; i+=40) {
+            ctx.beginPath();
+            ctx.moveTo(startX, startY + i);
+            ctx.lineTo(startX + drawW, startY + i);
+            ctx.stroke();
+        }
     }
     else if (type === 'shutter') {
         for (let i = 40; i < drawH; i+=40) {
+            ctx.beginPath();
             ctx.moveTo(startX, startY + i);
             ctx.lineTo(startX + drawW, startY + i);
+            ctx.stroke();
         }
     }
-    ctx.stroke();
 
-    // --- מידות אדריכליות (קווי מידה) ---
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "#0000aa"; // כחול לקווים
-    ctx.fillStyle = "#0000aa"; // כחול לטקסט
+    // --- מידות חיצוניות (אדריכלי) ---
+    const dimDist = 60;
+    ctx.strokeStyle = "#0000aa"; 
+    ctx.fillStyle = "#0000aa";
     ctx.font = "bold 36px Arial";
+    ctx.lineWidth = 2;
 
-    // קו מידה רוחב (למטה)
-    const dimY = startY + drawH + 50;
+    // קו רוחב (למטה)
     ctx.beginPath();
-    ctx.moveTo(startX, dimY);
-    ctx.lineTo(startX + drawW, dimY);
-    // קווים תוחמים קטנים
-    ctx.moveTo(startX, dimY - 10); ctx.lineTo(startX, dimY + 10);
-    ctx.moveTo(startX + drawW, dimY - 10); ctx.lineTo(startX + drawW, dimY + 10);
+    ctx.moveTo(startX, startY + drawH + dimDist);
+    ctx.lineTo(startX + drawW, startY + drawH + dimDist);
     ctx.stroke();
-    ctx.fillText(`${wVal} ס"מ`, startX + drawW/2, dimY + 40);
-
-    // קו מידה גובה (בצד ימין)
-    const dimX = startX + drawW + 50;
+    // גובלים
     ctx.beginPath();
-    ctx.moveTo(dimX, startY);
-    ctx.lineTo(dimX, startY + drawH);
-    // קווים תוחמים קטנים
-    ctx.moveTo(dimX - 10, startY); ctx.lineTo(dimX + 10, startY);
-    ctx.moveTo(dimX - 10, startY + drawH); ctx.lineTo(dimX + 10, startY + drawH);
+    ctx.moveTo(startX, startY + drawH + dimDist - 15); ctx.lineTo(startX, startY + drawH + dimDist + 15);
+    ctx.moveTo(startX + drawW, startY + drawH + dimDist - 15); ctx.lineTo(startX + drawW, startY + drawH + dimDist + 15);
+    ctx.stroke();
+    ctx.fillText(`${wVal}`, startX + drawW/2, startY + drawH + dimDist + 50);
+
+    // קו גובה (ימין)
+    ctx.beginPath();
+    ctx.moveTo(startX + drawW + dimDist, startY);
+    ctx.lineTo(startX + drawW + dimDist, startY + drawH);
+    ctx.stroke();
+    // גובלים
+    ctx.beginPath();
+    ctx.moveTo(startX + drawW + dimDist - 15, startY); ctx.lineTo(startX + drawW + dimDist + 15, startY);
+    ctx.moveTo(startX + drawW + dimDist - 15, startY + drawH); ctx.lineTo(startX + drawW + dimDist + 15, startY + drawH);
     ctx.stroke();
     
-    // טקסט גובה (מסובב)
+    // טקסט גובה (מאונך)
     ctx.save();
-    ctx.translate(dimX + 40, startY + drawH/2);
+    ctx.translate(startX + drawW + dimDist + 50, startY + drawH/2);
     ctx.rotate(-Math.PI/2);
     ctx.textAlign = "center";
-    ctx.fillText(`${hVal} ס"מ`, 0, 0);
+    ctx.fillText(`${hVal}`, 0, 0);
     ctx.restore();
 
     // הורדה
     const link = document.createElement('a');
-    link.download = `Skitza-Item-${Math.floor(Math.random()*1000)}.png`;
+    link.download = `Sketch_${typeText}_${wVal}x${hVal}.png`;
     link.href = canvas.toDataURL();
     link.click();
 }
