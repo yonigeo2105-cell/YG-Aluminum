@@ -426,15 +426,33 @@
                 <option value="pergola">פרגולות/גדרות</option>
             </select>
 
-            <div class="wings-section" style="display:none; background:#e6fffa; padding:10px; border-radius:10px; margin-bottom:15px; border:1px solid #b2f5ea;">
-                <label style="color:#2c7a7b;">מספר כנפיים:</label>
-                <select class="item-wings">
-                    <option value="2 כנפיים">2 כנפיים (רגיל)</option>
-                    <option value="3 כנפיים">3 כנפיים</option>
-                    <option value="4 כנפיים">4 כנפיים (פתיחה מהאמצע)</option>
-                    <option value="1 כנף (כיס)">1 כנף (לכיס)</option>
-                    <option value="6 כנפיים">6 כנפיים (3 נתיבים)</option>
-                </select>
+            <div class="wings-section" style="display:none; background:#fffbe6; padding:15px; border-radius:10px; margin-bottom:15px; border:1px solid #ffe58f;">
+                <div class="row">
+                    <div style="flex:1;">
+                        <label style="color:#d48806;">מספר כנפיים:</label>
+                        <select class="item-wings" style="border-color:#d48806;">
+                            <option value="1">1</option>
+                            <option value="2" selected>2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+                    <div style="flex:1;">
+                        <label style="color:#d48806;">סוג סגירה:</label>
+                        <select class="item-mifgash" style="border-color:#d48806;">
+                            <option value="לא מפגש">ללא מפגש (רגיל)</option>
+                            <option value="מפגש">מפגש (סגירה באמצע)</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <label>דגם/פרופיל:</label>
@@ -461,6 +479,7 @@
                         <option value="שחור (9005)">שחור עמוק (9005)</option>
                         <option value="אפור בהיר (7035)">אפור בהיר (7035)</option>
                         <option value="אפור בטון (7023)">אפור בטון (7023)</option>
+                        <option value="אפור גרפיט (7024)">אפור גרפיט (7024)</option>
                     </optgroup>
                     <optgroup label="חומים">
                         <option value="חום כהה (8019)">חום כהה (8019)</option>
@@ -556,7 +575,7 @@
         const wingsSection = card.querySelector('.wings-section');
         const product = selectElement.value;
         
-        // לוגיקת הצגת כנפיים
+        // כאן הקסם קורה: הצגת שדה הכנפיים רק בהזזה/ויטרינה
         if (product === 'window_slide' || product === 'vitrine') {
             wingsSection.style.display = 'block';
         } else {
@@ -654,16 +673,19 @@
             const type = prod.options[prod.selectedIndex]?.text || "-";
             const profile = card.querySelector('.item-profile').value || "-";
             
-            // בדיקת כנפיים
-            let wingsText = "";
+            // בדיקת כנפיים ומפגש
+            let wingsInfo = "";
             const wingsSection = card.querySelector('.wings-section');
             if (wingsSection.style.display !== 'none') {
-                wingsText = `\n   כנפיים: ${card.querySelector('.item-wings').value}`;
+                const wCount = card.querySelector('.item-wings').value;
+                const mifgash = card.querySelector('.item-mifgash').value;
+                wingsInfo = `\n   כנפיים: ${wCount} (${mifgash})`;
             }
 
             const cType = card.getAttribute('data-color-type') || 'ral';
             let color = cType === 'ral' ? card.querySelector('.item-color').value : card.querySelector('.item-color-klil').value;
 
+            // זכוכית
             const glassType = card.querySelector('.item-glass-type').value;
             const glassFinish = card.querySelector('.item-glass-finish').value;
             let glassString = glassType;
@@ -686,7 +708,7 @@
                 itemTotal = area * pricePerSqm;
             }
 
-            itemsText += `🔸 *פריט ${count}: ${type}*${wingsText}\n   מפרט: ${profile}\n   צבע: ${color}\n   זכוכית: ${glassString}\n   מידות (ס"מ): ${w_cm}x${h_cm} ${note}\n   מחיר יח': ${itemTotal.toLocaleString()} ₪ (לפני מע"מ)\n\n`;
+            itemsText += `🔸 *פריט ${count}: ${type}*${wingsInfo}\n   מפרט: ${profile}\n   צבע: ${color}\n   זכוכית: ${glassString}\n   מידות (ס"מ): ${w_cm}x${h_cm} ${note}\n   מחיר יח': ${itemTotal.toLocaleString()} ₪ (לפני מע"מ)\n\n`;
             count++;
         });
 
