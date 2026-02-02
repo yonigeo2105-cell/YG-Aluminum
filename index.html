@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0d47a1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>יהונתן אלומיניום</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0d47a1;
+            --primary-light: #42a5f5;
+            --bg: #f0f4f8;
+            --card: #ffffff;
+            --text-dark: #1a202c;
+            --text-light: #4a5568;
+            --whatsapp: #25D366;
+            --border: #cbd5e0;
+            --input-bg: #f7fafc;
+            --danger: #e53e3e;
+        }
+
+        body { 
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--bg); 
+            margin: 0; 
+            padding: 0; 
+            color: var(--text-dark);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%);
+            color: white;
+            padding: 30px 20px 40px;
+            text-align: center;
+            border-bottom-left-radius: 35px;
+            border-bottom-right-radius: 35px;
+            box-shadow: 0 10px 25px rgba(13, 71, 161, 0.25);
+            position: relative;
+            z-index: 10;
+        }
+        header h1 { margin: 0; font-size: 26px; font-weight: 800; }
+        header p { margin: 5px 0 0; font-size: 14px; opacity: 0.9; }
+
+        .container { 
+            padding: 0 20px; 
+            max-width: 650px; 
+            margin: -30px auto 0;
+            padding-bottom: 140px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            border: 1px solid white;
+        }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .min-charge-tag {
+            font-size: 12px;
+            background: #ebf8ff;
+            color: #2b6cb0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 5px;
+            display: none;
+        }
+
+        .btn-delete {
+            background: #fff5f5;
+            color: var(--danger);
+            border: 1px solid #fed7d7;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        label { 
+            font-weight: 600; 
+            display: block; 
+            margin-bottom: 6px; 
+            font-size: 14px; 
+            color: var(--text-dark);
+        }
+        
+        input, select { 
+            width: 100%; 
+            padding: 14px; 
+            border: 1px solid var(--border); 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--input-bg);
+            margin-bottom: 15px;
+            appearance: none;
+            -webkit-appearance: none;
+            color: var(--text-dark);
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary-light);
+            background-color: #fff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15);
+        }
+
+        .row { display: flex; gap: 12px; }
+        .row > div { flex: 1; }
+
+        .color-tabs {
+            display: flex;
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 9px;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: all 0.2s;
+        }
+        .tab.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .btn-add-item {
+            width: 100%;
+            background: white;
+            color: var(--primary);
+            border: 2px dashed var(--primary-light);
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.2s;
+        }
+        .btn-add-item:active { background: #e3f2fd; }
+
+        .extras-card {
+            border: 1px solid #bee3f8;
+            background: #ebf8ff;
+        }
+
+        .bottom-actions {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: white;
+            padding: 15px 20px 25px;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.1);
+            z-index: 100;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .btn-calc {
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, #1565c0 100%);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);
+        }
+
+        .result-box {
+            background: white;
+            border-radius: 20px;
+            border: 2px solid var(--primary-light);
+            margin-top: 25px;
+            display: none;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .result-header {
+            background: var(--primary-light);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 700;
+        }
+        .result-body { padding: 20px; }
+        .price-line { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 16px; }
+        .total-line { 
+            font-size: 24px; 
+            font-weight: 800; 
+            color: var(--primary); 
+            border-top: 2px dashed #cbd5e0; 
+            padding-top: 15px; 
+            margin-top: 15px; 
+            display: flex; 
+            justify-content: space-between; 
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; right: 0; left: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 25px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .preview-text {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            white-space: pre-wrap;
+            font-size: 14px;
+            overflow-y: auto;
+            flex: 1;
+            margin: 15px 0;
+            line-height: 1.5;
+        }
+        .modal-btns { display: flex; gap: 10px; }
+        .btn-modal { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 700; font-size: 16px; cursor:pointer;}
+        .btn-cancel { background: #edf2f7; color: var(--text-dark); }
+        .btn-send { background: var(--whatsapp); color: white; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.3s ease; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>יהונתן אלומיניום</h1>
+    <p>מערכת הצעות מחיר מתקדמת</p>
+</header>
+
+<div class="container">
+    
+    <div class="card">
+        <div class="card-title">👤 פרטי הלקוח</div>
+        <div class="row">
+            <div style="flex:2">
+                <label>שם הלקוח:</label>
+                <input type="text" id="clientName" placeholder="שם מלא">
+            </div>
+            <div style="flex:1">
+                <label>מס' הצעה:</label>
+                <input type="number" id="quoteNumber" style="font-weight:700; color:var(--primary); text-align:center;">
+            </div>
+        </div>
+    </div>
+
+    <div id="itemsContainer"></div>
+
+    <button class="btn-add-item" onclick="addItem()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
+        הוסף פריט נוסף
+    </button>
+
+    <div class="card extras-card">
+        <div class="card-title">🛠️ הובלה, התקנה ופירוק</div>
+        <label>עלות עבודה כוללת (לפני מע"מ):</label>
+        <input type="number" id="installationCost" placeholder="0 ₪" style="font-weight:bold;">
+        <label style="font-size:12px; color:#718096;">* השאר ריק אם המחיר כלול בפריטים</label>
+    </div>
+
+    <div class="result-box" id="resultBox">
+        <div class="result-header">סיכום כללי</div>
+        <div class="result-body">
+            <div class="price-line">
+                <span>סה"כ עבודות אלומיניום:</span>
+                <span id="itemsSubtotal">0 ₪</span>
+            </div>
+            <div class="price-line">
+                <span>עבודות התקנה/פירוק:</span>
+                <span id="installSubtotal">0 ₪</span>
+            </div>
+            <div class="price-line" style="border-top:1px solid #eee; padding-top:10px; font-weight:bold;">
+                <span>סה"כ לפני מע"מ:</span>
+                <span id="totalSub">0 ₪</span>
+            </div>
+            <div class="price-line">
+                <span>מע"מ (18%):</span>
+                <span id="totalVat">0 ₪</span>
+            </div>
+            <div class="total-line">
+                <span>לתשלום:</span>
+                <span id="totalFinal">0 ₪</span>
+            </div>
+            
+            <button class="btn-add-item" style="margin-top:20px; background:var(--whatsapp); color:white; border:none;" onclick="openPreview()">
+                שלח הצעת מחיר בוואטסאפ
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-actions">
+    <button class="btn-calc" onclick="calculateAll()">חשב סה"כ להצעה</button>
+</div>
+
+<div class="modal-overlay" id="previewModal">
+    <div class="modal-content">
+        <h3 style="margin:0; text-align:center; color:var(--primary)">תצוגה מקדימה</h3>
+        <div class="preview-text" id="previewText"></div>
+        <div class="modal-btns">
+            <button class="btn-modal btn-cancel" onclick="closePreview()">ערוך</button>
+            <button class="btn-modal btn-send" onclick="sendWhatsapp()">שלח!</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const profilesDB = {
+        "window_slide": [
+            "קליל 7000 (קלאסי)", "קליל 9000 (יוקרתי)", "קליל 9200 (פנורמי)", 
+            "קליל 1700 (בלגי)", "קליל 7300 (בלגי)", "קליל 2200 (אופיס)", 
+            "באוהאוס הזזה", "אקסטל 22"
+        ],
+        "window_hinge": [
+            "קליל 4300 (בלגי)", "קליל 4400 (קלאסי)", "קליל 4500 (סיסטם)", 
+            "קליל 5500 (באוהאוס)"
+        ],
+        "window_drykeep": [
+            "דריי-קיפ 4300 (בלגי)", "דריי-קיפ 4500 (קלאסי)", "דריי-קיפ 5500 (באוהאוס)", 
+            "דריי-קיפ אקסטל C10"
+        ],
+        "vitrine": [
+            "ויטרינה קליל 9000", "ויטרינה קליל 9200", "ויטרינה קליל 7300", 
+            "ויטרינה מינימל"
+        ],
+        "shutter": [
+            "שלב מוקצף", "שלב משוך (חזק)", "שלב אור", "שלב אור-קל (מיני)", 
+            "שלב משוך-על (מיגון)", "ארגז מונובלוק"
+        ],
+        "door": [
+            "דלת קליל 4300 (בלגי)", "דלת קליל 2000 (אופיס)", "דלת כניסה 4900", "דלת אינטרקום"
+        ],
+        "screen": ["רשת גלילה", "רשת הזזה", "רשת קבועה", "רשת שקופה", "רשת גרמנית"],
+        "pergola": ["פרגולה תלויה", "פרגולה עומדת", "רפפות הצללה", "גדר אלומיניום", "מסתור כביסה"]
+    };
+
+    let itemCount = 0;
+    let finalLink = "";
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const saved = localStorage.getItem('quoteCounter');
+        document.getElementById('quoteNumber').value = saved ? saved : 1;
+        addItem();
+    });
+
+    function addItem() {
+        itemCount++;
+        const container = document.getElementById('itemsContainer');
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'card fade-in item-card';
+        itemDiv.id = `item-${itemCount}`;
+        
+        itemDiv.innerHTML = `
+            <div class="card-header-row">
+                <div class="card-title">פריט #${itemCount} <span class="min-charge-tag" id="minTag-${itemCount}">מינימום 1 מ"ר</span></div>
+                ${itemCount > 1 ? `<button class="btn-delete" onclick="removeItem('${itemDiv.id}')">מחק</button>` : ''}
+            </div>
+
+            <label>סוג המוצר:</label>
+            <select class="item-product" onchange="updateItemProfiles(this)">
+                <option value="" disabled selected>-- בחר --</option>
+                <option value="window_slide">חלון הזזה</option>
+                <option value="window_hinge">חלון פתיחה (ציר)</option>
+                <option value="window_drykeep">חלון דריי-קיפ</option>
+                <option value="vitrine">ויטרינה</option>
+                <option value="shutter">תריס גלילה</option>
+                <option value="door">דלתות</option>
+                <option value="screen">רשתות</option>
+                <option value="pergola">פרגולות/גדרות</option>
+            </select>
+
+            <label>דגם/פרופיל:</label>
+            <select class="item-profile">
+                <option value="">בחר קודם מוצר...</option>
+            </select>
+
+            <label style="margin-top:10px">גוון (צבע):</label>
+            <div class="color-tabs">
+                <div class="tab active" onclick="switchItemColor(this, 'ral')">RAL</div>
+                <div class="tab" onclick="switchItemColor(this, 'klil')">קליל</div>
+            </div>
+            
+            <div class="ral-section">
+                <select class="item-color">
+                    <option value="לבן (9010)">לבן (9010)</option>
+                    <option value="שמנת (1013)">שמנת (1013)</option>
+                    <option value="אפור אנטרציט (7016)">אפור אנטרציט (7016)</option>
+                    <option value="שחור (9005)">שחור (9005)</option>
+                    <option value="אפור כסוף (9006)">אפור כסוף (9006)</option>
+                    <option value="חום (8019)">חום כהה (8019)</option>
+                    <option value="אפור בהיר (7035)">אפור בהיר (7035)</option>
+                </select>
+            </div>
+            <div class="klil-section" style="display:none;">
+                <select class="item-color-klil">
+                    <optgroup label="IRON">
+                        <option value="IRON 100 לבן">IRON 100 לבן</option>
+                        <option value="IRON 101 שמנת">IRON 101 שמנת</option>
+                        <option value="IRON 400 אפור">IRON 400 אפור</option>
+                        <option value="IRON 420 שחור">IRON 420 שחור</option>
+                    </optgroup>
+                    <optgroup label="אנודייז">
+                        <option value="אנודייז טבעי">אנודייז טבעי</option>
+                        <option value="אנודייז ברונזה">אנודייז ברונזה</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <label style="margin-top:10px">זכוכית:</label>
+            <select class="item-glass">
+                <option value="ללא">ללא זכוכית</option>
+                <optgroup label="טריפלקס">
+                    <option value="טריפלקס 3+3 שקוף">טריפלקס 3+3 שקוף</option>
+                    <option value="טריפלקס 3+3 חלבי">טריפלקס 3+3 חלבי</option>
+                    <option value="טריפלקס 4+4">טריפלקס 4+4</option>
+                    <option value="טריפלקס 5+5">טריפלקס 5+5</option>
+                    <option value="טריפלקס 6+6">טריפלקס 6+6</option>
+                    <option value="טריפלקס אנטי-סאן">טריפלקס אנטי-סאן</option>
+                </optgroup>
+                <optgroup label="בידודית">
+                    <option value="בידודית 4-6-4">בידודית 4-6-4</option>
+                    <option value="בידודית 6-12-6">בידודית 6-12-6</option>
+                    <option value="בידודית צלון">בידודית עם צלון</option>
+                </optgroup>
+            </select>
+
+            <div class="row" style="margin-top:15px">
+                <div><label>רוחב (ס"מ):</label><input type="number" class="item-width" placeholder="150"></div>
+                <div><label>גובה (ס"מ):</label><input type="number" class="item-height" placeholder="200"></div>
+            </div>
+            
+            <label style="color:var(--primary)">מחיר למ"ר (לפני מע"מ):</label>
+            <input type="number" class="item-price" placeholder="₪ למטר">
+        `;
+        container.appendChild(itemDiv);
+    }
+
+    function removeItem(id) { document.getElementById(id).remove(); }
+
+    function updateItemProfiles(selectElement) {
+        const card = selectElement.closest('.card');
+        const profileSelect = card.querySelector('.item-profile');
+        const product = selectElement.value;
+        profileSelect.innerHTML = "";
+        if (product && profilesDB[product]) {
+            profilesDB[product].forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p; opt.innerText = p; profileSelect.appendChild(opt);
+            });
+        } else {
+            profileSelect.innerHTML = '<option>אין פרופילים זמינים</option>';
+        }
+    }
+
+    function switchItemColor(tab, type) {
+        const card = tab.closest('.card');
+        card.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const ral = card.querySelector('.ral-section');
+        const klil = card.querySelector('.klil-section');
+        card.setAttribute('data-color-type', type);
+        if(type === 'ral') { ral.style.display = 'block'; klil.style.display = 'none'; }
+        else { ral.style.display = 'none'; klil.style.display = 'block'; }
+    }
+
+    function calculateAll() {
+        const items = document.querySelectorAll('.item-card');
+        let totalItemsPrice = 0;
+        let valid = true;
+
+        if(items.length === 0) { alert("אין פריטים לחישוב"); return; }
+
+        items.forEach(card => {
+            const w_cm = parseFloat(card.querySelector('.item-width').value);
+            const h_cm = parseFloat(card.querySelector('.item-height').value);
+            const p = parseFloat(card.querySelector('.item-price').value);
+
+            if(!w_cm || !h_cm || !p) {
+                card.style.border = "2px solid #fc8181";
+                valid = false;
+            } else {
+                card.style.border = "1px solid white";
+                
+                // המרה מס"מ למ"ר
+                let area = (w_cm * h_cm) / 10000;
+                let billableArea = area;
+                
+                // בדיקת מינימום 1 מטר
+                if (area < 1.0) {
+                    billableArea = 1.0;
+                    const minTag = card.querySelector('.min-charge-tag');
+                    if(minTag) minTag.style.display = 'inline-block';
+                } else {
+                    const minTag = card.querySelector('.min-charge-tag');
+                    if(minTag) minTag.style.display = 'none';
+                }
+
+                totalItemsPrice += (billableArea * p);
+            }
+        });
+
+        if(!valid) { alert("נא למלא את כל השדות החסרים"); return; }
+
+        const installCost = parseFloat(document.getElementById('installationCost').value) || 0;
+        const totalSub = totalItemsPrice + installCost;
+        const vat = totalSub * 0.18;
+        const totalFinal = totalSub + vat;
+
+        document.getElementById('itemsSubtotal').innerText = totalItemsPrice.toLocaleString() + " ₪";
+        document.getElementById('installSubtotal').innerText = installCost.toLocaleString() + " ₪";
+        document.getElementById('totalSub').innerText = totalSub.toLocaleString() + " ₪";
+        document.getElementById('totalVat').innerText = vat.toLocaleString() + " ₪";
+        document.getElementById('totalFinal').innerText = totalFinal.toLocaleString() + " ₪";
+
+        document.getElementById('resultBox').style.display = 'block';
+        setTimeout(() => document.querySelector('.bottom-actions').scrollIntoView(), 100);
+    }
+
+    function openPreview() {
+        if(document.getElementById('resultBox').style.display === 'none') {
+            alert("נא לחשב קודם"); return;
+        }
+
+        const quoteNum = document.getElementById('quoteNumber').value;
+        const client = document.getElementById('clientName').value || "לקוח יקר";
+        const items = document.querySelectorAll('.item-card');
+        const installCost = document.getElementById('installSubtotal').innerText;
+        
+        let itemsText = "";
+        let count = 1;
+
+        items.forEach(card => {
+            const prod = card.querySelector('.item-product');
+            const type = prod.options[prod.selectedIndex]?.text || "-";
+            const profile = card.querySelector('.item-profile').value || "-";
+            
+            const cType = card.getAttribute('data-color-type') || 'ral';
+            let color = cType === 'ral' ? card.querySelector('.item-color').value : card.querySelector('.item-color-klil').value;
+
+            const glass = card.querySelector('.item-glass').value;
+            const w_cm = parseFloat(card.querySelector('.item-width').value);
+            const h_cm = parseFloat(card.querySelector('.item-height').value);
+            const pricePerSqm = parseFloat(card.querySelector('.item-price').value);
+
+            let area = (w_cm * h_cm) / 10000;
+            let note = "";
+            let itemTotal = 0;
+            
+            if(area < 1.0) {
+                itemTotal = 1.0 * pricePerSqm;
+                note = "(לפי מינימום 1 מ\"ר)";
+            } else {
+                itemTotal = area * pricePerSqm;
+            }
+
+            itemsText += `🔸 *פריט ${count}: ${type}*\n   מפרט: ${profile}, ${color}, ${glass}\n   מידות (ס"מ): ${w_cm}x${h_cm} ${note}\n   מחיר יח': ${itemTotal.toLocaleString()} ₪ (לפני מע"מ)\n\n`;
+            count++;
+        });
+
+        const totalFinal = document.getElementById('totalFinal').innerText;
+        const totalSub = document.getElementById('totalSub').innerText;
+
+        const msg = `*יהונתן אלומיניום - הצעת מחיר מס' ${quoteNum}*
+
+שלום ${client},
+שמחתי לתת לך שירות! להלן פירוט ההצעה:
+
+${itemsText}------------------
+🛠 *התקנה ופירוק:* ${installCost}
+
+💵 *סיכום:*
+סה"כ לפני מע"מ: ${totalSub}
+סה"כ כולל מע"מ (18%): *${totalFinal}*
+
+נשמח לעמוד לשירותכם,
+*יהונתן אלומיניום*`;
+
+        document.getElementById('previewText').innerText = msg;
+        finalLink = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+        document.getElementById('previewModal').style.display = 'flex';
+    }
+
+    function closePreview() { document.getElementById('previewModal').style.display = 'none'; }
+    function sendWhatsapp() {
+        window.open(finalLink, '_blank');
+        let n = parseInt(document.getElementById('quoteNumber').value);
+        if(n) { localStorage.setItem('quoteCounter', n + 1); document.getElementById('quoteNumber').value = n + 1; }
+        closePreview();
+    }
+</script>
+</body>
+</html>
