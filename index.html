@@ -426,6 +426,17 @@
                 <option value="pergola">פרגולות/גדרות</option>
             </select>
 
+            <div class="wings-section" style="display:none; background:#e6fffa; padding:10px; border-radius:10px; margin-bottom:15px; border:1px solid #b2f5ea;">
+                <label style="color:#2c7a7b;">מספר כנפיים:</label>
+                <select class="item-wings">
+                    <option value="2 כנפיים">2 כנפיים (רגיל)</option>
+                    <option value="3 כנפיים">3 כנפיים</option>
+                    <option value="4 כנפיים">4 כנפיים (פתיחה מהאמצע)</option>
+                    <option value="1 כנף (כיס)">1 כנף (לכיס)</option>
+                    <option value="6 כנפיים">6 כנפיים (3 נתיבים)</option>
+                </select>
+            </div>
+
             <label>דגם/פרופיל:</label>
             <select class="item-profile">
                 <option value="">בחר קודם מוצר...</option>
@@ -439,47 +450,92 @@
             
             <div class="ral-section">
                 <select class="item-color">
-                    <option value="לבן (9010)">לבן (9010)</option>
-                    <option value="שמנת (1013)">שמנת (1013)</option>
-                    <option value="אפור אנטרציט (7016)">אפור אנטרציט (7016)</option>
-                    <option value="שחור (9005)">שחור (9005)</option>
-                    <option value="אפור כסוף (9006)">אפור כסוף (9006)</option>
-                    <option value="חום (8019)">חום כהה (8019)</option>
-                    <option value="אפור בהיר (7035)">אפור בהיר (7035)</option>
+                    <optgroup label="לבנים ושמנת">
+                        <option value="לבן (9010)">לבן שלג (9010)</option>
+                        <option value="לבן מבריק (9016)">לבן מבריק (9016)</option>
+                        <option value="שמנת (1013)">שמנת/פנינה (1013)</option>
+                        <option value="בז' (1015)">בז' בהיר (1015)</option>
+                    </optgroup>
+                    <optgroup label="אפורים ושחורים">
+                        <option value="אפור אנטרציט (7016)">אפור אנטרציט (7016)</option>
+                        <option value="שחור (9005)">שחור עמוק (9005)</option>
+                        <option value="אפור בהיר (7035)">אפור בהיר (7035)</option>
+                        <option value="אפור בטון (7023)">אפור בטון (7023)</option>
+                    </optgroup>
+                    <optgroup label="חומים">
+                        <option value="חום כהה (8019)">חום כהה (8019)</option>
+                        <option value="חום שוקולד (8017)">חום שוקולד (8017)</option>
+                        <option value="חום אגוז (8011)">חום אגוז (8011)</option>
+                    </optgroup>
+                    <optgroup label="מתכתי/אחר">
+                        <option value="אלומיניום טבעי (9006)">כסוף מטאלי (9006)</option>
+                        <option value="כחול (5010)">כחול (5010)</option>
+                        <option value="ירוק (6005)">ירוק בקבוק (6005)</option>
+                        <option value="אדום (3000)">אדום (3000)</option>
+                    </optgroup>
                 </select>
             </div>
             <div class="klil-section" style="display:none;">
                 <select class="item-color-klil">
-                    <optgroup label="IRON">
+                    <optgroup label="IRON (מגורען עדין)">
                         <option value="IRON 100 לבן">IRON 100 לבן</option>
                         <option value="IRON 101 שמנת">IRON 101 שמנת</option>
-                        <option value="IRON 400 אפור">IRON 400 אפור</option>
-                        <option value="IRON 420 שחור">IRON 420 שחור</option>
+                        <option value="IRON 400 אפור כהה">IRON 400 אפור כהה</option>
+                        <option value="IRON 420 שחור גרפיט">IRON 420 שחור גרפיט</option>
+                        <option value="IRON 415 אפור אבן">IRON 415 אפור אבן</option>
                     </optgroup>
-                    <optgroup label="אנודייז">
-                        <option value="אנודייז טבעי">אנודייז טבעי</option>
+                    <optgroup label="FINE IRON (חלק במראה ברזל)">
+                         <option value="FINE IRON 9010">FINE IRON 9010 (לבן)</option>
+                         <option value="FINE IRON 9005">FINE IRON 9005 (שחור)</option>
+                         <option value="FINE IRON 7016">FINE IRON 7016 (אפור)</option>
+                    </optgroup>
+                    <optgroup label="אנודייז (מטאלי)">
+                        <option value="אנודייז טבעי">אנודייז טבעי (כסף מט)</option>
                         <option value="אנודייז ברונזה">אנודייז ברונזה</option>
+                        <option value="אנודייז שמפניה">אנודייז שמפניה</option>
+                        <option value="אנודייז שחור">אנודייז שחור</option>
                     </optgroup>
                 </select>
             </div>
 
-            <label style="margin-top:10px">זכוכית:</label>
-            <select class="item-glass">
-                <option value="ללא">ללא זכוכית</option>
-                <optgroup label="טריפלקס">
-                    <option value="טריפלקס 3+3 שקוף">טריפלקס 3+3 שקוף</option>
-                    <option value="טריפלקס 3+3 חלבי">טריפלקס 3+3 חלבי</option>
-                    <option value="טריפלקס 4+4">טריפלקס 4+4</option>
-                    <option value="טריפלקס 5+5">טריפלקס 5+5</option>
-                    <option value="טריפלקס 6+6">טריפלקס 6+6</option>
-                    <option value="טריפלקס אנטי-סאן">טריפלקס אנטי-סאן</option>
-                </optgroup>
-                <optgroup label="בידודית">
-                    <option value="בידודית 4-6-4">בידודית 4-6-4</option>
-                    <option value="בידודית 6-12-6">בידודית 6-12-6</option>
-                    <option value="בידודית צלון">בידודית עם צלון</option>
-                </optgroup>
-            </select>
+            <label style="margin-top:10px">זכוכית ומילוי:</label>
+            <div class="row">
+                <div style="flex:2">
+                    <select class="item-glass-type">
+                        <option value="ללא זכוכית">ללא זכוכית</option>
+                        <optgroup label="טריפלקס">
+                            <option value="טריפלקס 3+3">טריפלקס 3+3 (סטנדרט)</option>
+                            <option value="טריפלקס 3+4">טריפלקס 3+4 (אקוסטי)</option>
+                            <option value="טריפלקס 4+4">טריפלקס 4+4 (מחוזק)</option>
+                            <option value="טריפלקס 4+5">טריפלקס 4+5 (אקוסטי כבד)</option>
+                            <option value="טריפלקס 5+5">טריפלקס 5+5 (ויטרינות)</option>
+                            <option value="טריפלקס 5+6">טריפלקס 5+6 (אקוסטי מיוחד)</option>
+                            <option value="טריפלקס 6+6">טריפלקס 6+6 (בטחוני)</option>
+                        </optgroup>
+                        <optgroup label="בידודית">
+                            <option value="בידודית 4-6-4">בידודית 4-6-4</option>
+                            <option value="בידודית 4-9-4">בידודית 4-9-4</option>
+                            <option value="בידודית 6-12-6">בידודית 6-12-6</option>
+                            <option value="בידודית צלון">בידודית עם צלון</option>
+                        </optgroup>
+                        <optgroup label="מחוסמת">
+                            <option value="מחוסמת 6 מ''מ">מחוסמת 6 מ''מ</option>
+                            <option value="מחוסמת 8 מ''מ">מחוסמת 8 מ''מ</option>
+                            <option value="מחוסמת 10 מ''מ">מחוסמת 10 מ''מ</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div style="flex:1">
+                    <select class="item-glass-finish">
+                        <option value="שקוף">שקוף</option>
+                        <option value="חלבי">חלבי</option>
+                        <option value="אנטי-סאן">אנטי-סאן (כהה)</option>
+                        <option value="צ'ינצ'ילה">צ'ינצ'ילה</option>
+                        <option value="סבתא">סבתא</option>
+                        <option value="גרניט">גרניט</option>
+                    </select>
+                </div>
+            </div>
 
             <div class="row" style="margin-top:15px">
                 <div><label>רוחב (ס"מ):</label><input type="number" class="item-width" placeholder="150"></div>
@@ -497,7 +553,16 @@
     function updateItemProfiles(selectElement) {
         const card = selectElement.closest('.card');
         const profileSelect = card.querySelector('.item-profile');
+        const wingsSection = card.querySelector('.wings-section');
         const product = selectElement.value;
+        
+        // לוגיקת הצגת כנפיים
+        if (product === 'window_slide' || product === 'vitrine') {
+            wingsSection.style.display = 'block';
+        } else {
+            wingsSection.style.display = 'none';
+        }
+
         profileSelect.innerHTML = "";
         if (product && profilesDB[product]) {
             profilesDB[product].forEach(p => {
@@ -538,11 +603,9 @@
             } else {
                 card.style.border = "1px solid white";
                 
-                // המרה מס"מ למ"ר
                 let area = (w_cm * h_cm) / 10000;
                 let billableArea = area;
                 
-                // בדיקת מינימום 1 מטר
                 if (area < 1.0) {
                     billableArea = 1.0;
                     const minTag = card.querySelector('.min-charge-tag');
@@ -591,10 +654,23 @@
             const type = prod.options[prod.selectedIndex]?.text || "-";
             const profile = card.querySelector('.item-profile').value || "-";
             
+            // בדיקת כנפיים
+            let wingsText = "";
+            const wingsSection = card.querySelector('.wings-section');
+            if (wingsSection.style.display !== 'none') {
+                wingsText = `\n   כנפיים: ${card.querySelector('.item-wings').value}`;
+            }
+
             const cType = card.getAttribute('data-color-type') || 'ral';
             let color = cType === 'ral' ? card.querySelector('.item-color').value : card.querySelector('.item-color-klil').value;
 
-            const glass = card.querySelector('.item-glass').value;
+            const glassType = card.querySelector('.item-glass-type').value;
+            const glassFinish = card.querySelector('.item-glass-finish').value;
+            let glassString = glassType;
+            if (glassType !== 'ללא זכוכית') {
+                glassString += ` (${glassFinish})`;
+            }
+
             const w_cm = parseFloat(card.querySelector('.item-width').value);
             const h_cm = parseFloat(card.querySelector('.item-height').value);
             const pricePerSqm = parseFloat(card.querySelector('.item-price').value);
@@ -610,7 +686,7 @@
                 itemTotal = area * pricePerSqm;
             }
 
-            itemsText += `🔸 *פריט ${count}: ${type}*\n   מפרט: ${profile}, ${color}, ${glass}\n   מידות (ס"מ): ${w_cm}x${h_cm} ${note}\n   מחיר יח': ${itemTotal.toLocaleString()} ₪ (לפני מע"מ)\n\n`;
+            itemsText += `🔸 *פריט ${count}: ${type}*${wingsText}\n   מפרט: ${profile}\n   צבע: ${color}\n   זכוכית: ${glassString}\n   מידות (ס"מ): ${w_cm}x${h_cm} ${note}\n   מחיר יח': ${itemTotal.toLocaleString()} ₪ (לפני מע"מ)\n\n`;
             count++;
         });
 
