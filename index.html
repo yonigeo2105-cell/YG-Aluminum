@@ -75,10 +75,12 @@
 const profilesDB = {
     "window_slide": ["קליל 7000 (קלאסי)", "קליל 9000 (יוקרתי)", "קליל 9200 (פנורמי)", "קליל 1700 (בלגי)", "קליל 7300 (בלגי)", "קליל 2200 (אופיס)", "באוהאוס הזזה", "אקסטל 22"],
     "window_hinge": ["קליל 4300 (בלגי)", "קליל 4400 (קלאסי)", "קליל 4500 (סיסטם)", "קליל 5500 (באוהאוס)"],
+    "window_kipp": ["קליל 4300 קיפ", "קליל 4400 קיפ", "קליל 4500 קיפ", "קליל 5500 קיפ (באוהאוס)"],
     "window_drykeep": ["דריי-קיפ 4300 (בלגי)", "דריי-קיפ 4500 (קלאסי)", "דריי-קיפ 5500 (באוהאוס)", "דריי-קיפ אקסטל C10"],
+    "window_fixed": ["קבוע 4300", "קבוע 4400", "קבוע 7000", "קבוע 9000", "קבוע באוהאוס"],
     "vitrine": ["ויטרינה קליל 9000", "ויטרינה קליל 9200", "ויטרינה קליל 7300", "ויטרינה מינימל"],
     "shutter": ["שלב מוקצף", "שלב משוך (חזק)", "שלב אור", "שלב אור-קל (מיני)", "שלב משוך-על (מיגון)", "ארגז מונובלוק"],
-    "door": ["דלת קליל 4300 (בלגי)", "דלת קליל 2000 (אופיס)", "דלת כניסה 4900", "דלת אינטרקום"],
+    "door": ["דלת קליל 4300 (בלגי)", "דלת קליל 2000 (אופיס)", "דלת כניסה 4900", "דלת אינטרקום", "דלת רב בריח"],
     "screen": ["רשת גלילה", "רשת הזזה", "רשת קבועה", "רשת שקופה", "רשת גרמנית"],
     "pergola": ["פרגולה תלויה", "פרגולה עומדת", "רפפות הצללה", "גדר אלומיניום", "מסתור כביסה"]
 };
@@ -97,7 +99,7 @@ function addItem() {
     itemDiv.id = `item-${itemCount}`;
     itemDiv.innerHTML = `
         <div class="card-header-row"><div class="card-title">פריט #${itemCount} <span class="min-charge-tag">מינימום 1 מ"ר</span></div>${itemCount > 1 ? `<button class="btn-delete" onclick="removeItem('${itemDiv.id}')">מחק</button>` : ''}</div>
-        <label>סוג מוצר:</label><select class="item-product" onchange="updateItemProfiles(this)"><option value="" disabled selected>-- בחר --</option><option value="window_slide">חלון הזזה</option><option value="window_hinge">חלון פתיחה (ציר)</option><option value="window_drykeep">חלון דריי-קיפ</option><option value="vitrine">ויטרינה</option><option value="shutter">תריס גלילה</option><option value="door">דלתות</option><option value="screen">רשתות</option><option value="pergola">פרגולות/גדרות</option></select>
+        <label>סוג מוצר:</label><select class="item-product" onchange="updateItemProfiles(this)"><option value="" disabled selected>-- בחר --</option><option value="window_slide">חלון הזזה</option><option value="window_hinge">חלון פתיחה (ציר)</option><option value="window_kipp">חלון קיפ (פתיחה עליונה)</option><option value="window_drykeep">חלון דריי-קיפ</option><option value="window_fixed">חלון קבוע (FIX)</option><option value="vitrine">ויטרינה</option><option value="shutter">תריס גלילה</option><option value="door">דלתות</option><option value="screen">רשתות</option><option value="pergola">פרגולות/גדרות</option></select>
         
         <div class="wings-section" style="display:none; background:#fffbe6; padding:15px; border-radius:10px; margin-bottom:15px; border:1px solid #ffe58f;">
             <div class="row">
@@ -226,7 +228,7 @@ function sendWhatsapp() {
     closePreview(); 
 }
 
-// --- מנוע שרטוט אדריכלי מתקדם (PRO) ---
+// --- מנוע שרטוט אדריכלי מקצועי (PRO v2) ---
 function generateAndDownloadSketch(btn) {
     const card = btn.closest('.item-card');
     const wVal = parseFloat(card.querySelector('.item-width').value) || 100;
@@ -237,7 +239,6 @@ function generateAndDownloadSketch(btn) {
     const profile = card.querySelector('.item-profile').value;
     const client = document.getElementById('clientName').value || "";
     
-    // פרמטרים
     let wings = 1;
     let mifgash = "";
     const wingsSec = card.querySelector('.wings-section');
@@ -246,7 +247,6 @@ function generateAndDownloadSketch(btn) {
         mifgash = card.querySelector('.item-mifgash').value;
     }
 
-    // קנבס ברזולוציה גבוהה
     const canvas = document.createElement('canvas');
     canvas.width = 1200; canvas.height = 900;
     const ctx = canvas.getContext('2d');
@@ -255,7 +255,7 @@ function generateAndDownloadSketch(btn) {
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // לוגו/כותרת
+    // כותרת
     ctx.fillStyle = "#0d47a1";
     ctx.font = "bold 40px Arial";
     ctx.textAlign = "center";
@@ -265,37 +265,73 @@ function generateAndDownloadSketch(btn) {
     ctx.fillText(client ? `לקוח: ${client}` : "סקיצה לאישור", canvas.width/2, 100);
     ctx.fillText(`${typeText} | ${profile}`, canvas.width/2, 140);
 
-    // אזור ציור
     const margin = 180;
     const drawW = canvas.width - (margin * 2);
     const drawH = canvas.height - (margin * 2) - 50;
     const startX = margin;
     const startY = 180;
 
-    // מסגרת חלון ראשית
-    ctx.strokeStyle = "#222";
-    ctx.lineWidth = 6;
-    ctx.strokeRect(startX, startY, drawW, drawH);
-
-    // לוגיקה גרפית
+    // --- שרטוט מסגרת ראשית (עובי פרופיל) ---
+    const frameThick = 15;
+    ctx.strokeStyle = "#333";
     ctx.lineWidth = 3;
-    ctx.strokeStyle = "#444";
     
+    // פרגולה וגדר לא צריכות מסגרת חלון רגילה
+    if (type !== 'pergola' && !type.includes('screen') && type !== 'shutter') {
+        ctx.strokeRect(startX, startY, drawW, drawH); // קו חיצוני
+        ctx.strokeRect(startX + frameThick, startY + frameThick, drawW - (frameThick*2), drawH - (frameThick*2)); // קו פנימי
+    }
+
+    // --- סימוני זכוכית (קווים אלכסוניים) ---
+    function drawGlass(x, y, w, h) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(x, y, w, h);
+        ctx.clip();
+        ctx.strokeStyle = "#e0e0e0";
+        ctx.lineWidth = 1;
+        for(let i=0; i<w+h; i+=40) {
+            ctx.moveTo(x + i, y);
+            ctx.lineTo(x, y + i);
+        }
+        ctx.stroke();
+        ctx.restore();
+    }
+    
+    // סימון רשת (X צפוף)
+    function drawMesh(x, y, w, h) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(x, y, w, h);
+        ctx.clip();
+        ctx.strokeStyle = "#ccc";
+        ctx.lineWidth = 1;
+        for(let i=0; i<w+h; i+=20) {
+            ctx.moveTo(x + i, y); ctx.lineTo(x, y + i); // אלכסון 1
+            ctx.moveTo(x - i + w, y); ctx.lineTo(x + w, y + i); // אלכסון 2
+        }
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    if (type !== 'shutter' && type !== 'pergola' && !type.includes('screen')) {
+        drawGlass(startX + frameThick, startY + frameThick, drawW - frameThick*2, drawH - frameThick*2);
+    }
+
+    ctx.strokeStyle = "#333";
+    ctx.lineWidth = 3;
+
     if (type === 'window_slide' || type === 'vitrine') {
-        // מסגרת פנימית
-        ctx.strokeRect(startX + 10, startY + 10, drawW - 20, drawH - 20);
-        
         const wingW = drawW / wings;
-        for (let i = 1; i < wings; i++) {
-            // עמודים אנכיים
-            ctx.beginPath();
-            ctx.moveTo(startX + i * wingW, startY);
-            ctx.lineTo(startX + i * wingW, startY + drawH);
-            ctx.stroke();
-            // סימון חפיפה
-            ctx.lineWidth = 1;
-            ctx.strokeRect(startX + i * wingW - 5, startY, 10, drawH);
-            ctx.lineWidth = 3;
+        for (let i = 0; i < wings; i++) {
+            // שרטוט כנף עם עובי
+            const wx = startX + i * wingW;
+            const offset = (i % 2 === 0) ? 0 : 5; 
+            const sashX = wx + offset;
+            const sashW = wingW - offset;
+            
+            // מסגרת כנף
+            ctx.strokeRect(sashX + 2, startY + frameThick + 2, sashW - 4, drawH - frameThick*2 - 4);
         }
         
         // חיצים
@@ -310,108 +346,125 @@ function generateAndDownloadSketch(btn) {
         }
     }
     else if (type === 'window_hinge' || type === 'door') {
-        // משולש אדריכלי (קודקוד לידית)
-        ctx.strokeStyle = "#666";
-        ctx.setLineDash([20, 15]); 
+        // משולש מקווקו: קודקוד לידית
+        ctx.setLineDash([15, 10]); 
         ctx.beginPath();
-        // בסיס בציר (ימין), קודקוד בידית (שמאל)
-        ctx.moveTo(startX + drawW, startY); // ימין למעלה
-        ctx.lineTo(startX, startY + drawH/2); // שמאל אמצע (ידית)
-        ctx.lineTo(startX + drawW, startY + drawH); // ימין למטה
+        ctx.moveTo(startX + drawW, startY); // ציר עליון
+        ctx.lineTo(startX, startY + drawH/2); // ידית
+        ctx.lineTo(startX + drawW, startY + drawH); // ציר תחתון
         ctx.stroke();
         ctx.setLineDash([]);
         
         // ידית
-        ctx.fillStyle = "#000";
-        ctx.fillRect(startX + 10, startY + drawH/2 - 25, 10, 50);
+        ctx.fillStyle = "#222";
+        ctx.fillRect(startX + frameThick + 5, startY + drawH/2 - 25, 12, 50);
+    }
+    else if (type === 'window_kipp') {
+        // קיפ: ציר למטה, ידית למעלה -> משולש עם שפיץ למעלה
+        ctx.setLineDash([15, 10]);
+        ctx.beginPath();
+        ctx.moveTo(startX, startY + drawH); // ציר שמאל
+        ctx.lineTo(startX + drawW/2, startY); // ידית (אמצע עליון)
+        ctx.lineTo(startX + drawW, startY + drawH); // ציר ימין
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        // ידית (למעלה באמצע)
+        ctx.fillStyle = "#222";
+        ctx.fillRect(startX + drawW/2 - 25, startY + frameThick + 5, 50, 12);
     }
     else if (type === 'window_drykeep') {
-        // שני משולשים (דריי קיפ)
-        ctx.strokeStyle = "#666";
-        ctx.setLineDash([20, 15]);
-        
+        ctx.setLineDash([15, 10]);
         // 1. משולש פתיחה (קודקוד שמאלה)
         ctx.beginPath();
         ctx.moveTo(startX + drawW, startY);
         ctx.lineTo(startX, startY + drawH/2);
         ctx.lineTo(startX + drawW, startY + drawH);
         ctx.stroke();
-        
         // 2. משולש קיפ (קודקוד למעלה)
         ctx.beginPath();
         ctx.moveTo(startX, startY + drawH); 
         ctx.lineTo(startX + drawW/2, startY);
         ctx.lineTo(startX + drawW, startY + drawH);
         ctx.stroke();
-        
         ctx.setLineDash([]);
-        // ידית
-        ctx.fillStyle = "#000";
-        ctx.fillRect(startX + 15, startY + drawH/2 - 25, 10, 50);
+        // ידית צד
+        ctx.fillStyle = "#222";
+        ctx.fillRect(startX + frameThick + 5, startY + drawH/2 - 25, 12, 50);
+    }
+    else if (type === 'shutter') {
+        // ארגז תריס
+        const boxH = 150; // גובה ארגז
+        ctx.fillStyle = "#ddd";
+        ctx.fillRect(startX, startY, drawW, boxH); // ארגז
+        ctx.strokeRect(startX, startY, drawW, boxH);
+        
+        // מסילות צד
+        ctx.fillStyle = "white";
+        ctx.fillRect(startX, startY + boxH, 20, drawH - boxH);
+        ctx.fillRect(startX + drawW - 20, startY + boxH, 20, drawH - boxH);
+        ctx.strokeRect(startX, startY + boxH, 20, drawH - boxH);
+        ctx.strokeRect(startX + drawW - 20, startY + boxH, 20, drawH - boxH);
+
+        // שלבים
+        ctx.strokeStyle = "#888";
+        for (let i = boxH; i < drawH; i+=35) {
+            ctx.beginPath();
+            ctx.moveTo(startX + 20, startY + i);
+            ctx.lineTo(startX + drawW - 20, startY + i);
+            ctx.stroke();
+        }
+    }
+    else if (type === 'window_fixed') {
+        // אין סימוני פתיחה, רק זכוכית
     }
     else if (type === 'pergola') {
-        // ציור פרגולה (קורות)
-        ctx.fillStyle = "#eee";
-        ctx.fillRect(startX, startY, drawW, 40); // קורה ראשית
-        ctx.strokeStyle = "#444";
-        ctx.strokeRect(startX, startY, drawW, 40);
+        // פרגולה
+        const beamH = 60;
+        // קורה ראשית
+        ctx.fillStyle = "#e0e0e0";
+        ctx.fillRect(startX, startY, drawW, beamH);
+        ctx.strokeRect(startX, startY, drawW, beamH);
         
-        // רפפות/שלבים
-        for (let i = 20; i < drawW; i+=60) {
+        // עמודים אם זו פרגולה עומדת
+        if (profile.includes('עומדת')) {
             ctx.fillStyle = "#ccc";
-            ctx.fillRect(startX + i, startY, 20, drawH);
+            ctx.fillRect(startX + 20, startY + beamH, 30, drawH - beamH); // עמוד שמאל
+            ctx.fillRect(startX + drawW - 50, startY + beamH, 30, drawH - beamH); // עמוד ימין
+            ctx.strokeRect(startX + 20, startY + beamH, 30, drawH - beamH);
+            ctx.strokeRect(startX + drawW - 50, startY + beamH, 30, drawH - beamH);
+        }
+        
+        // רפפות
+        for (let i = 50; i < drawW - 50; i+=70) {
             ctx.strokeRect(startX + i, startY, 20, drawH);
         }
     }
-    else if (type.includes('screen') || type.includes('pergola')) { 
-        // גדר/רשת - פסים לרוחב
-        for (let i = 40; i < drawH; i+=40) {
-            ctx.beginPath();
-            ctx.moveTo(startX, startY + i);
-            ctx.lineTo(startX + drawW, startY + i);
-            ctx.stroke();
-        }
-    }
-    else if (type === 'shutter') {
-        for (let i = 40; i < drawH; i+=40) {
-            ctx.beginPath();
-            ctx.moveTo(startX, startY + i);
-            ctx.lineTo(startX + drawW, startY + i);
-            ctx.stroke();
-        }
+    else if (type.includes('screen')) {
+        ctx.strokeRect(startX, startY, drawW, drawH);
+        drawMesh(startX, startY, drawW, drawH);
     }
 
-    // --- מידות חיצוניות (אדריכלי) ---
+    // --- מידות חיצוניות (כחול) ---
     const dimDist = 60;
     ctx.strokeStyle = "#0000aa"; 
     ctx.fillStyle = "#0000aa";
-    ctx.font = "bold 36px Arial";
+    ctx.font = "bold 40px Arial";
     ctx.lineWidth = 2;
 
-    // קו רוחב (למטה)
-    ctx.beginPath();
-    ctx.moveTo(startX, startY + drawH + dimDist);
-    ctx.lineTo(startX + drawW, startY + drawH + dimDist);
-    ctx.stroke();
+    // מידה רוחב
+    ctx.beginPath(); ctx.moveTo(startX, startY + drawH + dimDist); ctx.lineTo(startX + drawW, startY + drawH + dimDist); ctx.stroke();
     // גובלים
-    ctx.beginPath();
-    ctx.moveTo(startX, startY + drawH + dimDist - 15); ctx.lineTo(startX, startY + drawH + dimDist + 15);
-    ctx.moveTo(startX + drawW, startY + drawH + dimDist - 15); ctx.lineTo(startX + drawW, startY + drawH + dimDist + 15);
-    ctx.stroke();
-    ctx.fillText(`${wVal}`, startX + drawW/2, startY + drawH + dimDist + 50);
+    ctx.beginPath(); ctx.moveTo(startX, startY + drawH + dimDist - 15); ctx.lineTo(startX, startY + drawH + dimDist + 15); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(startX + drawW, startY + drawH + dimDist - 15); ctx.lineTo(startX + drawW, startY + drawH + dimDist + 15); ctx.stroke();
+    ctx.fillText(`${wVal}`, startX + drawW/2 - 30, startY + drawH + dimDist + 50);
 
-    // קו גובה (ימין)
-    ctx.beginPath();
-    ctx.moveTo(startX + drawW + dimDist, startY);
-    ctx.lineTo(startX + drawW + dimDist, startY + drawH);
-    ctx.stroke();
+    // מידה גובה
+    ctx.beginPath(); ctx.moveTo(startX + drawW + dimDist, startY); ctx.lineTo(startX + drawW + dimDist, startY + drawH); ctx.stroke();
     // גובלים
-    ctx.beginPath();
-    ctx.moveTo(startX + drawW + dimDist - 15, startY); ctx.lineTo(startX + drawW + dimDist + 15, startY);
-    ctx.moveTo(startX + drawW + dimDist - 15, startY + drawH); ctx.lineTo(startX + drawW + dimDist + 15, startY + drawH);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(startX + drawW + dimDist - 15, startY); ctx.lineTo(startX + drawW + dimDist + 15, startY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(startX + drawW + dimDist - 15, startY + drawH); ctx.lineTo(startX + drawW + dimDist + 15, startY + drawH); ctx.stroke();
     
-    // טקסט גובה (מאונך)
     ctx.save();
     ctx.translate(startX + drawW + dimDist + 50, startY + drawH/2);
     ctx.rotate(-Math.PI/2);
