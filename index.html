@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* --- העיצוב המקורי שלך (ללא שינויים) --- */
+        /* --- עיצוב מקורי --- */
         :root { --primary: #0d47a1; --primary-light: #42a5f5; --bg: #f0f4f8; --card: #ffffff; --text-dark: #1a202c; --whatsapp: #25D366; --border: #cbd5e0; --input-bg: #f7fafc; --danger: #e53e3e; }
         body { font-family: 'Rubik', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: var(--text-dark); -webkit-tap-highlight-color: transparent; height: 100vh; overflow-x: hidden; }
         
@@ -50,13 +50,15 @@
         .price-line { display: flex; justify-content: space-between; margin-bottom: 10px; }
         .total-line { font-size: 24px; font-weight: 800; color: var(--primary); border-top: 2px dashed #cbd5e0; padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; }
 
-        /* אלמנטים פנימיים חדשים (משתלבים בעיצוב המקורי) */
         .extra-panel { background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
         .notch-grid { display: flex; gap: 10px; margin-bottom: 10px; }
         .notch-btn { flex: 1; padding: 10px; border: 1px solid var(--border); background: white; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; }
         .notch-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
         .legal-footer { margin-top: 30px; font-size: 11px; color: #718096; text-align: center; border-top: 1px solid #cbd5e0; padding-top: 15px; line-height: 1.6; }
-        .btn-download-sketch { background-color: #2d3748; color: white; padding: 10px 15px; border-radius: 8px; font-size: 14px; border: none; cursor: pointer; width: 100%; margin-top: 5px; }
+        
+        /* כפתור הורדת שרטוט - בסגנון המקורי */
+        .btn-download-sketch { background-color: #2d3748; color: white; padding: 12px; border-radius: 8px; font-size: 15px; border: none; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-download-sketch:active { transform: scale(0.98); }
 
         .modal-overlay { position: fixed; top: 0; right: 0; left: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(5px); }
         .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
@@ -75,7 +77,8 @@
     </div>
 </div>
 
-<div id="pdfContent"> <header><h1>יהונתן אלומיניום</h1><p>מערכת הצעות מחיר מקצועית</p></header>
+<div id="pdfContent">
+    <header><h1>יהונתן אלומיניום</h1><p>מערכת הצעות מחיר מקצועית</p></header>
 
     <div class="container" id="mainApp">
         <div class="card">
@@ -152,7 +155,6 @@
     };
 
     let itemCount = 0;
-    // טעינת תאריך ומספר הצעה
     document.addEventListener('DOMContentLoaded', () => { 
         document.getElementById('quoteDate').valueAsDate = new Date();
         const saved = localStorage.getItem('quoteCounter'); 
@@ -213,8 +215,7 @@
                     <div><label style="color:var(--primary)">מחיר יח' (₪)</label><input type="number" class="price-input" placeholder="מחיר פיקס"></div>
                 </div>
                 
-                <button class="btn-download-sketch" onclick="generateSketch(this)">📸 צור שרטוט אוטומטי</button>
-                <div class="sketch-preview" style="margin-top:10px; max-width:100%; display:none;"></div>
+                <button class="btn-download-sketch" onclick="generateSketch(this)">📸 הורד שרטוט אדריכלי</button>
             </div>
         `;
         container.appendChild(div);
@@ -257,7 +258,6 @@
             profSelect.appendChild(opt);
         });
 
-        // תוספות ספציפיות
         let html = '';
         if(type === 'sliding') {
             html = `<div class="extra-panel">
@@ -378,66 +378,113 @@
         html2pdf().set(opt).from(element).save();
     }
 
+    // --- מנוע השרטוט האדריכלי המקורי (משוחזר + משודרג) ---
     function generateSketch(btn) {
         const card = btn.closest('.card');
-        const container = card.querySelector('.sketch-preview');
         const type = card.querySelector('.item-type').value;
         const w = parseFloat(card.querySelector('.w-input').value) || 100;
         const h = parseFloat(card.querySelector('.h-input').value) || 100;
         
+        // קנבס גדול ואיכותי כמו במקור
         const canvas = document.createElement('canvas');
-        canvas.width = 600; canvas.height = 400;
+        canvas.width = 1200; canvas.height = 900;
         const ctx = canvas.getContext('2d');
         
-        ctx.fillStyle = "white"; ctx.fillRect(0,0,600,400);
-        ctx.lineWidth = 3; ctx.strokeStyle = "#333";
-        const startX = 50; const startY = 50; const maxW = 500; const maxH = 300;
+        // רקע לבן
+        ctx.fillStyle = "white"; ctx.fillRect(0,0,1200,900);
+        
+        // כותרת
+        ctx.fillStyle = "#0d47a1"; ctx.font = "bold 40px Arial"; ctx.textAlign = "center";
+        ctx.fillText("יהונתן אלומיניום", 600, 60);
+        ctx.fillStyle = "#333"; ctx.font = "24px Arial";
+        const client = document.getElementById('clientName').value || "לקוח";
+        ctx.fillText(`לקוח: ${client} | תאריך: ${new Date().toLocaleDateString('he-IL')}`, 600, 100);
 
+        // פרופיל
+        const profile = card.querySelector('.profile-select').value;
+        ctx.font = "20px Arial"; ctx.fillStyle = "#555";
+        ctx.fillText(`מוצר: ${profile}`, 600, 140);
+
+        // חישוב יחס
+        const maxDrawW = 700; const maxDrawH = 500;
+        const ratio = w / h;
+        let dw, dh;
+        if (ratio > 1) { dw = maxDrawW; dh = maxDrawW / ratio; if(dh > maxDrawH){ dh = maxDrawH; dw = dh * ratio; } }
+        else { dh = maxDrawH; dw = maxDrawH * ratio; if(dw > maxDrawW){ dw = maxDrawW; dh = dw / ratio; } }
+        
+        const startX = (1200 - dw) / 2;
+        const startY = 250;
+        
+        ctx.strokeStyle = "#333"; ctx.lineWidth = 4;
+
+        // ציור לפי סוג
         if(type === 'fixed' && card.querySelector('.notch-pos')?.value) {
+            // ציור חיתוך צורני (L)
             const pos = card.querySelector('.notch-pos').value;
+            const cutW = (parseFloat(card.querySelector('.notch-w').value) / w) * dw;
+            const cutH = (parseFloat(card.querySelector('.notch-h').value) / h) * dh;
+
             ctx.beginPath();
             ctx.moveTo(startX, startY);
-            if(pos === 'TR') { ctx.lineTo(startX+maxW-50, startY); ctx.lineTo(startX+maxW-50, startY+50); ctx.lineTo(startX+maxW, startY+50); } else ctx.lineTo(startX+maxW, startY);
-            ctx.lineTo(startX+maxW, startY+maxH); ctx.lineTo(startX, startY+maxH); ctx.closePath(); ctx.stroke();
-            ctx.fillStyle="red"; ctx.fillText("חיתוך", startX+maxW-40, startY+20);
+            if(pos === 'TR') { 
+                ctx.lineTo(startX+dw-cutW, startY); ctx.lineTo(startX+dw-cutW, startY+cutH); ctx.lineTo(startX+dw, startY+cutH);
+            } else { ctx.lineTo(startX+dw, startY); }
+            
+            ctx.lineTo(startX+dw, startY+dh); 
+            ctx.lineTo(startX, startY+dh); 
+            ctx.closePath(); 
+            ctx.fillStyle = "#f0f8ff"; ctx.fill(); 
+            ctx.stroke();
+
+            // מידות החיתוך
+            ctx.fillStyle = "red"; ctx.font = "bold 24px Arial";
+            ctx.fillText("חיתוך", startX+dw-20, startY+20);
         }
         else if(type === 'pocket') {
-            ctx.setLineDash([5,5]); ctx.strokeRect(startX+maxW, startY, 80, maxH); ctx.setLineDash([]);
-            ctx.strokeRect(startX, startY, maxW, maxH);
-            ctx.beginPath(); ctx.moveTo(startX, startY+maxH-10); ctx.lineTo(startX+maxW+80, startY+maxH-10); ctx.stroke();
-            ctx.fillStyle="black"; ctx.fillText("כיס", startX+maxW+10, startY+maxH/2);
+            // ציור כיס
+            ctx.setLineDash([15, 10]); ctx.strokeStyle = "#999";
+            ctx.strokeRect(startX+dw, startY, 150, dh); // הקיר
+            ctx.setLineDash([]); ctx.strokeStyle = "#333";
+            
+            ctx.strokeRect(startX, startY, dw, dh); // הפתח
+            ctx.beginPath(); ctx.moveTo(startX, startY+dh-10); ctx.lineTo(startX+dw+130, startY+dh-10); ctx.stroke();
+            
+            ctx.fillStyle = "#0000aa"; ctx.font = "bold 30px Arial";
+            ctx.fillText("קיר/כיס", startX+dw+40, startY+dh/2);
         }
-        else if(type === 'door') {
-             let curY = startY; let doorH = maxH;
-             if(card.querySelector('.dr-top')?.value > 0) {
-                 ctx.strokeRect(startX, startY, maxW, 50); ctx.fillText("קבוע עליון", startX+maxW/2-30, startY+30);
-                 curY += 50; doorH -= 50;
-             }
-             ctx.strokeRect(startX, curY, maxW, doorH);
-             if(card.querySelector('.dr-closer').value !== 'none') {
-                 ctx.beginPath(); ctx.moveTo(startX+maxW-10, curY); ctx.lineTo(startX+maxW-40, curY); ctx.lineTo(startX+maxW-10, curY+30); ctx.fill();
-             }
-        }
-        else if(type === 'shutter') {
-            const isExt = card.querySelector('.sht-box').value.includes('חיצוני');
-            let boxH = 40;
-            if(isExt) { ctx.fillStyle = "#eee"; ctx.fillRect(startX, startY-boxH, maxW, boxH); ctx.strokeRect(startX, startY-boxH, maxW, boxH); }
-            else { ctx.setLineDash([5,5]); ctx.strokeRect(startX, startY-boxH, maxW, boxH); ctx.setLineDash([]); }
-            ctx.strokeRect(startX, startY, maxW, maxH);
-            for(let y=0; y<maxH; y+=20) { ctx.strokeRect(startX, startY+y, maxW, 15); }
+        else if(type === 'pergola') {
+            // ציור פרגולה (פסים)
+            ctx.fillStyle = "#eee"; ctx.fillRect(startX, startY, dw, dh);
+            ctx.strokeRect(startX, startY, dw, dh);
+            ctx.strokeStyle = "#999"; ctx.lineWidth = 2;
+            for(let i=0; i<dh; i+=30) { ctx.beginPath(); ctx.moveTo(startX, startY+i); ctx.lineTo(startX+dw, startY+i); ctx.stroke(); }
         }
         else {
-            ctx.strokeRect(startX, startY, maxW, maxH);
-            ctx.fillText(`${w} X ${h}`, startX+maxW/2-30, startY+maxH+30);
+            // מלבן סטנדרטי (חלונות/דלתות)
+            ctx.strokeRect(startX, startY, dw, dh);
+            ctx.strokeRect(startX+10, startY+10, dw-20, dh-20); // מסגרת פנימית
+            // קווים אלכסוניים (זכוכית)
+            if(!type.includes('shutter')) {
+                ctx.strokeStyle = "#e0e0e0"; ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(startX+20, startY+dh-20); ctx.lineTo(startX+dh-20, startY+20); ctx.stroke();
+            }
         }
 
-        const img = new Image();
-        img.src = canvas.toDataURL();
-        img.style.maxWidth = "100%";
-        img.style.border = "1px solid #ccc";
-        container.innerHTML = '';
-        container.appendChild(img);
-        container.style.display = 'block';
+        // מידות בכחול (כמו במקור)
+        ctx.fillStyle = "#0000aa"; ctx.font = "bold 30px Arial";
+        ctx.fillText(`${w}`, 600, startY + dh + 40); // רוחב למטה
+        
+        ctx.save();
+        ctx.translate(startX + dw + 40, startY + dh/2);
+        ctx.rotate(-Math.PI/2);
+        ctx.fillText(`${h}`, 0, 0); // גובה בצד
+        ctx.restore();
+
+        // הורדה אוטומטית (כמו במקור)
+        const link = document.createElement('a');
+        link.download = `Sketch_${client}_${type}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
     }
 
     function openPreview() {
