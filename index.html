@@ -10,17 +10,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* --- העיצוב המקורי (ללא שינויים) --- */
         :root { --primary: #0d47a1; --primary-light: #42a5f5; --bg: #f0f4f8; --card: #ffffff; --text-dark: #1a202c; --whatsapp: #25D366; --border: #cbd5e0; --input-bg: #f7fafc; --danger: #e53e3e; }
         body { font-family: 'Rubik', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: var(--text-dark); -webkit-tap-highlight-color: transparent; height: 100vh; overflow-x: hidden; }
         
-        /* מסך כניסה - שוחזר בדיוק */
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0d47a1 0%, #002171 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: opacity 0.5s; }
         .login-box { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .login-box h2 { color: var(--primary); margin-top: 0; }
+        .login-box p { color: #555; margin-bottom: 10px; font-weight: 500; }
         .login-box input { width: 90%; margin-bottom: 15px; text-align: center; font-size: 20px; letter-spacing: 2px; }
         .btn-login { background: var(--primary); color: white; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; }
 
-        /* אפליקציה ראשית */
         header { background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%); color: white; padding: 30px 20px 40px; text-align: center; border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; box-shadow: 0 10px 25px rgba(13,71,161,0.25); position: relative; z-index: 10; }
         header h1 { margin: 0; font-size: 26px; font-weight: 800; }
         
@@ -33,37 +33,33 @@
         
         label { font-weight: 600; display: block; margin-bottom: 6px; font-size: 14px; }
         input, select, textarea { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 16px; background-color: var(--input-bg); margin-bottom: 15px; font-family: 'Rubik', sans-serif; box-sizing: border-box; }
-        input:focus, select:focus { border-color: var(--primary-light); outline: none; box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15); background: #fff; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-light); outline: none; box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15); background: #fff; }
         
         .row { display: flex; gap: 12px; } .row > div { flex: 1; }
         
         .btn-add-item { width: 100%; background: white; color: var(--primary); border: 2px dashed var(--primary-light); padding: 15px; border-radius: 15px; font-size: 16px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
         
         .bottom-actions { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px 25px; box-shadow: 0 -5px 25px rgba(0,0,0,0.1); z-index: 100; border-radius: 20px 20px 0 0; display: none; gap: 10px; }
-        .btn-calc { flex: 1; background: linear-gradient(90deg, var(--primary) 0%, #1565c0 100%); color: white; padding: 16px; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3); cursor: pointer; }
-        
+        .btn-action { flex: 1; padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer; text-align: center; }
+        .btn-calc { background: linear-gradient(90deg, var(--primary) 0%, #1565c0 100%); color: white; }
+        .btn-pdf { background: #e53e3e; color: white; }
+
         .result-box { background: white; border-radius: 20px; border: 2px solid var(--primary-light); margin-top: 25px; display: none; overflow: hidden; margin-bottom: 20px; }
         .result-header { background: var(--primary-light); color: white; padding: 15px; text-align: center; font-weight: 700; }
         .result-body { padding: 20px; }
         .price-line { display: flex; justify-content: space-between; margin-bottom: 10px; }
         .total-line { font-size: 24px; font-weight: 800; color: var(--primary); border-top: 2px dashed #cbd5e0; padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; }
-        
-        .modal-overlay { position: fixed; top: 0; right: 0; left: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(5px); }
-        .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
-        
-        .btn-download-sketch { background-color: #2d3748; color: white; padding: 10px 15px; border-radius: 8px; font-size: 14px; border: none; cursor: pointer; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 100%; justify-content: center; }
 
-        /* אלמנטים חדשים (מעוצבים בשפה של המקורי) */
-        .extra-panel { background: #f1f5f9; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
-        .legal-footer { margin-top: 30px; font-size: 11px; color: #718096; text-align: center; border-top: 1px solid #cbd5e0; padding-top: 15px; line-height: 1.6; }
-        
-        /* בחירת מגרעת */
+        /* אלמנטים פנימיים חדשים (בעיצוב המקורי) */
+        .extra-panel { background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
         .notch-grid { display: flex; gap: 10px; margin-bottom: 10px; }
         .notch-btn { flex: 1; padding: 10px; border: 1px solid var(--border); background: white; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; }
         .notch-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .legal-footer { margin-top: 30px; font-size: 11px; color: #718096; text-align: center; border-top: 1px solid #cbd5e0; padding-top: 15px; line-height: 1.6; }
+        .btn-download-sketch { background-color: #2d3748; color: white; padding: 10px 15px; border-radius: 8px; font-size: 14px; border: none; cursor: pointer; width: 100%; margin-top: 5px; }
 
-        /* להסתרת כפתורים ב-PDF */
-        .no-print { } 
+        .modal-overlay { position: fixed; top: 0; right: 0; left: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(5px); }
+        .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
     </style>
 </head>
 <body>
@@ -85,14 +81,14 @@
         <div class="card">
             <div class="card-title">👤 פרטי לקוח</div>
             <div class="row">
-                <div style="flex:2"><label>שם הלקוח:</label><input type="text" id="clientName" placeholder="שם מלא"></div>
-                <div style="flex:1"><label>תאריך:</label><input type="date" id="quoteDate"></div>
+                <div style="flex:2"><label>שם הלקוח:</label><input type="text" id="clientName" placeholder="ישראל ישראלי"></div>
+                <div style="flex:1"><label>מס' הצעה:</label><input type="number" id="quoteNumber" style="font-weight:700;text-align:center"></div>
             </div>
         </div>
         
         <div id="itemsContainer"></div>
         
-        <button class="btn-add-item no-print" data-html2canvas-ignore="true" onclick="addItem()">➕ הוסף מוצר חדש</button>
+        <button class="btn-add-item" data-html2canvas-ignore="true" onclick="addItem()">➕ הוסף מוצר חדש</button>
         
         <div class="card" style="background:#ebf8ff; border:1px solid #bee3f8;">
             <div class="card-title">🛠️ תוספות והתקנה</div>
@@ -117,15 +113,15 @@
                     <strong>בכבוד רב, יהונתן אלומיניום</strong>
                 </div>
 
-                <button class="btn-add-item no-print" style="margin-top:20px; background:var(--whatsapp); color:white; border:none;" data-html2canvas-ignore="true" onclick="openPreview()">שלח הצעה בוואטסאפ</button>
+                <button class="btn-add-item" style="margin-top:20px; background:var(--whatsapp); color:white; border:none;" data-html2canvas-ignore="true" onclick="openPreview()">שלח הצעה בוואטסאפ</button>
             </div>
         </div>
     </div>
 </div>
 
 <div class="bottom-actions" id="bottomNav">
-    <button class="btn-calc" onclick="calculateAll()">חשב סה"כ לתשלום</button>
-    <button class="btn-calc" style="background: #e53e3e; margin-right:10px;" onclick="generatePDF()">📄 הורד PDF</button>
+    <button class="btn-action btn-calc" onclick="calculateAll()">חשב סה"כ לתשלום</button>
+    <button class="btn-action btn-pdf" onclick="generatePDF()">📄 הורד PDF</button>
 </div>
 
 <div class="modal-overlay" id="previewModal">
@@ -140,7 +136,6 @@
 </div>
 
 <script>
-    // --- נתונים ---
     const profilesDB = {
         "sliding": ["קליל 7000 קלאסי", "קליל 9000", "קליל 9200", "קליל 1700 בלגי", "קליל 2200 אופיס"],
         "pocket": ["כיס בודד (2 נתיבים)", "כיס בודד (3 נתיבים)", "כיס כפול (2 נתיבים)", "כיס כפול (3 נתיבים)"],
@@ -155,7 +150,11 @@
     };
 
     let itemCount = 0;
-    document.getElementById('quoteDate').valueAsDate = new Date();
+    // טעינת מספר הצעה
+    document.addEventListener('DOMContentLoaded', () => { 
+        const saved = localStorage.getItem('quoteCounter'); 
+        document.getElementById('quoteNumber').value = saved ? saved : 1; 
+    });
 
     function checkLogin() {
         if(document.getElementById('passwordInput').value === '1234') {
@@ -226,7 +225,7 @@
         const stdInputs = card.querySelector('.standard-inputs');
         const profSelect = card.querySelector('.profile-select');
 
-        // לוגיקת ג'וקר
+        // ג'וקר
         if(type === 'joker') {
             stdInputs.style.display = 'none';
             container.innerHTML = `
@@ -248,7 +247,6 @@
 
         stdInputs.style.display = 'block';
         
-        // עדכון פרופילים
         profSelect.innerHTML = "";
         (profilesDB[type] || []).forEach(p => {
             const opt = document.createElement('option');
@@ -319,7 +317,6 @@
         container.innerHTML = html;
     }
 
-    // פונקציות עזר
     function selectNotch(btn, pos) {
         const panel = btn.closest('.extra-panel');
         panel.querySelectorAll('.notch-btn').forEach(b => b.classList.remove('selected'));
@@ -340,7 +337,6 @@
         }
     }
 
-    // חישוב
     function calculateAll() {
         let itemsSum = 0;
         document.querySelectorAll('.item-card').forEach(card => {
@@ -351,7 +347,7 @@
         
         const install = parseFloat(document.getElementById('installationCost').value) || 0;
         const totalSub = itemsSum + install;
-        const vat = totalSub * 0.18; // מע"מ 18%
+        const vat = totalSub * 0.18; 
         const final = totalSub + vat;
 
         document.getElementById('itemsSubtotal').innerText = itemsSum.toLocaleString() + " ₪";
@@ -364,7 +360,6 @@
         setTimeout(() => document.getElementById('bottomNav').scrollIntoView({behavior:'smooth'}), 200);
     }
 
-    // PDF
     function generatePDF() {
         const element = document.getElementById('pdfContent');
         document.getElementById('resultBox').style.display = 'block';
@@ -380,7 +375,6 @@
         html2pdf().set(opt).from(element).save();
     }
 
-    // שרטוט חכם
     function generateSketch(btn) {
         const card = btn.closest('.card');
         const container = card.querySelector('.sketch-preview');
@@ -396,7 +390,6 @@
         ctx.lineWidth = 3; ctx.strokeStyle = "#333";
         const startX = 50; const startY = 50; const maxW = 500; const maxH = 300;
 
-        // ציור
         if(type === 'fixed' && card.querySelector('.notch-pos')?.value) {
             const pos = card.querySelector('.notch-pos').value;
             ctx.beginPath();
@@ -422,6 +415,14 @@
                  ctx.beginPath(); ctx.moveTo(startX+maxW-10, curY); ctx.lineTo(startX+maxW-40, curY); ctx.lineTo(startX+maxW-10, curY+30); ctx.fill();
              }
         }
+        else if(type === 'shutter') {
+            const isExt = card.querySelector('.sht-box').value.includes('חיצוני');
+            let boxH = 40;
+            if(isExt) { ctx.fillStyle = "#eee"; ctx.fillRect(startX, startY-boxH, maxW, boxH); ctx.strokeRect(startX, startY-boxH, maxW, boxH); }
+            else { ctx.setLineDash([5,5]); ctx.strokeRect(startX, startY-boxH, maxW, boxH); ctx.setLineDash([]); }
+            ctx.strokeRect(startX, startY, maxW, maxH);
+            for(let y=0; y<maxH; y+=20) { ctx.strokeRect(startX, startY+y, maxW, 15); }
+        }
         else {
             ctx.strokeRect(startX, startY, maxW, maxH);
             ctx.fillText(`${w} X ${h}`, startX+maxW/2-30, startY+maxH+30);
@@ -436,9 +437,8 @@
         container.style.display = 'block';
     }
 
-    // וואטסאפ
     function openPreview() {
-        let txt = `*הצעת מחיר - יהונתן אלומיניום*\nלקוח: ${document.getElementById('clientName').value}\n\n`;
+        let txt = `*הצעת מחיר - יהונתן אלומיניום*\nלקוח: ${document.getElementById('clientName').value}\nהצעה מס': ${document.getElementById('quoteNumber').value}\n\n`;
         document.querySelectorAll('.item-card').forEach(c => {
             const type = c.querySelector('.item-type');
             const typeName = type.options[type.selectedIndex].text;
