@@ -2,985 +2,402 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>יהונתן אלומיניום - מערכת הצעות מחיר PRO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="יהונתן PRO">
+    <title>יהונתן אלומיניום PRO</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #1e40af; /* כחול אלומיניום עמוק */
-            --secondary: #3b82f6;
-            --accent: #f59e0b;
-            --bg: #f3f4f6;
-            --surface: #ffffff;
-            --text: #111827;
-            --border: #e5e7eb;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: var(--surface);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 20px;
-        }
-
-        h1 { color: var(--primary); margin: 0; font-size: 2.5rem; }
-        h2 { font-size: 1.2rem; color: #6b7280; font-weight: normal; }
-
-        /* טאבים לבחירת מוצר */
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: center;
-        }
-
-        .tab-btn {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-
-        .tab-btn:hover { background: #eff6ff; }
-        .tab-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        /* אזור עבודה ראשי */
-        .workspace {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .workspace { grid-template-columns: 1fr; }
-        }
-
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 10px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-
-        .row {
-            display: flex;
-            gap: 10px;
-        }
+        :root { --primary: #0d47a1; --primary-light: #42a5f5; --bg: #f0f4f8; --card: #ffffff; --text-dark: #1a202c; --whatsapp: #25D366; --border: #cbd5e0; --input-bg: #f7fafc; --danger: #e53e3e; }
+        body { font-family: 'Rubik', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: var(--text-dark); -webkit-tap-highlight-color: transparent; height: 100vh; overflow-x: hidden; }
         
-        .checkbox-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 5px;
-        }
-        .checkbox-wrapper input { width: auto; }
+        /* מסך כניסה */
+        #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0d47a1 0%, #002171 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: opacity 0.5s; }
+        .login-box { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .login-box h2 { color: var(--primary); margin-top: 0; }
+        .login-box input { width: 90%; margin-bottom: 15px; text-align: center; font-size: 20px; letter-spacing: 2px; }
+        .btn-login { background: var(--primary); color: white; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; }
 
-        /* קנבס שרטוט */
-        .canvas-container {
-            background: white;
-            border: 2px dashed var(--border);
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 400px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        canvas {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        .price-section {
-            background: #ecfdf5;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #10b981;
-            margin-top: 20px;
-        }
-
-        .add-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .add-btn:hover { background: #1e3a8a; }
-
-        /* טבלת הצעת מחיר */
-        .quote-list {
-            margin-top: 40px;
-            border-top: 2px solid var(--border);
-            padding-top: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            text-align: right;
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th { background-color: #f9fafb; }
+        /* אפליקציה ראשית */
+        header { background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%); color: white; padding: 30px 20px 40px; text-align: center; border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; box-shadow: 0 10px 25px rgba(13,71,161,0.25); position: relative; z-index: 10; }
+        header h1 { margin: 0; font-size: 26px; font-weight: 800; }
+        .container { padding: 0 20px; max-width: 650px; margin: -30px auto 0; padding-bottom: 140px; position: relative; z-index: 20; display: none; }
         
-        .item-row img {
-            max-width: 100px;
-            max-height: 80px;
-            border: 1px solid #ddd;
-        }
+        .card { background: var(--card); border-radius: 18px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); border: 1px solid white; }
+        .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .card-title { font-size: 18px; font-weight: 700; color: var(--primary); }
+        .btn-delete { background: #fff5f5; color: var(--danger); border: 1px solid #fed7d7; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+        
+        label { font-weight: 600; display: block; margin-bottom: 6px; font-size: 14px; }
+        input, select, textarea { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 16px; background-color: var(--input-bg); margin-bottom: 15px; font-family: 'Rubik', sans-serif; box-sizing: border-box; }
+        input:focus, select:focus { border-color: var(--primary-light); outline: none; box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15); background: #fff; }
+        
+        .row { display: flex; gap: 12px; } .row > div { flex: 1; }
+        
+        .btn-add-item { width: 100%; background: white; color: var(--primary); border: 2px dashed var(--primary-light); padding: 15px; border-radius: 15px; font-size: 16px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
+        .bottom-actions { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px 25px; box-shadow: 0 -5px 25px rgba(0,0,0,0.1); z-index: 100; border-radius: 20px 20px 0 0; display: none; display:flex; gap:10px; }
+        .btn-calc { flex:1; background: linear-gradient(90deg, var(--primary) 0%, #1565c0 100%); color: white; padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3); }
+        .btn-pdf { flex:1; background: #e53e3e; color: white; padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3); }
+        
+        .result-box { background: white; border-radius: 20px; border: 2px solid var(--primary-light); margin-top: 25px; display: none; overflow: hidden; margin-bottom: 20px; }
+        .result-header { background: var(--primary-light); color: white; padding: 15px; text-align: center; font-weight: 700; }
+        .result-body { padding: 20px; }
+        .price-line { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .total-line { font-size: 24px; font-weight: 800; color: var(--primary); border-top: 2px dashed #cbd5e0; padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; }
+        
+        .modal-overlay { position: fixed; top: 0; right: 0; left: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(5px); }
+        .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
+        .btn-download-sketch { background-color: #2d3748; color: white; padding: 10px 15px; border-radius: 8px; font-size: 14px; border: none; cursor: pointer; margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 100%; justify-content: center; }
 
-        .actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 30px;
-            justify-content: flex-end;
-        }
-
-        .action-btn {
-            padding: 12px 25px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-whatsapp { background-color: #25D366; color: white; }
-        .btn-pdf { background-color: #ef4444; color: white; }
-
-        /* טקסט משפטי */
-        .legal-footer {
-            margin-top: 50px;
-            font-size: 0.8rem;
-            color: #666;
-            border-top: 1px solid #ccc;
-            padding-top: 10px;
-            text-align: center;
-        }
-
-        .hidden { display: none; }
+        /* הסתרת אלמנטים שנועדו רק ל-PDF */
+        .pdf-only { display: none; }
+        .legal-footer { margin-top: 30px; font-size: 10px; color: #555; text-align: center; border-top: 1px solid #ccc; padding-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container" id="quote-area">
-    <header>
-        <h1>יהונתן אלומיניום</h1>
-        <h2>מערכת הצעות מחיר ושרטוט מתקדם</h2>
-    </header>
+<div id="loginScreen">
+    <div class="login-box">
+        <div style="font-size: 40px; margin-bottom: 10px;">🛡️</div>
+        <h2>כניסה למערכת</h2>
+        <input type="password" id="passwordInput" placeholder="****" inputmode="numeric">
+        <button class="btn-login" onclick="checkLogin()">היכנס</button>
+        <p id="loginError" style="color:red; font-size:12px; margin-top:10px; display:none;">סיסמה שגויה</p>
+    </div>
+</div>
 
-    <div class="customer-details">
-        <div class="row">
-            <div class="form-group" style="flex:1">
-                <label>שם הלקוח</label>
-                <input type="text" id="custName" placeholder="שם מלא">
-            </div>
-            <div class="form-group" style="flex:1">
-                <label>תאריך</label>
-                <input type="date" id="quoteDate">
+<div id="pdfContent"> <header><h1>יהונתן אלומיניום</h1><p>מערכת הצעות מחיר מקצועית</p></header>
+
+    <div class="container" id="mainApp" style="display:none"> <div class="card">
+            <div class="card-title">👤 פרטי לקוח</div>
+            <div class="row">
+                <div style="flex:2"><label>שם הלקוח:</label><input type="text" id="clientName" placeholder="שם מלא"></div>
+                <div style="flex:1"><label>תאריך:</label><input type="date" id="quoteDate"></div>
             </div>
         </div>
-    </div>
+        
+        <div id="itemsContainer"></div>
+        
+        <button class="btn-add-item" data-html2canvas-ignore="true" onclick="addItem()">➕ הוסף מוצר חדש</button>
+        
+        <div class="result-box" id="resultBox">
+            <div class="result-header">סיכום הזמנה</div>
+            <div class="result-body">
+                <div class="price-line"><span>סה"כ מוצרים:</span><span id="itemsSubtotal">0 ₪</span></div>
+                <div class="total-line"><span>סה"כ לתשלום:</span><span id="totalFinal">0 ₪</span></div>
+                
+                <div class="legal-footer">
+                    * המחיר כולל הובלה.<br>
+                    * הצעת מחיר זאת משמשת כחוזה.<br>
+                    * הסחורה בבעלות יהונתן אלומיניום עד התשלום.<br>
+                    * הצעת מחיר תקפה ל-5 ימי עסקים ויתכנו שינויים קלים ביום החתימת החוזה.<br>
+                    <strong>בכבוד רב, יהונתן אלומיניום</strong>
+                </div>
 
-    <div class="tabs" id="productTabs">
-        <button class="tab-btn active" onclick="setProduct('sliding')">חלון הזזה</button>
-        <button class="tab-btn" onclick="setProduct('pocket')">חלון כיס</button>
-        <button class="tab-btn" onclick="setProduct('hinge')">חלון ציר/דריי קיפ</button>
-        <button class="tab-btn" onclick="setProduct('fixed')">קבוע / ויטרינה</button>
-        <button class="tab-btn" onclick="setProduct('door')">דלתות כניסה/לובי</button>
-        <button class="tab-btn" onclick="setProduct('shutter')">תריסים</button>
-        <button class="tab-btn" onclick="setProduct('screen_roll')">רשת גלילה</button>
-        <button class="tab-btn" onclick="setProduct('shower')">מקלחונים</button>
-        <button class="tab-btn" onclick="setProduct('pergola')">פרגולות</button>
-        <button class="tab-btn" onclick="setProduct('fence')">גדרות</button>
-        <button class="tab-btn" onclick="setProduct('joker')">עבודות כלליות</button>
-    </div>
-
-    <div class="workspace">
-        <div class="controls" id="controlsPanel">
+                <button class="btn-add-item" style="margin-top:20px; background:var(--whatsapp); color:white; border:none;" data-html2canvas-ignore="true" onclick="openPreview()">שלח בוואטסאפ</button>
             </div>
-
-        <div class="canvas-container">
-            <canvas id="drawingCanvas" width="500" height="400"></canvas>
-            <div id="imagePreview" style="display:none; width: 100%; height: 100%; object-fit: contain;"></div>
-        </div>
-    </div>
-
-    <div class="price-section">
-        <div class="row">
-            <div class="form-group" style="flex:1">
-                <label>כמות יחידות</label>
-                <input type="number" id="quantity" value="1" min="1" onchange="updateTotal()">
-            </div>
-            <div class="form-group" style="flex:1">
-                <label>מחיר ליחידה (₪)</label>
-                <input type="number" id="manualPrice" placeholder="הזן מחיר סופי למוצר" onchange="updateTotal()">
-            </div>
-        </div>
-        <h3>סה"כ לשורה זו: <span id="lineTotal">0</span> ₪</h3>
-        <button class="add-btn" onclick="addItem()">הוסף להצעת המחיר ➕</button>
-    </div>
-
-    <div class="quote-list">
-        <h2>פירוט ההזמנה</h2>
-        <table id="itemsTable">
-            <thead>
-                <tr>
-                    <th>תמונה/שרטוט</th>
-                    <th>תיאור מוצר</th>
-                    <th>מידות</th>
-                    <th>כמות</th>
-                    <th>מחיר יח'</th>
-                    <th>סה"כ</th>
-                    <th>מחיקה</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-        <div style="text-align: left; margin-top: 20px; font-size: 1.5rem; font-weight: bold; color: var(--primary);">
-            סה"כ לתשלום: <span id="grandTotal">0</span> ₪
-        </div>
-
-        <div class="legal-footer">
-            <p>* המחיר כולל הובלה.</p>
-            <p>* הצעת מחיר זאת משמשת כחוזה.</p>
-            <p>* הסחורה בבעלות יהונתן אלומיניום עד התשלום המלא.</p>
-            <p>* הצעת המחיר תקפה ל-5 ימי עסקים ויתכנו שינויים קלים ביום חתימת החוזה.</p>
-            <p style="font-weight: bold; margin-top: 10px;">בכבוד רב, יהונתן אלומיניום</p>
         </div>
     </div>
 </div>
 
-<div class="actions container" style="margin-top: 20px; background: transparent; box-shadow: none;">
-    <button class="action-btn btn-pdf" onclick="generatePDF()">📄 הורד הצעת מחיר (PDF)</button>
-    <button class="action-btn btn-whatsapp" onclick="sendWhatsapp()">📱 שלח בוואטסאפ</button>
+<div class="bottom-actions" id="bottomNav" style="display:none">
+    <button class="btn-calc" onclick="calculateAll()">חשב סה"כ</button>
+    <button class="btn-pdf" onclick="exportPDF()">📄 הורד PDF</button>
+</div>
+
+<div class="modal-overlay" id="previewModal">
+    <div class="modal-content">
+        <h3 style="text-align:center;margin:0 0 15px 0;color:var(--primary)">טיוטת הודעה</h3>
+        <textarea id="previewText" style="width:100%; height:150px; font-family:sans-serif;"></textarea>
+        <div class="modal-btns" style="display:flex; gap:10px; margin-top:10px;">
+            <button class="btn-login" style="background:#ccc; color:black" onclick="closePreview()">סגור</button>
+            <button class="btn-login" style="background:var(--whatsapp)" onclick="sendWhatsapp()">שלח</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    // --- משתנים גלובליים ---
-    let currentType = 'sliding';
-    let cart = [];
-    const canvas = document.getElementById('drawingCanvas');
-    const ctx = canvas.getContext('2d');
-    let uploadedImage = null;
+// --- נתונים מעודכנים ---
+const profilesDB = {
+    "sliding": ["קליל 7000 קלאסי", "קליל 9000", "קליל 9200 (מפואר)", "קליל 1700 (בלגי)", "קליל 2200"],
+    "pocket": ["כיס בודד (מסילה 2 נתיבים)", "כיס בודד (מסילה 3 נתיבים)", "כיס כפול (מסילה 2 נתיבים)", "כיס כפול (מסילה 3 נתיבים)"],
+    "hinge": ["קליל 4500 (קלאסי)", "קליל 4300 (בלגי)", "קליל 5500 (משרדי)"],
+    "fixed": ["קליל 4300 בלגי FIX", "קליל 4500 קלאסי FIX", "קליל 2000 בייסיק FIX", "קליל 5500 אופיס FIX", "מתאם 7000/9000"],
+    "door": ["דלת 2000 פנל", "דלת לובי זכוכית", "דלת ציר בלגי 4300"],
+    "shutter": ["שלב 8 (רגיל)", "שלב אור (מיני)", "שלב מוקצף"],
+    "screen_roll": ["רשת גלילה (אנכית)", "רשת הזזה", "רשת קבועה"],
+    "pergola": ["פרגולה תלויה", "פרגולה עומדת", "גדר אלומיניום"],
+    "shower": ["מקלחון חזית", "מקלחון פינתי"],
+    "joker": ["עבודה כללית"]
+};
 
-    // --- תאריך ברירת מחדל ---
-    document.getElementById('quoteDate').valueAsDate = new Date();
+let itemCount = 0;
+document.getElementById('quoteDate').valueAsDate = new Date();
 
-    // --- הגדרות סדרות ונתונים ---
-    const profiles = {
-        sliding: ['קליל 7000 קלאסי', 'קליל 9000', 'קליל 9200 (מפואר)', 'קליל 1700 (בלגי)'],
-        pocket: ['כיס בודד - מסילה 2 נתיבים', 'כיס בודד - מסילה 3 נתיבים', 'כיס כפול - מסילה 2 נתיבים', 'כיס כפול - מסילה 3 נתיבים'],
-        hinge: ['קליל 4500 (קלאסי)', 'קליל 4300 (בלגי)', 'קליל 5500 (משרדי)'],
-        fixed: ['קליל 4300 בלגי FIX', 'קליל 4500 קלאסי FIX', 'קליל 2000 בייסיק FIX', 'קליל 5500 אופיס FIX', 'מתאם 7000/9000'],
-        door: ['דלת 2000 פנל', 'דלת לובי זכוכית', 'דלת ציר בלגי 4300'],
-        shutter: ['שלב 8 (רגיל)', 'שלב אור (מיני)', 'שלב מוקצף'],
-        pergola: ['פרופיל 15/5', 'פרופיל הייטק 20/4'],
-        fence: ['הייטק אפס', 'הייטק 10', 'רפפה']
+function checkLogin() {
+    if (document.getElementById('passwordInput').value === '1234') {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+        document.getElementById('bottomNav').style.display = 'flex';
+    } else {
+        document.getElementById('loginError').style.display = 'block';
+    }
+}
+
+function addItem() {
+    itemCount++;
+    const container = document.getElementById('itemsContainer');
+    const div = document.createElement('div');
+    div.className = 'card item-card';
+    div.id = `item-${itemCount}`;
+    
+    // HTML בסיסי לכרטיס
+    div.innerHTML = `
+        <div class="card-header-row">
+            <div class="card-title">פריט #${itemCount}</div>
+            <button class="btn-delete" onclick="this.closest('.card').remove()">מחק</button>
+        </div>
+
+        <label>סוג מוצר:</label>
+        <select class="item-type" onchange="updateFields(this)">
+            <option value="sliding">חלון הזזה</option>
+            <option value="pocket">חלון כיס (Pocket)</option>
+            <option value="hinge">חלון ציר / דריי קיפ</option>
+            <option value="fixed">קבוע / ויטרינה</option>
+            <option value="shutter">תריסים</option>
+            <option value="screen_roll">רשתות</option>
+            <option value="door">דלתות</option>
+            <option value="shower">מקלחונים</option>
+            <option value="pergola">פרגולות וגדרות</option>
+            <option value="joker">כללי / ג'וקר</option>
+        </select>
+
+        <div class="dynamic-fields" style="background:#f7fafc; padding:10px; border-radius:8px; margin-bottom:10px;"></div>
+
+        <div class="dims-price-row">
+            <div class="row">
+                <div><label>רוחב (ס"מ)</label><input type="number" class="item-w" placeholder="100"></div>
+                <div><label>גובה (ס"מ)</label><input type="number" class="item-h" placeholder="100"></div>
+            </div>
+            <div class="row">
+                <div><label>כמות</label><input type="number" class="item-qty" value="1"></div>
+                <div><label style="color:var(--primary)">מחיר יח' (₪)</label><input type="number" class="item-price" placeholder="מחיר פיקס"></div>
+            </div>
+        </div>
+
+        <div class="joker-extra" style="display:none">
+            <label>תיאור העבודה:</label>
+            <textarea class="item-desc" rows="3"></textarea>
+            <label>העלאת תמונה (אופציונלי):</label>
+            <input type="file" accept="image/*" onchange="handleImg(this)">
+            <img class="img-preview" style="max-width:100%; display:none; margin-top:10px; border-radius:10px;">
+        </div>
+
+        <button class="btn-download-sketch" onclick="generateSketch(this)">📸 הורד שרטוט לייצור</button>
+    `;
+    container.appendChild(div);
+    updateFields(div.querySelector('.item-type')); // אתחול שדות
+}
+
+function updateFields(select) {
+    const card = select.closest('.card');
+    const type = select.value;
+    const container = card.querySelector('.dynamic-fields');
+    const dimsRow = card.querySelector('.dims-price-row');
+    const jokerRow = card.querySelector('.joker-extra');
+    
+    // איפוס
+    jokerRow.style.display = type === 'joker' ? 'block' : 'none';
+    dimsRow.style.display = type === 'joker' ? 'none' : 'block';
+    if(type === 'joker') { container.innerHTML = ''; return; }
+
+    let html = `<label>דגם פרופיל:</label><select class="item-profile">`;
+    (profilesDB[type] || []).forEach(p => html += `<option value="${p}">${p}</option>`);
+    html += `</select>`;
+
+    // תוספות ספציפיות
+    if (type === 'sliding') {
+        html += `<div class="row">
+            <div><label>מס' כנפיים</label><input type="number" class="extra-sash" value="2"></div>
+            <div><label>זיגוג</label><select class="extra-glass"><option>שקוף</option><option>חלבי</option><option>טריפלקס</option></select></div>
+        </div>`;
+    }
+    else if (type === 'pocket') {
+        html += `<div class="row">
+            <div><label>הרכב</label><select class="extra-comp"><option>זכוכית בלבד</option><option>זכוכית+תריס</option><option>זכוכית+תריס+רשת</option></select></div>
+        </div>`;
+    }
+    else if (type === 'shutter') {
+        html += `<div class="row">
+            <div><label>ארגז</label><select class="extra-box"><option>פנימי/סמוי</option><option>חיצוני</option></select></div>
+            <div><label>מנוע</label><select class="extra-motor"><option>ידני</option><option>חשמלי רגיל</option><option>סומפי</option><option>סומפי רדיו</option></select></div>
+        </div>
+        <input type="number" class="extra-nm" placeholder="כוח מנוע (Nm)">`;
+    }
+    else if (type === 'pergola') {
+        html += `<div class="row">
+            <div><label>קירוי</label><select class="extra-roof"><option>ללא</option><option>סנטף רגיל</option><option>סנטף BH</option></select></div>
+            <div><label>מרזב?</label><select class="extra-gutter"><option>לא</option><option>כן</option></select></div>
+        </div>`;
+    }
+    else if (type === 'fixed') {
+        html += `<label>חיתוך צורני (מגרעת)?</label>
+        <div class="row">
+            <input type="number" class="extra-cut-w" placeholder="רוחב חיתוך">
+            <input type="number" class="extra-cut-h" placeholder="גובה חיתוך">
+        </div>`;
+    }
+
+    container.innerHTML = html;
+}
+
+function handleImg(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = input.closest('.card').querySelector('.img-preview');
+            img.src = e.target.result;
+            img.style.display = 'block';
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function calculateAll() {
+    let sum = 0;
+    document.querySelectorAll('.item-card').forEach(card => {
+        const qty = parseFloat(card.querySelector('.item-qty').value) || 1;
+        const price = parseFloat(card.querySelector('.item-price').value) || 0;
+        sum += (qty * price);
+    });
+    
+    document.getElementById('itemsSubtotal').innerText = sum.toLocaleString() + " ₪";
+    document.getElementById('totalFinal').innerText = sum.toLocaleString() + " ₪"; // מחיר סופי כולל הכל
+    document.getElementById('resultBox').style.display = 'block';
+    
+    setTimeout(() => document.getElementById('resultBox').scrollIntoView({behavior:'smooth'}), 200);
+}
+
+function openPreview() {
+    let text = `*הצעת מחיר - יהונתן אלומיניום*\nלקוח: ${document.getElementById('clientName').value}\n\n`;
+    
+    document.querySelectorAll('.item-card').forEach((card, i) => {
+        const type = card.querySelector('.item-type').options[card.querySelector('.item-type').selectedIndex].text;
+        const price = card.querySelector('.item-price').value;
+        const qty = card.querySelector('.item-qty').value;
+        
+        if (card.querySelector('.item-type').value === 'joker') {
+             const desc = card.querySelector('.item-desc').value;
+             text += `🔹 *${type}*\n${desc}\nכמות: ${qty} | מחיר: ${price} ₪\n\n`;
+        } else {
+            const w = card.querySelector('.item-w').value;
+            const h = card.querySelector('.item-h').value;
+            const profile = card.querySelector('.item-profile').value;
+            text += `🔹 *${type}*\nדגם: ${profile}\nמידות: ${w}x${h}\nכמות: ${qty} | מחיר יח': ${price} ₪\n\n`;
+        }
+    });
+    
+    text += `*סה"כ לתשלום: ${document.getElementById('totalFinal').innerText}*`;
+    document.getElementById('previewText').value = text;
+    document.getElementById('previewModal').style.display = 'flex';
+}
+
+function sendWhatsapp() {
+    const txt = encodeURIComponent(document.getElementById('previewText').value);
+    window.open(`https://wa.me/?text=${txt}`);
+    closePreview();
+}
+
+function closePreview() { document.getElementById('previewModal').style.display = 'none'; }
+
+function exportPDF() {
+    const element = document.getElementById('pdfContent');
+    // חשיפת האלמנטים המוסתרים לפני יצירת PDF
+    const resultBox = document.getElementById('resultBox');
+    resultBox.style.display = 'block'; 
+
+    const opt = {
+        margin: 0.2,
+        filename: `הצעת_מחיר_${document.getElementById('clientName').value}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
 
-    // --- אתחול ראשוני ---
-    setProduct('sliding');
+    html2pdf().set(opt).from(element).save();
+}
 
-    // --- פונקציית החלפת מוצר ---
-    function setProduct(type) {
-        currentType = type;
-        
-        // עדכון טאבים
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active'); // שימוש ב-event הנוכחי
-        
-        // ניקוי תמונה
-        uploadedImage = null;
-        document.getElementById('imagePreview').style.display = 'none';
-        canvas.style.display = 'block';
-
-        renderControls();
-        draw();
+// --- מנוע שרטוט מתקדם ---
+function generateSketch(btn) {
+    const card = btn.closest('.card');
+    const type = card.querySelector('.item-type').value;
+    const w = card.querySelector('.item-w').value || 100;
+    const h = card.querySelector('.item-h').value || 100;
+    
+    if (type === 'joker') {
+        alert("לא ניתן לייצר שרטוט למוצר כללי");
+        return;
     }
 
-    // --- בניית הטופס דינמית ---
-    function renderControls() {
-        const panel = document.getElementById('controlsPanel');
-        let html = '';
+    const canvas = document.createElement('canvas');
+    canvas.width = 800; canvas.height = 600;
+    const ctx = canvas.getContext('2d');
+    
+    // רקע
+    ctx.fillStyle = "white"; ctx.fillRect(0,0,800,600);
+    ctx.lineWidth = 3; ctx.strokeStyle = "#333";
+    
+    const startX = 100; const startY = 100;
+    const drawW = 600; const drawH = 400; // סכמתי
 
-        // שדות משותפים (רוחב/גובה) - לכולם חוץ מ"ג'וקר"
-        if (currentType !== 'joker') {
-            html += `
-            <div class="row">
-                <div class="form-group" style="flex:1"><label>רוחב (ס"מ)</label><input type="number" id="width" value="100" oninput="draw()"></div>
-                <div class="form-group" style="flex:1"><label>גובה (ס"מ)</label><input type="number" id="height" value="100" oninput="draw()"></div>
-            </div>`;
-        }
-
-        // לוגיקה ייחודית לכל מוצר
-        switch (currentType) {
-            case 'sliding':
-                html += `
-                    <div class="form-group"><label>דגם פרופיל</label><select id="profile" onchange="draw()">${getOptions(profiles.sliding)}</select></div>
-                    <div class="form-group"><label>מספר כנפיים (הקלד מספר)</label><input type="number" id="sashCount" value="2" min="1" oninput="draw()"></div>
-                    <div class="form-group"><label>זיגוג</label><select id="glass"><option>שקוף 4 מ"מ</option><option>טריפלקס 3+3</option><option>בידודית 4-6-4</option><option>חלבי</option></select></div>
-                    <div class="form-group"><label>חלוקה ("בלגי")</label><select id="division" onchange="draw()"><option value="none">ללא</option><option value="horizontal">פסים לרוחב</option><option value="grid">קוביות</option></select></div>
-                `;
-                break;
-            
-            case 'pocket':
-                html += `
-                    <div class="form-group"><label>סוג כיס ומסילה</label><select id="pocketType" onchange="draw()">${getOptions(profiles.pocket)}</select></div>
-                    <div class="checkbox-wrapper"><input type="checkbox" id="brushTrim" checked> <label>כולל הלבשות מברשת</label></div>
-                    <div class="form-group"><label>הרכב כנף</label><select id="pocketSash"><option>זכוכית בלבד</option><option>זכוכית + תריס</option><option>זכוכית + רשת + תריס</option></select></div>
-                `;
-                break;
-
-            case 'fixed':
-                html += `
-                    <div class="form-group"><label>דגם פרופיל</label><select id="profile" onchange="draw()">${getOptions(profiles.fixed)}</select></div>
-                    <div class="checkbox-wrapper"><input type="checkbox" id="isNotch" onchange="toggleNotch(this.checked)"> <label>יש מגרעת/חיתוך?</label></div>
-                    <div id="notchControls" class="hidden" style="background:#eee; padding:10px; border-radius:5px;">
-                        <label>מידות חיתוך (ס"מ)</label>
-                        <div class="row">
-                            <input type="number" id="cutW" placeholder="רוחב חיתוך" oninput="draw()">
-                            <input type="number" id="cutH" placeholder="גובה חיתוך" oninput="draw()">
-                        </div>
-                    </div>
-                `;
-                break;
-
-            case 'door':
-                html += `
-                    <div class="form-group"><label>סוג דלת</label><select id="profile" onchange="draw()">${getOptions(profiles.door)}</select></div>
-                    <div class="form-group"><label>מחזיר שמן</label><select id="closer" onchange="draw()"><option value="none">ללא</option><option value="top">חיצוני עליון</option><option value="floor">רצפתי</option><option value="hidden">סמוי</option></select></div>
-                    <div class="checkbox-wrapper"><input type="checkbox" id="hasTopFixed" onchange="renderControls(); draw()"> <label>קבוע עליון</label></div>
-                    ${document.getElementById('hasTopFixed')?.checked ? '<input type="number" id="topFixedHeight" placeholder="גובה קבוע עליון" oninput="draw()">' : ''}
-                    <div class="checkbox-wrapper"><input type="checkbox" id="hasSideFixed" onchange="renderControls(); draw()"> <label>קבוע צד</label></div>
-                    ${document.getElementById('hasSideFixed')?.checked ? '<input type="number" id="sideFixedWidth" placeholder="רוחב קבוע צד" oninput="draw()">' : ''}
-                `;
-                break;
-
-            case 'shutter':
-                html += `
-                    <div class="form-group"><label>סוג שלב</label><select id="slatType" onchange="draw()"><option value="foam">מוקצף (רגיל)</option><option value="light">שלב אור (מיני)</option></select></div>
-                    <div class="form-group"><label>ארגז תריס</label><select id="boxType" onchange="draw()"><option value="hidden">ארגז סמוי/פנימי</option><option value="external">ארגז חיצוני (מונובלוק)</option></select></div>
-                    <div class="row">
-                        <div class="form-group"><label>סוג מנוע</label><select id="motorType"><option>ידני (רצועה)</option><option>חשמלי רגיל</option><option>סומפי (Somfy)</option><option>סומפי רדיו</option></select></div>
-                        <div class="form-group"><label>כוח (Nm)</label><input type="number" id="motorNm" placeholder="20"></div>
-                    </div>
-                `;
-                break;
-
-            case 'screen_roll':
-                html += `
-                    <div class="form-group"><label>סוג רשת</label><input type="text" value="רשת גלילה (אנכית)" disabled></div>
-                    <p style="font-size:0.8rem; color:gray;">* מידות שמוזנות הן מידות פתח נטו. הקסטה תחושב פנימה.</p>
-                `;
-                break;
-
-            case 'pergola':
-                html += `
-                    <div class="form-group"><label>סוג פרופיל</label><select id="profile">${getOptions(profiles.pergola)}</select></div>
-                    <div class="form-group"><label>קירוי (סנטף)</label><select id="roofType" onchange="draw()"><option value="none">ללא קירוי</option><option value="bh">סנטף BH (כוורת)</option><option value="greca">סנטף גלי רגיל</option></select></div>
-                    <div class="checkbox-wrapper"><input type="checkbox" id="hasGutter" onchange="draw()"> <label>כולל מרזב + ירידה</label></div>
-                `;
-                break;
-
-            case 'fence':
-                html += `
-                    <div class="form-group"><label>דגם</label><select id="profile" onchange="draw()">${getOptions(profiles.fence)}</select></div>
-                    <div class="form-group"><label>מרווח בין שלבים (מ"מ)</label><select id="spacing" onchange="draw()"><option value="0">0 (אטום)</option><option value="10">10 מ"מ</option><option value="20">20 מ"מ</option></select></div>
-                    <div class="checkbox-wrapper"><input type="checkbox" id="hasGate" onchange="draw()"> <label>שער משולב בגדר</label></div>
-                `;
-                break;
-            
-            case 'shower':
-                html += `
-                    <div class="form-group"><label>סוג מקלחון</label><select id="showerType" onchange="draw()"><option value="front">חזית (דלת אחת)</option><option value="corner">פינתי (2 זכוכיות)</option></select></div>
-                    <div class="form-group"><label>סוג זכוכית</label><select><option>שקופה 8 מ"מ</option><option>גרניט/פסים</option><option>אקסטרא קליר</option></select></div>
-                `;
-                break;
-
-            case 'joker':
-                html += `
-                    <div class="form-group"><label>שם העבודה</label><input type="text" id="jokerTitle" placeholder="לדוגמה: הגבהת מעקה"></div>
-                    <div class="form-group"><label>תיאור מפורט</label><textarea id="jokerDesc" rows="4" placeholder="פרט כאן את מהות העבודה..."></textarea></div>
-                    <div class="form-group"><label>העלאת תמונה/סקיצה</label><input type="file" id="jokerImg" accept="image/*" onchange="handleImageUpload(this)"></div>
-                `;
-                break;
-        }
-
-        // צבע פרופיל (לכולם חוץ מג'וקר)
-        if (currentType !== 'joker') {
-            html += `<div class="form-group"><label>צבע פרופיל</label><input type="text" id="color" placeholder="לדוגמה: לבן, 9005, 7016"></div>`;
-        }
-        
-        // הערות
-        html += `<div class="form-group"><label>הערות</label><input type="text" id="notes" placeholder="הערות להדפסה"></div>`;
-
-        panel.innerHTML = html;
-        
-        // אם החלפנו מוצר, נצייר שוב כדי לאפס
-        if (currentType !== 'joker') draw();
+    // לוגיקה לפי סוג
+    if (type === 'pocket') {
+        // קיר
+        ctx.setLineDash([10,10]); ctx.strokeStyle="#999";
+        ctx.strokeRect(startX + drawW, startY, 200, drawH); // כיס
+        ctx.setLineDash([]); ctx.strokeStyle="#333";
+        // פתח
+        ctx.strokeRect(startX, startY, drawW, drawH);
+        // מסילה
+        ctx.beginPath(); ctx.moveTo(startX, startY+drawH-10); ctx.lineTo(startX+drawW+180, startY+drawH-10); ctx.stroke();
+        ctx.fillText("חלון כיס", startX + 20, startY + 40);
+    } 
+    else if (type === 'shutter') {
+        const boxH = 50;
+        ctx.fillStyle = "#ddd"; ctx.fillRect(startX, startY-boxH, drawW, boxH); ctx.strokeRect(startX, startY-boxH, drawW, boxH);
+        ctx.strokeRect(startX, startY, drawW, drawH);
+        for(let i=0; i<drawH; i+=20) { ctx.strokeRect(startX, startY+i, drawW, 15); } // שלבים
+        ctx.fillStyle = "black"; ctx.fillText("ארגז תריס", startX + drawW/2 - 30, startY - 20);
     }
-
-    function getOptions(arr) {
-        return arr.map(item => `<option value="${item}">${item}</option>`).join('');
-    }
-
-    function toggleNotch(isChecked) {
-        document.getElementById('notchControls').classList.toggle('hidden', !isChecked);
-        draw();
-    }
-
-    // --- טיפול בהעלאת תמונה ---
-    function handleImageUpload(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                uploadedImage = e.target.result;
-                document.getElementById('drawingCanvas').style.display = 'none';
-                const imgDiv = document.getElementById('imagePreview');
-                imgDiv.style.display = 'block';
-                imgDiv.innerHTML = `<img src="${uploadedImage}" style="max-width:100%; max-height:100%;" />`;
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    // --- מנוע השרטוט (The Drawing Engine) ---
-    function draw() {
-        // ניקוי קנבס
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        if (currentType === 'joker') return; // בג'וקר אין שרטוט אוטומטי
-
-        const wInput = document.getElementById('width').value || 100;
-        const hInput = document.getElementById('height').value || 100;
-
-        // הגדרת קנה מידה (Scale)
-        const padding = 50;
-        const scaleX = (canvas.width - padding * 2) / wInput;
-        const scaleY = (canvas.height - padding * 2) / hInput;
-        const scale = Math.min(scaleX, scaleY);
-        
-        const drawW = wInput * scale;
-        const drawH = hInput * scale;
-        const startX = (canvas.width - drawW) / 2;
-        const startY = (canvas.height - drawH) / 2;
-
-        ctx.strokeStyle = '#333';
-        ctx.lineWidth = 2;
-        ctx.fillStyle = '#eef2ff'; // צבע זכוכית ברירת מחדל
-
-        // לוגיקה לפי סוג
-        if (currentType === 'sliding') {
-            const sashes = document.getElementById('sashCount').value;
-            const division = document.getElementById('division').value;
-            
-            // מסגרת ראשית
-            ctx.strokeRect(startX, startY, drawW, drawH);
-            
-            // חלוקה לכנפיים
-            const sashW = drawW / sashes;
-            for (let i = 0; i < sashes; i++) {
-                // מסגרת כנף
-                ctx.strokeRect(startX + (i * sashW) + 5, startY + 5, sashW - 10, drawH - 10);
-                
-                // ידית (אמצע גובה, בצד)
-                ctx.fillStyle = '#000';
-                ctx.fillRect(startX + (i * sashW) + 10, startY + drawH/2 - 10, 4, 20); 
-                ctx.fillStyle = '#eef2ff';
-
-                // חלוקות בלגיות
-                if (division === 'horizontal') {
-                    ctx.beginPath();
-                    ctx.moveTo(startX + (i * sashW) + 5, startY + drawH/3);
-                    ctx.lineTo(startX + (i * sashW) + sashW - 5, startY + drawH/3);
-                    ctx.moveTo(startX + (i * sashW) + 5, startY + (drawH/3)*2);
-                    ctx.lineTo(startX + (i * sashW) + sashW - 5, startY + (drawH/3)*2);
-                    ctx.stroke();
-                } else if (division === 'grid') {
-                     // קווים אופקיים
-                    ctx.beginPath();
-                    ctx.moveTo(startX + (i * sashW) + 5, startY + drawH/2);
-                    ctx.lineTo(startX + (i * sashW) + sashW - 5, startY + drawH/2);
-                    // קו אנכי
-                    ctx.moveTo(startX + (i * sashW) + sashW/2, startY + 5);
-                    ctx.lineTo(startX + (i * sashW) + sashW/2, startY + drawH - 10);
-                    ctx.stroke();
-                }
-            }
-            // חץ כיוון
-            drawArrow(startX + 20, startY + drawH/2, startX + drawW - 20, startY + drawH/2);
-        }
-
-        else if (currentType === 'pocket') {
-            const pocketType = document.getElementById('pocketType').value;
-            const isDouble = pocketType.includes('כפול');
-            const tracks = pocketType.includes('3') ? 3 : 2;
-            
-            // שרטוט קיר (מקווקו)
-            ctx.setLineDash([5, 5]);
-            ctx.strokeStyle = '#999';
-            
-            if (!isDouble) {
-                // קיר כיס מימין
-                ctx.strokeRect(startX + drawW, startY, drawW * 0.8, drawH);
-                ctx.strokeRect(startX + drawW, startY, drawW * 0.8, drawH);
-            }
-            ctx.setLineDash([]);
-            ctx.strokeStyle = '#333';
-
-            // מסגרת פתח
-            ctx.strokeRect(startX, startY, drawW, drawH);
-            
-            // מסילות ברצפה (2 או 3)
-            for(let i=1; i<=tracks; i++) {
-                ctx.beginPath();
-                ctx.moveTo(startX, startY + drawH - (i*5));
-                // המסילה ממשיכה לתוך הכיס
-                const endTrack = isDouble ? startX + drawW + 20 : startX + drawW * 1.8;
-                ctx.lineTo(endTrack, startY + drawH - (i*5));
-                ctx.strokeStyle = '#666';
-                ctx.stroke();
-            }
-
-            // כנף נכנסת
-            ctx.fillStyle = 'rgba(200, 230, 255, 0.5)';
-            ctx.fillRect(startX + drawW/2, startY + 5, drawW/2, drawH - 10);
-            ctx.strokeRect(startX + drawW/2, startY + 5, drawW/2, drawH - 10);
-            
-            // חץ לתוך הכיס
-            drawArrow(startX + drawW/2, startY + drawH/2, startX + drawW + 30, startY + drawH/2);
-        }
-
-        else if (currentType === 'fixed') {
-             // בדיקת מגרעת
-             const isNotch = document.getElementById('isNotch')?.checked;
-             
-             ctx.beginPath();
-             if (isNotch) {
-                 const cutW = (document.getElementById('cutW').value || 0) * scale;
-                 const cutH = (document.getElementById('cutH').value || 0) * scale;
-                 // שרטוט מלבן עם חיתוך בפינה ימנית עליונה
-                 ctx.moveTo(startX, startY);
-                 ctx.lineTo(startX + drawW - cutW, startY); // עליון עד החיתוך
-                 ctx.lineTo(startX + drawW - cutW, startY + cutH); // יורד למטה
-                 ctx.lineTo(startX + drawW, startY + cutH); // ימינה
-                 ctx.lineTo(startX + drawW, startY + drawH); // יורד עד הסוף
-                 ctx.lineTo(startX, startY + drawH); // שמאלה
-                 ctx.closePath();
-                 
-                 // טקסט מידות החיתוך
-                 ctx.fillStyle = 'red';
-                 ctx.fillText(`חיתוך: ${document.getElementById('cutW').value}/${document.getElementById('cutH').value}`, startX + drawW - cutW - 10, startY + cutH + 15);
-             } else {
-                 ctx.rect(startX, startY, drawW, drawH);
-             }
-             ctx.stroke();
-             // קווי הצללה לזכוכית
-             ctx.beginPath();
-             ctx.moveTo(startX + 10, startY + drawH - 10);
-             ctx.lineTo(startX + drawW - 10, startY + 10);
-             ctx.strokeStyle = '#ddd';
-             ctx.stroke();
-        }
-
-        else if (currentType === 'shutter') {
-            const slatType = document.getElementById('slatType').value;
-            const boxType = document.getElementById('boxType').value;
-            
-            let boxH = 30 * scale; // גובה ארגז
-            
-            // שרטוט הארגז
-            if (boxType === 'external') {
-                ctx.fillStyle = '#ddd';
-                ctx.fillRect(startX - 10, startY - boxH, drawW + 20, boxH);
-                ctx.strokeRect(startX - 10, startY - boxH, drawW + 20, boxH);
-                ctx.fillStyle = '#000';
-                ctx.fillText('ארגז חיצוני', startX + drawW/2 - 30, startY - boxH/2);
-            } else {
-                ctx.setLineDash([5, 5]); // ארגז נסתר
-                ctx.strokeRect(startX, startY - boxH, drawW, boxH);
-                ctx.setLineDash([]);
-                ctx.fillText('ארגז נסתר', startX + drawW/2 - 30, startY - boxH/2);
-            }
-
-            // מסילות
-            ctx.strokeRect(startX, startY, drawW, drawH); // מסגרת
-            
-            // שלבים
-            const slatH = (slatType === 'light') ? 15 : 10;
-            const gap = (slatType === 'light') ? 4 : 0;
-            
-            for (let y = startY; y < startY + drawH; y += (slatH + gap)) {
-                ctx.strokeRect(startX + 5, y, drawW - 10, slatH);
-            }
-        }
-        
-        else if (currentType === 'pergola') {
-            // עמודים
-            ctx.fillRect(startX + 10, startY + 20, 10, drawH - 20); // עמוד שמאל
-            ctx.fillRect(startX + drawW - 20, startY + 20, 10, drawH - 20); // עמוד ימין
-            
-            // קורות (פרגולה במבט על או חתך) - נצייר קורות אורך
-            const roofType = document.getElementById('roofType').value;
-            
-            for (let x = startX; x < startX + drawW; x += 30) {
-                 ctx.strokeRect(x, startY + 20, 5, drawH - 20); // הצללה
-            }
-            
-            // מסגרת עליונה
-            ctx.strokeRect(startX, startY, drawW, drawH);
-
-            // קירוי סנטף
-            if (roofType !== 'none') {
-                ctx.beginPath();
-                ctx.strokeStyle = 'blue';
-                // גלים
-                for (let x = startX; x < startX + drawW; x+=10) {
-                    ctx.lineTo(x, startY + (x%20===0 ? 0 : 5));
-                }
-                ctx.stroke();
-                ctx.fillText(roofType === 'bh' ? 'סנטף BH כוורת' : 'סנטף גלי', startX + 10, startY - 10);
-            }
-            
-            // מרזב
-            if (document.getElementById('hasGutter').checked) {
-                ctx.fillStyle = '#555';
-                ctx.fillRect(startX + drawW, startY, 15, drawH); // מרזב בצד
-                ctx.beginPath();
-                ctx.arc(startX + drawW + 7, startY + drawH, 10, 0, 2*Math.PI); // יציאה
-                ctx.fill();
-                ctx.fillText('מרזב', startX + drawW + 20, startY + 20);
-            }
-        }
-        
-        else if (currentType === 'screen_roll') {
-            // קסטה למעלה
-            const boxH = 40; // קבוע בפיקסלים לציור
-            ctx.fillStyle = '#ddd';
-            ctx.fillRect(startX, startY, drawW, boxH);
-            ctx.strokeRect(startX, startY, drawW, boxH);
-            ctx.fillStyle = '#000';
-            ctx.fillText('קסטה עליונה', startX + drawW/2 - 30, startY + 25);
-            
-            // מסילות צד
-            ctx.fillRect(startX, startY + boxH, 10, drawH - boxH);
-            ctx.fillRect(startX + drawW - 10, startY + boxH, 10, drawH - boxH);
-            
-            // רשת
-            ctx.globalAlpha = 0.2;
-            ctx.fillStyle = 'gray';
-            ctx.fillRect(startX + 10, startY + boxH, drawW - 20, drawH - boxH);
-            ctx.globalAlpha = 1.0;
-            
-            ctx.strokeRect(startX, startY, drawW, drawH);
-        }
-
-        else if (currentType === 'door') {
-            const hasTop = document.getElementById('hasTopFixed')?.checked;
-            const hasSide = document.getElementById('hasSideFixed')?.checked;
-            let topH = 0;
-            let sideW = 0;
-
-            if (hasTop) topH = (canvas.height * 0.2); // ויזואלי בלבד
-            if (hasSide) sideW = (canvas.width * 0.2);
-
-            // מסגרת ראשית (הכל)
-            const totalW = drawW; 
-            const totalH = drawH;
-            
-            // שרטוט קבוע עליון
-            if (hasTop) {
-                ctx.strokeRect(startX, startY, totalW, topH);
-                ctx.fillText('קבוע עליון', startX + totalW/2 - 20, startY + topH/2);
-            }
-            
-            // שרטוט קבוע צד
-            if (hasSide) {
-                ctx.strokeRect(startX, startY + topH, sideW, totalH - topH);
-                ctx.fillText('קבוע צד', startX + 5, startY + totalH/2);
-            }
-            
-            // הדלת עצמה
-            const doorX = startX + sideW;
-            const doorY = startY + topH;
-            const doorW = totalW - sideW;
-            const doorH = totalH - topH;
-            
-            ctx.strokeRect(doorX, doorY, doorW, doorH);
-            
-            // משולש פתיחה
-            ctx.beginPath();
-            ctx.moveTo(doorX, doorY);
-            ctx.lineTo(doorX + doorW, doorY + doorH/2);
-            ctx.lineTo(doorX, doorY + doorH);
-            ctx.strokeStyle = '#aaa';
-            ctx.stroke();
-
-            // מחזיר שמן
-            const closer = document.getElementById('closer').value;
-            if (closer !== 'none') {
-                ctx.fillStyle = 'black';
-                // משולש קטן למעלה
-                ctx.beginPath();
-                ctx.moveTo(doorX + doorW - 10, doorY);
-                ctx.lineTo(doorX + doorW - 40, doorY);
-                ctx.lineTo(doorX + doorW - 10, doorY + 20);
-                ctx.fill();
-                ctx.fillText('מחזיר שמן', doorX + doorW - 60, doorY - 5);
-            }
-        }
-
-        else {
-            // ברירת מחדל לכל השאר
-            ctx.strokeRect(startX, startY, drawW, drawH);
-            ctx.fillText(currentType, startX + drawW/2, startY + drawH/2);
-        }
-
-        // טקסט מידות ראשיות
-        ctx.fillStyle = '#000';
-        ctx.font = '14px Arial';
-        ctx.textAlign = 'center';
-        // רוחב
-        ctx.fillText(`${wInput}`, startX + drawW / 2, startY - 10);
-        // גובה
-        ctx.textAlign = 'left';
-        ctx.fillText(`${hInput}`, startX + drawW + 10, startY + drawH / 2);
-    }
-
-    function drawArrow(fromx, fromy, tox, toy) {
-        var headlen = 10;
-        var dx = tox - fromx;
-        var dy = toy - fromy;
-        var angle = Math.atan2(dy, dx);
-        ctx.beginPath();
-        ctx.moveTo(fromx, fromy);
-        ctx.lineTo(tox, toy);
-        ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
-        ctx.moveTo(tox, toy);
-        ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+    else if (type === 'pergola') {
+        // עמודים
+        ctx.fillRect(startX, startY+50, 20, drawH-50);
+        ctx.fillRect(startX+drawW-20, startY+50, 20, drawH-50);
+        // גג
+        ctx.strokeRect(startX, startY, drawW, 50);
+        // סנטף
+        ctx.beginPath(); ctx.strokeStyle="blue";
+        for(let x=startX; x<startX+drawW; x+=10) ctx.lineTo(x, startY-10 + (x%20===0?0:10));
         ctx.stroke();
     }
-
-    // --- הוספה לסל ---
-    function addItem() {
-        const qty = parseInt(document.getElementById('quantity').value);
-        const price = parseFloat(document.getElementById('manualPrice').value);
-        
-        if (!price || price <= 0) {
-            alert('נא להזין מחיר למוצר');
-            return;
-        }
-
-        let desc = '';
-        let dims = '';
-        let imgSrc = '';
-
-        if (currentType === 'joker') {
-            desc = `<b>${document.getElementById('jokerTitle').value}</b><br>${document.getElementById('jokerDesc').value}`;
-            dims = '-';
-            imgSrc = uploadedImage || ''; // שימוש בתמונה שהועלתה
-        } else {
-            // בניית תיאור אוטומטי
-            const w = document.getElementById('width').value;
-            const h = document.getElementById('height').value;
-            dims = `${w} X ${h}`;
-            
-            const profile = document.getElementById('profile') ? document.getElementById('profile').value : '';
-            const color = document.getElementById('color').value;
-            desc = `<b>${translateType(currentType)}</b> - ${profile}`;
-            if(color) desc += `<br>צבע: ${color}`;
-            
-            // תוספות ספציפיות
-            if(currentType === 'sliding') desc += `<br>כנפיים: ${document.getElementById('sashCount').value}, ${document.getElementById('glass').value}`;
-            if(currentType === 'shutter') {
-                const motor = document.getElementById('motorType').value;
-                desc += `<br>שלב: ${document.getElementById('slatType').value}, מנוע: ${motor}`;
-                if(motor.includes('סומפי') || motor.includes('חשמלי')) {
-                     desc += ` (${document.getElementById('motorNm').value}Nm)`;
-                }
-            }
-            if(currentType === 'pergola') desc += `<br>קירוי: ${document.getElementById('roofType').value}`;
-            
-            // לקיחת תמונה מהקנבס
-            imgSrc = canvas.toDataURL();
-        }
-
-        const item = {
-            id: Date.now(),
-            desc: desc,
-            dims: dims,
-            qty: qty,
-            price: price,
-            total: qty * price,
-            image: imgSrc
-        };
-
-        cart.push(item);
-        renderCart();
-        
-        // איפוס שדות מחיר
-        document.getElementById('manualPrice').value = '';
-        document.getElementById('lineTotal').innerText = '0';
-        if(currentType === 'joker') {
-            document.getElementById('jokerTitle').value = '';
-            document.getElementById('jokerDesc').value = '';
-            document.getElementById('jokerImg').value = '';
-            uploadedImage = null;
-            document.getElementById('imagePreview').style.display = 'none';
-        }
+    else {
+        // מלבן רגיל
+        ctx.strokeRect(startX, startY, drawW, drawH);
+        ctx.fillText(`${w} X ${h}`, startX + drawW/2 - 40, startY + drawH + 30);
     }
 
-    function renderCart() {
-        const tbody = document.querySelector('#itemsTable tbody');
-        tbody.innerHTML = '';
-        let grandTotal = 0;
+    // כותרת
+    ctx.font = "20px Arial"; ctx.fillStyle = "black";
+    ctx.fillText(`יהונתן אלומיניום | ${type}`, 50, 50);
 
-        cart.forEach((item, index) => {
-            grandTotal += item.total;
-            const tr = document.createElement('tr');
-            tr.className = 'item-row';
-            tr.innerHTML = `
-                <td>${item.image ? `<img src="${item.image}">` : ''}</td>
-                <td style="text-align:right;">${item.desc}</td>
-                <td>${item.dims}</td>
-                <td>${item.qty}</td>
-                <td>₪${item.price.toLocaleString()}</td>
-                <td>₪${item.total.toLocaleString()}</td>
-                <td><button onclick="removeItem(${index})" style="background:red; color:white; border:none; border-radius:4px; cursor:pointer;">X</button></td>
-            `;
-            tbody.appendChild(tr);
-        });
-
-        document.getElementById('grandTotal').innerText = grandTotal.toLocaleString();
-    }
-
-    function removeItem(index) {
-        cart.splice(index, 1);
-        renderCart();
-    }
-
-    function updateTotal() {
-        const q = document.getElementById('quantity').value;
-        const p = document.getElementById('manualPrice').value;
-        document.getElementById('lineTotal').innerText = (q * p).toLocaleString();
-    }
-
-    function translateType(type) {
-        const types = {
-            'sliding': 'חלון הזזה', 'pocket': 'חלון כיס', 'hinge': 'חלון ציר', 
-            'fixed': 'קבוע', 'door': 'דלת כניסה', 'shutter': 'תריס', 
-            'screen_roll': 'רשת גלילה', 'shower': 'מקלחון', 'pergola': 'פרגולה', 
-            'fence': 'גדר', 'joker': 'עבודות כלליות'
-        };
-        return types[type] || type;
-    }
-
-    // --- ייצוא ---
-    function sendWhatsapp() {
-        let text = `שלום ${document.getElementById('custName').value || 'לקוח'},\nהנה הצעת מחיר מיהונתן אלומיניום:\n`;
-        cart.forEach(item => {
-            // ניקוי תגיות HTML לוואטסאפ
-            const cleanDesc = item.desc.replace(/<br>/g, ', ').replace(/<b>/g, '*').replace(/<\/b>/g, '*');
-            text += `\n📦 ${cleanDesc}\nמידות: ${item.dims}\nכמות: ${item.qty} | מחיר: ₪${item.price}\n`;
-        });
-        text += `\nסה"כ: ₪${document.getElementById('grandTotal').innerText}`;
-        
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
-    }
-
-    function generatePDF() {
-        const element = document.getElementById('quote-area');
-        const opt = {
-            margin: 0.5,
-            filename: `הצעת_מחיר_${document.getElementById('custName').value}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        };
-        
-        // הסתרת אלמנטים לא רצויים ב-PDF
-        const controls = document.getElementById('productTabs');
-        const panels = document.getElementById('controlsPanel');
-        const canvasArea = document.querySelector('.canvas-container'); // מסתירים את אזור העבודה, משאירים רק את הטבלה
-        const addBtn = document.querySelector('.price-section');
-        
-        controls.style.display = 'none';
-        panels.style.display = 'none';
-        canvasArea.style.display = 'none';
-        addBtn.style.display = 'none';
-
-        html2pdf().set(opt).from(element).save().then(() => {
-            // החזרת התצוגה
-            controls.style.display = 'flex';
-            panels.style.display = 'flex';
-            canvasArea.style.display = 'flex';
-            addBtn.style.display = 'block';
-        });
-    }
-
+    // הורדה
+    const link = document.createElement('a');
+    link.download = `Sketch_${type}.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+}
 </script>
-
 </body>
 </html>
