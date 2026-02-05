@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* --- העיצוב המקורי (ללא שינויים) --- */
+        /* --- העיצוב המקורי שלך (ללא שינויים) --- */
         :root { --primary: #0d47a1; --primary-light: #42a5f5; --bg: #f0f4f8; --card: #ffffff; --text-dark: #1a202c; --whatsapp: #25D366; --border: #cbd5e0; --input-bg: #f7fafc; --danger: #e53e3e; }
         body { font-family: 'Rubik', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: var(--text-dark); -webkit-tap-highlight-color: transparent; height: 100vh; overflow-x: hidden; }
         
@@ -50,7 +50,7 @@
         .price-line { display: flex; justify-content: space-between; margin-bottom: 10px; }
         .total-line { font-size: 24px; font-weight: 800; color: var(--primary); border-top: 2px dashed #cbd5e0; padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; }
 
-        /* אלמנטים פנימיים חדשים (בעיצוב המקורי) */
+        /* אלמנטים פנימיים חדשים (משתלבים בעיצוב המקורי) */
         .extra-panel { background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
         .notch-grid { display: flex; gap: 10px; margin-bottom: 10px; }
         .notch-btn { flex: 1; padding: 10px; border: 1px solid var(--border); background: white; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; }
@@ -80,8 +80,10 @@
     <div class="container" id="mainApp">
         <div class="card">
             <div class="card-title">👤 פרטי לקוח</div>
+            <label>שם הלקוח:</label>
+            <input type="text" id="clientName" placeholder="ישראל ישראלי">
             <div class="row">
-                <div style="flex:2"><label>שם הלקוח:</label><input type="text" id="clientName" placeholder="ישראל ישראלי"></div>
+                <div style="flex:1"><label>תאריך:</label><input type="date" id="quoteDate"></div>
                 <div style="flex:1"><label>מס' הצעה:</label><input type="number" id="quoteNumber" style="font-weight:700;text-align:center"></div>
             </div>
         </div>
@@ -150,8 +152,9 @@
     };
 
     let itemCount = 0;
-    // טעינת מספר הצעה
+    // טעינת תאריך ומספר הצעה
     document.addEventListener('DOMContentLoaded', () => { 
+        document.getElementById('quoteDate').valueAsDate = new Date();
         const saved = localStorage.getItem('quoteCounter'); 
         document.getElementById('quoteNumber').value = saved ? saved : 1; 
     });
