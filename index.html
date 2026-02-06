@@ -9,45 +9,39 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="יהונתן PRO">
     <title>יהונתן אלומיניום PRO</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- העיצוב המקורי (ללא שינוי) --- */
         :root { --primary: #0d47a1; --primary-light: #42a5f5; --bg: #f0f4f8; --card: #ffffff; --text-dark: #1a202c; --whatsapp: #25D366; --border: #cbd5e0; --input-bg: #f7fafc; --danger: #e53e3e; }
         body { font-family: 'Rubik', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: var(--text-dark); -webkit-tap-highlight-color: transparent; height: 100vh; overflow-x: hidden; }
         
         /* מסך כניסה */
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0d47a1 0%, #002171 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: opacity 0.5s; }
         .login-box { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .login-box h2 { color: var(--primary); margin-top: 0; }
-        .login-box p { color: #555; margin-bottom: 10px; font-weight: 500; }
-        .login-box input { width: 90%; margin-bottom: 15px; text-align: center; font-size: 20px; letter-spacing: 2px; border: 1px solid #ccc; padding: 10px; border-radius: 8px; }
-        .btn-login { background: var(--primary); color: white; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .btn-login { background: var(--primary); color: white; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .login-box input { width: 90%; margin-bottom: 10px; text-align: center; font-size: 20px; letter-spacing: 2px; border: 1px solid #ccc; padding: 10px; border-radius: 8px; }
 
-        /* כותרת */
-        header { background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%); color: white; padding: 30px 20px 40px; text-align: center; border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; box-shadow: 0 10px 25px rgba(13,71,161,0.25); position: relative; z-index: 10; }
-        header h1 { margin: 0; font-size: 26px; font-weight: 800; }
+        /* כותרת - תיקון גלילה */
+        header { background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%); color: white; padding: 30px 20px 30px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); margin-bottom: 20px; }
+        header h1 { margin: 0; font-size: 28px; font-weight: 800; }
         
-        .container { padding: 0 20px; max-width: 650px; margin: -30px auto 0; padding-bottom: 140px; position: relative; z-index: 20; display: none; }
+        .container { padding: 0 20px; max-width: 650px; margin: 0 auto; padding-bottom: 140px; }
         
-        .card { background: var(--card); border-radius: 18px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); border: 1px solid white; position: relative; }
+        .card { background: var(--card); border-radius: 18px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); border: 1px solid white; }
         .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         .card-title { font-size: 18px; font-weight: 700; color: var(--primary); }
         .btn-delete { background: #fff5f5; color: var(--danger); border: 1px solid #fed7d7; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
         
         label { font-weight: 600; display: block; margin-bottom: 6px; font-size: 14px; }
         input, select, textarea { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 16px; background-color: var(--input-bg); margin-bottom: 15px; font-family: 'Rubik', sans-serif; box-sizing: border-box; }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary-light); outline: none; box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15); background: #fff; }
         
         .row { display: flex; gap: 12px; } .row > div { flex: 1; }
-        
         .btn-add-item { width: 100%; background: white; color: var(--primary); border: 2px dashed var(--primary-light); padding: 15px; border-radius: 15px; font-size: 16px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
         
-        .bottom-actions { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px 25px; box-shadow: 0 -5px 25px rgba(0,0,0,0.1); z-index: 100; border-radius: 20px 20px 0 0; display: none; gap: 10px; }
+        .bottom-actions { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px 25px; box-shadow: 0 -5px 25px rgba(0,0,0,0.1); z-index: 100; border-radius: 20px 20px 0 0; display: flex; gap: 10px; }
         .btn-action { flex: 1; padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer; text-align: center; }
         .btn-calc { background: linear-gradient(90deg, var(--primary) 0%, #1565c0 100%); color: white; }
         .btn-pdf { background: #e53e3e; color: white; }
@@ -58,38 +52,41 @@
         .price-line { display: flex; justify-content: space-between; margin-bottom: 10px; }
         .total-line { font-size: 24px; font-weight: 800; color: var(--primary); border-top: 2px dashed #cbd5e0; padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; }
 
-        /* אלמנטים מיוחדים */
         .color-tabs { display: flex; background: #e2e8f0; padding: 4px; border-radius: 12px; margin-bottom: 15px; }
         .tab { flex: 1; text-align: center; padding: 10px; font-size: 14px; font-weight: 600; border-radius: 9px; cursor: pointer; color: #718096; transition: all 0.2s; }
         .tab.active { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
 
         .extra-panel { background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0; display: none; }
-        
         .notch-grid { display: flex; gap: 10px; margin-bottom: 10px; }
         .notch-btn { flex: 1; padding: 10px; border: 1px solid var(--border); background: white; border-radius: 8px; cursor: pointer; text-align: center; font-weight: bold; }
         .notch-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
 
-        .legal-footer { margin-top: 30px; font-size: 11px; color: #718096; text-align: center; border-top: 1px solid #cbd5e0; padding-top: 15px; line-height: 1.6; }
-        
         .btn-download-sketch { background-color: #2d3748; color: white; padding: 12px; border-radius: 8px; font-size: 15px; border: none; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .btn-download-sketch:active { transform: scale(0.98); }
-
+        
         .modal-overlay { position: fixed; top: 0; right: 0; left: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(5px); }
         .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
-        
-        /* לוח ציור */
         canvas#drawingPad { border: 2px dashed #cbd5e0; border-radius: 10px; touch-action: none; background: white; cursor: crosshair; width: 100%; height: 300px; }
-        
-        /* סגנון ל-PDF המוסתר */
-        #invoice-template { display: none; font-family: 'Arial', sans-serif; direction: rtl; padding: 20px; background: white; width: 100%; max-width: 800px; }
+
+        /* סגנון ל-PDF המוסתר (תיקון: Off-screen ולא display:none) */
+        #invoice-template { 
+            position: absolute; 
+            top: 0; 
+            left: -9999px; /* מעיף אותו החוצה מהמסך אבל משאיר אותו קיים */
+            width: 800px; 
+            background: white; 
+            padding: 40px;
+            font-family: 'Arial', sans-serif; 
+            direction: rtl; 
+            z-index: -1;
+        }
         #invoice-template table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
-        #invoice-template th { background-color: #0d47a1; color: white; padding: 10px; text-align: right; border: 1px solid #ddd; }
-        #invoice-template td { padding: 10px; border: 1px solid #ddd; vertical-align: middle; }
-        #invoice-template tr:nth-child(even) { background-color: #f2f2f2; }
-        .invoice-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0d47a1; padding-bottom: 20px; }
-        .invoice-summary { float: left; width: 300px; margin-top: 20px; }
-        .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-        .summary-row.total { font-weight: bold; font-size: 1.2em; border-top: 2px solid #0d47a1; border-bottom: none; margin-top: 10px; padding-top: 10px; color: #0d47a1; }
+        #invoice-template th { background-color: #0d47a1; color: white; padding: 12px; text-align: right; border: 1px solid #ddd; font-size: 14px; }
+        #invoice-template td { padding: 12px; border: 1px solid #ddd; vertical-align: middle; font-size: 14px; }
+        #invoice-template tr:nth-child(even) { background-color: #f9f9f9; }
+        .invoice-header { text-align: center; margin-bottom: 40px; border-bottom: 3px solid #0d47a1; padding-bottom: 20px; }
+        .summary-box { float: left; width: 350px; margin-top: 30px; background: #f8f9fa; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 15px; }
+        .summary-row.total { font-weight: bold; font-size: 18px; border-top: 2px solid #0d47a1; border-bottom: none; margin-top: 10px; padding-top: 10px; color: #0d47a1; }
     </style>
 </head>
 <body>
@@ -98,7 +95,6 @@
     <div class="login-box">
         <div style="font-size: 40px; margin-bottom: 10px;">🛡️</div>
         <h2>כניסה למערכת</h2>
-        <p>נא להקיש סיסמה</p>
         <input type="password" id="passwordInput" placeholder="****" inputmode="numeric">
         <button class="btn-login" onclick="checkLogin()">היכנס</button>
         <p id="loginError" style="color:red; font-size:12px; margin-top:10px; display:none;">סיסמה שגויה</p>
@@ -107,9 +103,9 @@
 
 <div id="invoice-template">
     <div class="invoice-header">
-        <h1 style="margin:0; color:#0d47a1;">יהונתן אלומיניום</h1>
-        <p style="margin:5px 0;">הצעת מחיר מקצועית</p>
-        <div style="display:flex; justify-content:space-between; margin-top:20px; font-weight:bold;">
+        <h1 style="margin:0; color:#0d47a1; font-size: 32px;">יהונתן אלומיניום</h1>
+        <p style="margin:5px 0; font-size: 18px; color: #555;">הצעת מחיר מקצועית</p>
+        <div style="display:flex; justify-content:space-between; margin-top:30px; font-weight:bold; font-size: 16px;">
             <span id="pdf-client">לקוח: </span>
             <span id="pdf-date">תאריך: </span>
             <span id="pdf-number">מס' הצעה: </span>
@@ -120,25 +116,24 @@
         <thead>
             <tr>
                 <th style="width:5%">#</th>
-                <th style="width:40%">תיאור מוצר</th>
-                <th style="width:20%">מידות (ס"מ)</th>
+                <th style="width:45%">תיאור מוצר</th>
+                <th style="width:15%">מידות (ס"מ)</th>
                 <th style="width:10%">כמות</th>
-                <th style="width:12%">מחיר יח'</th>
-                <th style="width:13%">סה"כ</th>
+                <th style="width:10%">מחיר יח'</th>
+                <th style="width:15%">סה"כ</th>
             </tr>
         </thead>
-        <tbody id="pdf-table-body">
-            </tbody>
+        <tbody id="pdf-table-body"></tbody>
     </table>
     
-    <div class="invoice-summary">
-        <div class="summary-row"><span>סה"כ לפני מע"מ:</span><span id="pdf-subtotal"></span></div>
+    <div class="summary-box">
+        <div class="summary-row"><span>סה"כ מוצרים + התקנה:</span><span id="pdf-subtotal"></span></div>
         <div class="summary-row"><span>מע"מ (18%):</span><span id="pdf-vat"></span></div>
         <div class="summary-row total"><span>סה"כ לתשלום:</span><span id="pdf-total"></span></div>
     </div>
     <div style="clear:both"></div>
     
-    <div style="margin-top:50px; font-size:12px; color:#555; border-top:1px solid #ccc; padding-top:10px;">
+    <div style="margin-top:60px; font-size:12px; color:#555; border-top:1px solid #ccc; padding-top:15px; line-height: 1.8;">
         * המחיר כולל הובלה והתקנה.<br>
         * הצעת מחיר זאת משמשת כחוזה עבודה.<br>
         * הסחורה בבעלות יהונתן אלומיניום עד התשלום המלא.<br>
@@ -147,7 +142,12 @@
     </div>
 </div>
 
-<div class="container" id="mainApp">
+<header>
+    <h1>יהונתן אלומיניום</h1>
+    <p style="margin:5px 0 0; opacity:0.9;">מערכת הצעות מחיר</p>
+</header>
+
+<div class="container" id="mainApp" style="display:none">
     <div class="card">
         <div class="card-title">👤 פרטי לקוח</div>
         <label>שם הלקוח:</label>
@@ -160,7 +160,7 @@
     
     <div id="itemsContainer"></div>
     
-    <button class="btn-add-item" data-html2canvas-ignore="true" onclick="addItem()">➕ הוסף מוצר חדש</button>
+    <button class="btn-add-item" onclick="addItem()">➕ הוסף מוצר חדש</button>
     
     <div class="card" style="background:#ebf8ff; border:1px solid #bee3f8;">
         <div class="card-title">🛠️ תוספות והתקנה</div>
@@ -177,12 +177,12 @@
             <div class="price-line"><span>מע"מ (18%):</span><span id="totalVat">0 ₪</span></div>
             <div class="total-line"><span>סה"כ לתשלום:</span><span id="totalFinal">0 ₪</span></div>
             
-            <button class="btn-add-item" style="margin-top:20px; background:var(--whatsapp); color:white; border:none;" data-html2canvas-ignore="true" onclick="openPreview()">שלח הצעה בוואטסאפ</button>
+            <button class="btn-add-item" style="margin-top:20px; background:var(--whatsapp); color:white; border:none;" onclick="openPreview()">שלח הצעה בוואטסאפ</button>
         </div>
     </div>
 </div>
 
-<div class="bottom-actions" id="bottomNav">
+<div class="bottom-actions" id="bottomNav" style="display:none">
     <button class="btn-action btn-calc" onclick="calculateAll()">חשב סה"כ לתשלום</button>
     <button class="btn-action btn-pdf" onclick="generatePDF()">📄 הורד PDF</button>
 </div>
@@ -211,7 +211,7 @@
 </div>
 
 <script>
-    // --- נתונים (פרופילים אמיתיים לפרגולות) ---
+    // --- נתונים ---
     const profilesDB = {
         "sliding": ["קליל 7000 קלאסי", "קליל 9000", "קליל 9200", "קליל 1700 בלגי", "קליל 2200 אופיס"],
         "pocket": ["כיס בודד (2 נתיבים)", "כיס בודד (3 נתיבים)", "כיס כפול (2 נתיבים)", "כיס כפול (3 נתיבים)"],
@@ -348,7 +348,10 @@
                      </div>
                 </div>
                 
-                <img class="img-display" style="width:100%; border-radius:10px; margin-top:10px; display:none; border:1px solid #ccc">
+                <div class="img-container" style="position:relative; margin-top:10px; display:none">
+                    <img class="img-display" style="width:100%; border-radius:10px; border:1px solid #ccc">
+                    <button class="btn-delete" style="position:absolute; top:5px; left:5px; background:rgba(255,255,255,0.9)" onclick="clearJokerImage(this)">🗑️ מחק שרטוט</button>
+                </div>
                 
                 <div class="row" style="margin-top:15px">
                     <div><label>כמות</label><input type="number" class="qty-input-joker" value="1"></div>
@@ -494,26 +497,35 @@
         panel.querySelector('.notch-dims').style.display = 'flex';
     }
 
+    // --- לוגיקת ג'וקר ---
     function openDrawing(btn) {
         activeDrawingBtn = btn;
         document.getElementById('drawingModal').style.display = 'flex';
         initCanvas();
     }
     
-    function closeDrawing() {
-        document.getElementById('drawingModal').style.display = 'none';
-    }
+    function closeDrawing() { document.getElementById('drawingModal').style.display = 'none'; }
 
     function previewImage(input) {
         if(input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                const img = input.closest('.joker-panel').querySelector('.img-display');
+                const container = input.closest('.joker-panel').querySelector('.img-container');
+                const img = container.querySelector('.img-display');
                 img.src = e.target.result;
-                img.style.display = 'block';
+                container.style.display = 'block';
             }
             reader.readAsDataURL(input.files[0]);
         }
+    }
+    
+    function clearJokerImage(btn) {
+        const container = btn.closest('.img-container');
+        const img = container.querySelector('.img-display');
+        img.src = "";
+        container.style.display = "none";
+        // איפוס ה-input file כדי שאפשר יהיה להעלות שוב
+        btn.closest('.joker-panel').querySelector('input[type="file"]').value = "";
     }
     
     let canvas, ctx, isDrawing = false;
@@ -545,9 +557,10 @@
     
     function saveDrawing() {
         const dataURL = canvas.toDataURL();
-        const img = activeDrawingBtn.closest('.joker-panel').querySelector('.img-display');
+        const container = activeDrawingBtn.closest('.joker-panel').querySelector('.img-container');
+        const img = container.querySelector('.img-display');
         img.src = dataURL;
-        img.style.display = 'block';
+        container.style.display = 'block';
         closeDrawing();
     }
 
@@ -581,7 +594,7 @@
         setTimeout(() => document.getElementById('bottomNav').scrollIntoView({behavior:'smooth'}), 200);
     }
 
-    // --- הפקת PDF (טבלה בלבד) ---
+    // --- הפקת PDF (טבלה בלבד, ללא הסתרה מוחלטת) ---
     function generatePDF() {
         // 1. עדכון כותרות
         document.getElementById('pdf-client').innerText = "לקוח: " + document.getElementById('clientName').value;
@@ -630,7 +643,7 @@
             tbody.innerHTML += row;
         });
 
-        // 3. הוספת שורת התקנה (אם יש) לתוך הסיכום למטה
+        // 3. סיכום
         const install = parseFloat(document.getElementById('installationCost').value) || 0;
         const totalBeforeVat = itemsSum + install;
         const vat = totalBeforeVat * 0.18;
@@ -640,9 +653,8 @@
         document.getElementById('pdf-vat').innerText = vat.toLocaleString() + " ₪";
         document.getElementById('pdf-total').innerText = finalTotal.toLocaleString() + " ₪";
 
-        // 4. הפקה
+        // 4. הפקה באמצעות Off-screen Div
         const element = document.getElementById('invoice-template');
-        element.style.display = 'block'; // הצגה זמנית לצורך ההמרה
         
         const opt = {
             margin: 0.5,
@@ -652,15 +664,15 @@
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
 
-        html2pdf().set(opt).from(element).save().then(() => {
-            element.style.display = 'none'; // הסתרה חזרה
-        });
+        html2pdf().set(opt).from(element).save();
     }
 
-    // --- PRO ARCHITECT ENGINE v2.5 (Pergola Fix) ---
+    // --- PRO ARCHITECT ENGINE v3.0 (Pergola Fix) ---
     function generateSketch(btn) {
         const card = btn.closest('.card');
-        const type = card.querySelector('.item-type').value;
+        const typeSelect = card.querySelector('.item-type');
+        const type = typeSelect.value;
+        const typeName = typeSelect.options[typeSelect.selectedIndex].text; // השם המלא בעברית
         const w = parseFloat(card.querySelector('.w-input').value) || 100;
         const h = parseFloat(card.querySelector('.h-input').value) || 100;
         const profile = card.querySelector('.profile-select').value;
@@ -675,8 +687,11 @@
         ctx.fillStyle = "#333"; ctx.font = "24px Arial";
         const client = document.getElementById('clientName').value || "לקוח";
         ctx.fillText(`לקוח: ${client} | תאריך: ${new Date().toLocaleDateString('he-IL')}`, 600, 100);
+        
+        // תיקון כותרת: שימוש בשם מוצר מלא + שם הפרופיל
+        let title = `${typeName} - ${profile}`;
         ctx.font = "20px Arial"; ctx.fillStyle = "#555";
-        ctx.fillText(`מוצר: ${profile}`, 600, 140);
+        ctx.fillText(title, 600, 140);
 
         const maxDrawW = 700; const maxDrawH = 500;
         const ratio = w / h;
@@ -689,6 +704,7 @@
         
         ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
 
+        // 1. הזזה
         if (type === 'sliding') {
             ctx.strokeRect(startX, startY, dw, dh);
             const sashes = parseInt(card.querySelector('.sl-sashes').value) || 2;
@@ -775,25 +791,59 @@
              const gap = isLight ? 25 : 15;
              for(let y=0; y<dh; y+=gap) { ctx.strokeRect(startX, startY+y, dw, gap-2); }
         }
+        
+        // --- תיקון פרגולות ---
         else if (type === 'pergola') {
-            ctx.fillStyle = "#eee"; ctx.fillRect(startX, startY, dw, dh*0.1); ctx.strokeRect(startX, startY, dw, dh*0.1); 
             const isStand = card.querySelector('.prg-type').value === 'stand';
-            if(isStand) { ctx.fillStyle = "#333"; ctx.fillRect(startX+20, startY+dh*0.1, 20, dh*0.9); ctx.fillRect(startX+dw-40, startY+dh*0.1, 20, dh*0.9); }
-            if(card.querySelector('.prg-gutter').checked) { ctx.beginPath(); ctx.arc(startX+dw+10, startY+dh*0.1-10, 10, 0, 2*Math.PI); ctx.stroke(); }
-            
-            // ציור פסים לפי כיוון
+            const postH = parseFloat(card.querySelector('.prg-post-h').value) || 250;
+            const roofH = dh * 0.15; // גובה הגג בשרטוט
+
+            // 1. ציור הגג
+            ctx.fillStyle = "#eee"; ctx.fillRect(startX, startY, dw, roofH); 
+            ctx.strokeStyle = "#333"; ctx.lineWidth = 3; ctx.strokeRect(startX, startY, dw, roofH); 
+
+            // 2. ציור פסים לפי כיוון (בתוך הגג)
             const dir = card.querySelector('.prg-dir').value;
             ctx.strokeStyle = "#999"; ctx.lineWidth = 1;
-            const startBody = startY + dh*0.1;
             if(dir === 'width' || dir === 'grid') { // לרוחב
-                for(let y=startBody; y<startY+dh; y+=20) { ctx.beginPath(); ctx.moveTo(startX, y); ctx.lineTo(startX+dw, y); ctx.stroke(); }
+                for(let y=startY; y<startY+roofH; y+=15) { ctx.beginPath(); ctx.moveTo(startX, y); ctx.lineTo(startX+dw, y); ctx.stroke(); }
             }
             if(dir === 'length' || dir === 'grid') { // לאורך
-                for(let x=startX; x<startX+dw; x+=20) { ctx.beginPath(); ctx.moveTo(x, startBody); ctx.lineTo(x, startY+dh); ctx.stroke(); }
+                for(let x=startX; x<startX+dw; x+=15) { ctx.beginPath(); ctx.moveTo(x, startY); ctx.lineTo(x, startY+roofH); ctx.stroke(); }
             }
+            
+            // 3. לוגיקת עמודים / תליה
             ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
-            ctx.strokeRect(startX, startBody, dw, dh*0.9); // מסגרת גוף
+            if(isStand) {
+                // עמודים יורדים עד למטה
+                ctx.fillStyle = "#333";
+                ctx.fillRect(startX + 20, startY + roofH, 15, dh - roofH); // עמוד שמאלי
+                ctx.fillRect(startX + dw - 35, startY + roofH, 15, dh - roofH); // עמוד ימני
+                
+                // קו מידה לגובה העמוד
+                ctx.strokeStyle = "red"; ctx.lineWidth = 1;
+                const postX = startX + dw + 20;
+                ctx.beginPath(); 
+                ctx.moveTo(postX, startY + roofH); ctx.lineTo(postX + 10, startY + roofH); // קו עליון
+                ctx.moveTo(postX, startY + dh); ctx.lineTo(postX + 10, startY + dh); // קו תחתון
+                ctx.moveTo(postX + 5, startY + roofH); ctx.lineTo(postX + 5, startY + dh); // קו מחבר
+                ctx.stroke();
+                ctx.save(); ctx.translate(postX + 25, startY + (roofH + dh)/2); ctx.rotate(Math.PI/2);
+                ctx.fillStyle = "red"; ctx.font = "bold 16px Arial"; ctx.textAlign = "center";
+                ctx.fillText(`h=${postH}`, 0, 0); ctx.restore();
+            } else {
+                // תלויה - סימון קיר בצד שמאל
+                ctx.setLineDash([10, 5]); ctx.strokeStyle = "#aaa"; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(startX - 20, startY - 20); ctx.lineTo(startX - 20, startY + dh); ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = "#555"; ctx.font = "14px Arial"; ctx.fillText("קיר תומך", startX - 60, startY + dh/2);
+            }
+            
+            if(card.querySelector('.prg-gutter').checked) { 
+                ctx.beginPath(); ctx.arc(startX+dw+10, startY+roofH-10, 10, 0, 2*Math.PI); ctx.stroke(); 
+            }
         }
+        
         else if(type === 'fence') {
              ctx.strokeRect(startX, startY, dw, dh);
              const spaceCm = parseInt(card.querySelector('.fence-space').value) || 2;
@@ -803,6 +853,7 @@
         }
         else { ctx.strokeRect(startX, startY, dw, dh); ctx.strokeRect(startX+10, startY+10, dw-20, dh-20); }
 
+        // קווי מידה כלליים
         ctx.strokeStyle = "#0000aa"; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(startX, startY+dh+20); ctx.lineTo(startX, startY+dh+50); ctx.moveTo(startX+dw, startY+dh+20); ctx.lineTo(startX+dw, startY+dh+50); ctx.moveTo(startX, startY+dh+35); ctx.lineTo(startX+dw, startY+dh+35); ctx.stroke();
         ctx.fillStyle = "#0000aa"; ctx.font = "bold 30px Arial"; ctx.textAlign = "center"; ctx.fillText(`${w}`, startX+dw/2, startY+dh+65);
@@ -818,14 +869,15 @@
     function openPreview() {
         let txt = `*הצעת מחיר - יהונתן אלומיניום*\nלקוח: ${document.getElementById('clientName').value}\nהצעה מס': ${document.getElementById('quoteNumber').value}\n\n`;
         document.querySelectorAll('.item-card').forEach(c => {
-            const type = c.querySelector('.item-type');
-            const qty = type.value === 'joker' ? c.querySelector('.qty-input-joker').value : c.querySelector('.qty-input').value;
-            const price = type.value === 'joker' ? c.querySelector('.price-input-joker').value : c.querySelector('.price-input').value;
+            const typeSelect = c.querySelector('.item-type');
+            const type = typeSelect.value;
+            const qty = type === 'joker' ? c.querySelector('.qty-input-joker').value : c.querySelector('.qty-input').value;
+            const price = type === 'joker' ? c.querySelector('.price-input-joker').value : c.querySelector('.price-input').value;
             
-            if(type.value === 'joker') {
+            if(type === 'joker') {
                 txt += `🔹 *${c.querySelector('.joker-title').value}*\n${c.querySelector('.joker-desc').value}\n`;
             } else {
-                const typeName = type.options[type.selectedIndex].text;
+                const typeName = typeSelect.options[typeSelect.selectedIndex].text;
                 const prof = c.querySelector('.profile-select').value;
                 const w = c.querySelector('.w-input').value;
                 const h = c.querySelector('.h-input').value;
