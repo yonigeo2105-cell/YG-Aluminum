@@ -69,7 +69,7 @@
         .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
         canvas#drawingPad { border: 2px dashed #cbd5e0; border-radius: 10px; touch-action: none; background: white; cursor: crosshair; width: 100%; height: 300px; }
 
-        /* סגנון למודל PDF */
+        /* PDF Styles */
         .pdf-preview-content { background: white; width: 100%; max-width: 800px; padding: 0; border-radius: 0; height: 100%; overflow-y: auto; }
         .pdf-paper { background: white; padding: 30px; font-family: 'Arial', sans-serif; direction: rtl; min-height: 800px; }
         .pdf-paper table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
@@ -157,7 +157,6 @@
             <button class="btn-login" style="background:#e53e3e; margin:0; flex:1" onclick="document.getElementById('pdfPreviewModal').style.display='none'">סגור</button>
             <button class="btn-login" style="background:var(--primary); margin:0; flex:2" onclick="downloadActualPdf()">⬇️ הורד קובץ PDF</button>
         </div>
-        
         <div id="pdfPaperContent" class="pdf-paper"></div>
     </div>
 </div>
@@ -175,6 +174,7 @@
 </div>
 
 <script>
+    // --- מאגרי נתונים מלאים ---
     const profilesDB = {
         "sliding": ["קליל 7000 קלאסי", "קליל 9000", "קליל 9200", "קליל 1700 בלגי", "קליל 2200 אופיס"],
         "pocket": ["כיס בודד (2 נתיבים)", "כיס בודד (3 נתיבים)", "כיס כפול (2 נתיבים)", "כיס כפול (3 נתיבים)"],
@@ -191,8 +191,44 @@
         "joker": ["עבודה כללית"]
     };
 
-    const ralColors = ["RAL 9010 (לבן)", "RAL 9016 (לבן בוהק)", "RAL 9005 (שחור)", "RAL 7016 (אפור אנטרציט)", "RAL 1013 (שמנת)", "RAL 7035 (אפור בהיר)", "RAL 7000 (אפור סנאי)"];
-    const klilColors = ["לבן קליל", "שמנת קליל", "אפור IRON 400", "שחור IRON 420", "לבן IRON 100", "בז' IRON 200"];
+    // מניפות צבעים מלאות
+    const colorsDB = {
+        "klil": {
+            "iron": ["IRON 100 (לבן)", "IRON 200 (בז')", "IRON 300 (אבן)", "IRON 400 (אפור)", "IRON 420 (שחור)", "IRON 500 (חום)", "IRON 600 (ירוק)", "IRON 700 (כחול)"],
+            "fine": ["FINE IRON (מגורען עדין)", "FINE כסף", "FINE שמפניה", "FINE ברונזה", "FINE לבן", "FINE שחור"],
+            "elox": ["אנודייז טבעי (מט)", "אנודייז כסף", "אנודייז שמפניה", "אנודייז ברונזה", "אנודייז שחור"],
+            "basic": ["לבן 9010", "לבן 9016 (בוהק)", "שמנת 1013", "שחור מט", "אפור 7035", "חום 8014"],
+            "office": ["אפור אופיס", "לבן אופיס", "בז' אופיס", "שחור אופיס"]
+        },
+        "ral": {
+            "ral_1xxx": ["1000 (Green Beige)", "1013 (Oyster White)", "1015 (Light Ivory)", "1018 (Zinc Yellow)", "1023 (Traffic Yellow)"],
+            "ral_2xxx": ["2000 (Yellow Orange)", "2004 (Pure Orange)", "2010 (Signal Orange)"],
+            "ral_3xxx": ["3000 (Flame Red)", "3004 (Purple Red)", "3020 (Traffic Red)"],
+            "ral_4xxx": ["4001 (Red Lilac)", "4005 (Blue Lilac)", "4010 (Telemagenta)"],
+            "ral_5xxx": ["5002 (Ultramarine)", "5005 (Signal Blue)", "5010 (Gentian Blue)", "5015 (Sky Blue)"],
+            "ral_6xxx": ["6005 (Moss Green)", "6009 (Fir Green)", "6018 (Yellow Green)", "6021 (Pale Green)"],
+            "ral_7xxx": ["7000 (Squirrel Grey)", "7004 (Signal Grey)", "7012 (Basalt Grey)", "7016 (Anthracite)", "7021 (Black Grey)", "7035 (Light Grey)", "7040 (Window Grey)"],
+            "ral_8xxx": ["8001 (Ochre Brown)", "8003 (Clay Brown)", "8014 (Sepia Brown)", "8017 (Chocolate Brown)", "8019 (Grey Brown)"],
+            "ral_9xxx": ["9001 (Cream)", "9002 (Grey White)", "9005 (Jet Black)", "9006 (White Aluminium)", "9007 (Grey Aluminium)", "9010 (Pure White)", "9016 (Traffic White)"]
+        }
+    };
+
+    const glassTypes = {
+        "types": [
+            "טריפלקס 3+3 (סטנדרט)", "טריפלקס 3+4 (אקוסטי)", "טריפלקס 3+5", "טריפלקס 3+6",
+            "טריפלקס 4+4", "טריפלקס 4+5 (אקוסטי)", "טריפלקס 4+6",
+            "טריפלקס 5+5", "טריפלקס 6+6 (אנטי-וונדליזם)", "טריפלקס 8+8",
+            "בידודית 4-6-4", "בידודית 4-9-4", "בידודית 4-12-4", "בידודית 4-16-4",
+            "בידודית 5-9-5", "בידודית 6-9-6", "בידודית 6-12-6 (מומלץ)",
+            "בידודית עם צלון פנימי",
+            "מחוסמת 4 מ\"מ", "מחוסמת 5 מ\"מ", "מחוסמת 6 מ\"מ", "מחוסמת 8 מ\"מ", "מחוסמת 10 מ\"מ", "מחוסמת 12 מ\"מ",
+            "רגילה (מונוליטי) 4 מ\"מ", "רגילה 5 מ\"מ", "רגילה 6 מ\"מ"
+        ],
+        "finish": [
+            "שקוף (Clear)", "חלבי (Matte)", "חום (Bronze)", "אפור (Grey)", "ירוק", "כחול",
+            "רפלקטיבי (מראה)", "צ'ינצ'ילה", "סבתא", "גרניט", "פסים/תריס"
+        ]
+    };
 
     let itemCount = 0;
     let activeDrawingBtn = null; 
@@ -253,28 +289,19 @@
                 
                 <label style="margin-top:10px">גוון אלומיניום:</label>
                 <div class="color-tabs">
-                    <div class="tab active" onclick="switchColorTab(this, 'ral')">RAL (טמבור)</div>
+                    <div class="tab active" onclick="switchColorTab(this, 'ral')">טמבור / RAL</div>
                     <div class="tab" onclick="switchColorTab(this, 'klil')">קליל</div>
                 </div>
-                <select class="color-select">
-                    ${ralColors.map(c => `<option value="${c}">${c}</option>`).join('')}
-                </select>
+                <div class="row">
+                    <select class="color-family" onchange="updateColorShades(this)"></select>
+                    <select class="color-shade"><option>בחר משפחה תחילה</option></select>
+                </div>
 
                 <div class="glass-section">
                     <label style="margin-top:10px">זכוכית:</label>
                     <div class="row">
-                        <select class="glass-type">
-                            <option value="טריפלקס 3+3">טריפלקס 3+3</option>
-                            <option value="טריפלקס 4+4">טריפלקס 4+4</option>
-                            <option value="בידודית 4-6-4">בידודית 4-6-4</option>
-                            <option value="בידודית 6-12-6">בידודית 6-12-6</option>
-                            <option value="מחוסמת 6">מחוסמת 6 מ"מ</option>
-                        </select>
-                        <select class="glass-finish">
-                            <option value="שקוף">שקוף</option>
-                            <option value="חלבי">חלבי</option>
-                            <option value="אנטי-סאן">אנטי-סאן</option>
-                        </select>
+                        <select class="glass-type"></select>
+                        <select class="glass-finish"></select>
                     </div>
                 </div>
 
@@ -325,20 +352,55 @@
             </div>
         `;
         container.appendChild(div);
+        
+        // אתחול רשימות זכוכית
+        const glassTypeSelect = div.querySelector('.glass-type');
+        const glassFinishSelect = div.querySelector('.glass-finish');
+        glassTypes.types.forEach(t => glassTypeSelect.innerHTML += `<option value="${t}">${t}</option>`);
+        glassTypes.finish.forEach(f => glassFinishSelect.innerHTML += `<option value="${f}">${f}</option>`);
+
+        // אתחול צבעים ברירת מחדל (RAL)
+        switchColorTab(div.querySelector('.tab.active'), 'ral');
         updateItemFields(div.querySelector('.item-type'));
     }
 
+    // --- ניהול צבעים חכם ---
     function switchColorTab(tab, type) {
         const card = tab.closest('.card');
         card.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-        const select = card.querySelector('.color-select');
-        select.innerHTML = '';
-        const list = type === 'ral' ? ralColors : klilColors;
-        list.forEach(c => {
+        
+        const familySelect = card.querySelector('.color-family');
+        familySelect.innerHTML = "";
+        
+        // הזנת משפחות צבעים
+        const families = (type === 'klil') ? 
+            {"iron": "קליל IRON (מגורען)", "fine": "קליל FINE (חלק)", "basic": "קליל BASIC", "office": "קליל OFFICE", "elox": "קליל אנודייז"} :
+            {"ral_9xxx": "לבנים ושחורים (9000)", "ral_7xxx": "אפורים (7000)", "ral_1xxx": "בז' ושמנת (1000)", "ral_8xxx": "חומים (8000)", "ral_3xxx": "אדומים (3000)", "ral_5xxx": "כחולים (5000)", "ral_6xxx": "ירוקים (6000)", "ral_2xxx": "כתומים (2000)", "ral_4xxx": "סגולים (4000)"};
+            
+        for (const [key, value] of Object.entries(families)) {
             const opt = document.createElement('option');
-            opt.value = c; opt.innerText = c;
-            select.appendChild(opt);
+            opt.value = key;
+            opt.innerText = value;
+            familySelect.appendChild(opt);
+        }
+        familySelect.setAttribute('data-type', type);
+        updateColorShades(familySelect);
+    }
+
+    function updateColorShades(familySelect) {
+        const card = familySelect.closest('.card');
+        const shadeSelect = card.querySelector('.color-shade');
+        const type = familySelect.getAttribute('data-type');
+        const family = familySelect.value;
+        
+        shadeSelect.innerHTML = "";
+        const shades = colorsDB[type][family] || [];
+        
+        shades.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s; opt.innerText = s;
+            shadeSelect.appendChild(opt);
         });
     }
 
@@ -352,17 +414,13 @@
         const dirContainer = card.querySelector('.opening-dir-container');
         const glassSection = card.querySelector('.glass-section');
 
-        // ג'וקר
         if(type === 'joker') {
             stdInputs.style.display = 'none'; extraPanel.style.display = 'none'; jokerPanel.style.display = 'block'; return;
         }
 
         stdInputs.style.display = 'block'; jokerPanel.style.display = 'none';
-        
-        // כיוון פתיחה
         dirContainer.style.display = (type === 'hinge' || type === 'door' || type === 'tilt_turn') ? 'block' : 'none';
 
-        // הסתרת זכוכיות בפרגולה/גדר/רשת/תריס
         if(type === 'pergola' || type === 'fence' || type === 'shutter' || type === 'screen_roll') {
             glassSection.style.display = 'none';
         } else {
@@ -493,13 +551,12 @@
         setTimeout(() => document.getElementById('bottomNav').scrollIntoView({behavior:'smooth'}), 200);
     }
 
-    // --- PDF Logic: תיקון סופי (Clone + Delay) ---
+    // --- PDF Logic ---
     function showPdfPreview() {
         const clientName = document.getElementById('clientName').value || "ישראל ישראלי";
         const quoteDate = new Date(document.getElementById('quoteDate').value).toLocaleDateString('he-IL');
         const quoteNum = document.getElementById('quoteNumber').value || "1";
         
-        // בניית ה-HTML של ה-PDF
         let htmlContent = `
             <div class="invoice-header">
                 <h1 style="margin:0; color:#0d47a1; font-size: 32px;">יהונתן אלומיניום</h1>
@@ -533,12 +590,12 @@
                 dims = "-";
             } else {
                 const profile = card.querySelector('.profile-select').value;
-                const color = card.querySelector('.color-select').value;
-                desc += `<br>פרופיל: ${profile}<br>צבע: ${color}`;
-                // הוספת זכוכית רק אם המוצר אינו פרגולה/גדר וכו'
+                const shade = card.querySelector('.color-shade').value;
+                desc += `<br>פרופיל: ${profile}<br>צבע: ${shade}`;
                 if(typeSelect.value !== 'pergola' && typeSelect.value !== 'fence' && typeSelect.value !== 'shutter' && typeSelect.value !== 'screen_roll') {
                     const glass = card.querySelector('.glass-type').value;
-                    desc += `, זכוכית: ${glass}`;
+                    const finish = card.querySelector('.glass-finish').value;
+                    desc += `<br>זכוכית: ${glass}, ${finish}`;
                 }
                 dims = `${card.querySelector('.w-input').value} / ${card.querySelector('.h-input').value}`;
                 qty = parseFloat(card.querySelector('.qty-input').value) || 1;
@@ -578,8 +635,6 @@
     function downloadActualPdf() {
         const element = document.getElementById('pdfPaperContent');
         const clientName = document.getElementById('clientName').value || "הצעה";
-        
-        // תיקון: הגדרות שמבטיחות יציבות ושכפול נקי של האלמנט
         const opt = {
             margin: 0.5,
             filename: `הצעת_מחיר_${clientName}.pdf`,
@@ -587,12 +642,10 @@
             html2canvas: { scale: 2, useCORS: true },
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
-        
-        // השינוי הקריטי: שרשור נכון של הפקודות כדי למנוע קריסה בפעם השנייה
         html2pdf().set(opt).from(element).toPdf().get('pdf').save();
     }
 
-    // --- PRO ARCHITECT ENGINE v6.0 ---
+    // --- Sketch Engine v6.0 ---
     function generateSketch(btn) {
         const card = btn.closest('.card');
         const typeSelect = card.querySelector('.item-type');
@@ -613,7 +666,6 @@
         const client = document.getElementById('clientName').value || "לקוח";
         ctx.fillText(`לקוח: ${client} | תאריך: ${new Date().toLocaleDateString('he-IL')}`, 600, 100);
         
-        // כותרת
         let title = `${typeName} - ${profile}`;
         if(type === 'pergola' && card.querySelector('.prg-type').value === 'stand') {
             const ph = card.querySelector('.prg-post-h').value;
@@ -633,7 +685,6 @@
         
         ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
 
-        // שרטוטים
         if (type === 'sliding') {
             ctx.strokeRect(startX, startY, dw, dh);
             const sashes = parseInt(card.querySelector('.sl-sashes').value) || 2;
@@ -721,29 +772,17 @@
              for(let y=0; y<dh; y+=gap) { ctx.strokeRect(startX, startY+y, dw, gap-2); }
         }
         
-        // --- תיקון שרטוט פרגולה מקצועי (V6) ---
         else if (type === 'pergola') {
-            const roofH = dh * 0.15; // עובי הגג
-            
-            // 1. ציור קורות ראשיות (Rafters) בולטות
+            const roofH = dh * 0.15; 
             ctx.fillStyle = "#eee"; 
-            
-            // קורות בולטות בצדדים (נותן מראה של פרגולה ולא סתם מלבן)
             ctx.fillRect(startX - 15, startY, dw + 30, roofH); 
-            ctx.lineWidth = 4; // מסגרת עבה יותר
-            ctx.strokeStyle = "#333";
+            ctx.lineWidth = 4; ctx.strokeStyle = "#333";
             ctx.strokeRect(startX - 15, startY, dw + 30, roofH);
-
             const dir = card.querySelector('.prg-dir').value;
-            ctx.strokeStyle = "#777"; ctx.lineWidth = 2; // פסים דקים יותר בפנים
-
+            ctx.strokeStyle = "#777"; ctx.lineWidth = 2; 
             if(dir === 'width' || dir === 'grid') { for(let y=startY; y<startY+roofH; y+=15) { ctx.beginPath(); ctx.moveTo(startX-15, y); ctx.lineTo(startX+dw+15, y); ctx.stroke(); } }
             if(dir === 'length' || dir === 'grid') { for(let x=startX; x<startX+dw; x+=15) { ctx.beginPath(); ctx.moveTo(x, startY); ctx.lineTo(x, startY+roofH); ctx.stroke(); } }
-            
-            // 2. מסגרת פנימית להדגשת עובי פרופיל
             ctx.strokeRect(startX, startY + 5, dw, roofH - 10);
-
-            // ללא עמודים! רק טקסט אם זה קיר
             if(card.querySelector('.prg-type').value === 'wall') {
                 ctx.setLineDash([10, 5]); ctx.strokeStyle = "#aaa"; ctx.lineWidth = 4;
                 ctx.beginPath(); ctx.moveTo(startX - 40, startY - 20); ctx.lineTo(startX - 40, startY + dh); ctx.stroke();
