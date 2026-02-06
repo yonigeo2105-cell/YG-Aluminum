@@ -21,14 +21,16 @@
         /* מסך כניסה */
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0d47a1 0%, #002171 100%); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: opacity 0.5s; }
         .login-box { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .login-box h2 { color: var(--primary); margin-top: 0; margin-bottom: 10px; }
+        .login-box p { color: #555; margin-bottom: 15px; font-weight: 500; } 
         .btn-login { background: var(--primary); color: white; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
         .login-box input { width: 90%; margin-bottom: 10px; text-align: center; font-size: 20px; letter-spacing: 2px; border: 1px solid #ccc; padding: 10px; border-radius: 8px; }
 
-        /* כותרת */
-        header { background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%); color: white; padding: 30px 20px 30px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); margin-bottom: 20px; position: relative; z-index: 10; }
+        /* כותרת - תיקון גלילה */
+        header { background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%); color: white; padding: 30px 20px 30px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 100; }
         header h1 { margin: 0; font-size: 28px; font-weight: 800; }
         
-        .container { padding: 0 20px; max-width: 650px; margin: 0 auto; padding-bottom: 140px; position: relative; z-index: 1; }
+        .container { padding: 20px; max-width: 650px; margin: 0 auto; padding-bottom: 140px; }
         
         .card { background: var(--card); border-radius: 18px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); border: 1px solid white; }
         .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
@@ -67,23 +69,18 @@
         .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
         canvas#drawingPad { border: 2px dashed #cbd5e0; border-radius: 10px; touch-action: none; background: white; cursor: crosshair; width: 100%; height: 300px; }
 
-        /* סגנון ל-PDF המוסתר - תיקון קריטי */
-        #invoice-template { 
-            display: none; /* מוסתר לחלוטין כברירת מחדל */
-            width: 800px; 
-            background: white; 
-            padding: 40px;
-            font-family: 'Arial', sans-serif; 
-            direction: rtl; 
-        }
-        #invoice-template table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
-        #invoice-template th { background-color: #0d47a1; color: white; padding: 12px; text-align: right; border: 1px solid #ddd; font-size: 14px; }
-        #invoice-template td { padding: 12px; border: 1px solid #ddd; vertical-align: middle; font-size: 14px; }
-        #invoice-template tr:nth-child(even) { background-color: #f9f9f9; }
+        /* סגנון למודל PDF */
+        .pdf-preview-content { background: white; width: 100%; max-width: 800px; padding: 0; border-radius: 0; height: 100%; overflow-y: auto; }
+        .pdf-paper { background: white; padding: 30px; font-family: 'Arial', sans-serif; direction: rtl; min-height: 800px; }
+        .pdf-paper table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
+        .pdf-paper th { background-color: #0d47a1; color: white; padding: 12px; text-align: right; border: 1px solid #ddd; font-size: 14px; }
+        .pdf-paper td { padding: 12px; border: 1px solid #ddd; vertical-align: middle; font-size: 14px; }
+        .pdf-paper tr:nth-child(even) { background-color: #f9f9f9; }
         .invoice-header { text-align: center; margin-bottom: 40px; border-bottom: 3px solid #0d47a1; padding-bottom: 20px; }
         .summary-box { float: left; width: 350px; margin-top: 30px; background: #f8f9fa; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
         .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 15px; }
         .summary-row.total { font-weight: bold; font-size: 18px; border-top: 2px solid #0d47a1; border-bottom: none; margin-top: 10px; padding-top: 10px; color: #0d47a1; }
+
     </style>
 </head>
 <body>
@@ -92,50 +89,9 @@
     <div class="login-box">
         <div style="font-size: 40px; margin-bottom: 10px;">🛡️</div>
         <h2>כניסה למערכת</h2>
-        <input type="password" id="passwordInput" placeholder="****" inputmode="numeric">
+        <p>נא להקיש סיסמה</p> <input type="password" id="passwordInput" placeholder="****" inputmode="numeric">
         <button class="btn-login" onclick="checkLogin()">היכנס</button>
         <p id="loginError" style="color:red; font-size:12px; margin-top:10px; display:none;">סיסמה שגויה</p>
-    </div>
-</div>
-
-<div id="invoice-template">
-    <div class="invoice-header">
-        <h1 style="margin:0; color:#0d47a1; font-size: 32px;">יהונתן אלומיניום</h1>
-        <p style="margin:5px 0; font-size: 18px; color: #555;">הצעת מחיר מקצועית</p>
-        <div style="display:flex; justify-content:space-between; margin-top:30px; font-weight:bold; font-size: 16px;">
-            <span id="pdf-client">לקוח: </span>
-            <span id="pdf-date">תאריך: </span>
-            <span id="pdf-number">מס' הצעה: </span>
-        </div>
-    </div>
-    
-    <table>
-        <thead>
-            <tr>
-                <th style="width:5%">#</th>
-                <th style="width:45%">תיאור מוצר</th>
-                <th style="width:15%">מידות (ס"מ)</th>
-                <th style="width:10%">כמות</th>
-                <th style="width:10%">מחיר יח'</th>
-                <th style="width:15%">סה"כ</th>
-            </tr>
-        </thead>
-        <tbody id="pdf-table-body"></tbody>
-    </table>
-    
-    <div class="summary-box">
-        <div class="summary-row"><span>סה"כ מוצרים + התקנה:</span><span id="pdf-subtotal"></span></div>
-        <div class="summary-row"><span>מע"מ (18%):</span><span id="pdf-vat"></span></div>
-        <div class="summary-row total"><span>סה"כ לתשלום:</span><span id="pdf-total"></span></div>
-    </div>
-    <div style="clear:both"></div>
-    
-    <div style="margin-top:60px; font-size:12px; color:#555; border-top:1px solid #ccc; padding-top:15px; line-height: 1.8;">
-        * המחיר כולל הובלה והתקנה.<br>
-        * הצעת מחיר זאת משמשת כחוזה עבודה.<br>
-        * הסחורה בבעלות יהונתן אלומיניום עד התשלום המלא.<br>
-        * הצעת מחיר תקפה ל-5 ימי עסקים.<br>
-        <strong>בכבוד רב, יהונתן אלומיניום</strong>
     </div>
 </div>
 
@@ -181,7 +137,7 @@
 
 <div class="bottom-actions" id="bottomNav" style="display:none">
     <button class="btn-action btn-calc" onclick="calculateAll()">חשב סה"כ לתשלום</button>
-    <button class="btn-action btn-pdf" onclick="generatePDF()">📄 הורד PDF</button>
+    <button class="btn-action btn-pdf" onclick="showPdfPreview()">📄 הצג והורד PDF</button>
 </div>
 
 <div class="modal-overlay" id="previewModal">
@@ -192,6 +148,17 @@
             <button class="btn-login" style="background:#ccc; color:black" onclick="document.getElementById('previewModal').style.display='none'">סגור</button>
             <button class="btn-login" style="background:var(--whatsapp)" onclick="sendWhatsapp()">שלח</button>
         </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="pdfPreviewModal" style="background: white;">
+    <div class="pdf-preview-content">
+        <div style="background: #eee; padding: 10px; display: flex; gap: 10px; position:sticky; top:0; border-bottom:1px solid #ccc;">
+            <button class="btn-login" style="background:#e53e3e; margin:0; flex:1" onclick="document.getElementById('pdfPreviewModal').style.display='none'">סגור</button>
+            <button class="btn-login" style="background:var(--primary); margin:0; flex:2" onclick="downloadActualPdf()">⬇️ הורד קובץ PDF</button>
+        </div>
+        
+        <div id="pdfPaperContent" class="pdf-paper"></div>
     </div>
 </div>
 
@@ -208,7 +175,6 @@
 </div>
 
 <script>
-    // --- נתונים ---
     const profilesDB = {
         "sliding": ["קליל 7000 קלאסי", "קליל 9000", "קליל 9200", "קליל 1700 בלגי", "קליל 2200 אופיס"],
         "pocket": ["כיס בודד (2 נתיבים)", "כיס בודד (3 נתיבים)", "כיס כפול (2 נתיבים)", "כיס כפול (3 נתיבים)"],
@@ -222,7 +188,7 @@
         "pergola": ["פרופיל הייטק 120/40", "פרופיל הייטק 150/50", "פרופיל דאבל T (Double T)", "פרופיל 100/100", "רפפות Z", "רפפות אליפטיות", "דמוי עץ"],
         "fence": ["גדר שלבים אופקיים", "גדר הייטק"],
         "shower": ["מקלחון חזית", "מקלחון פינתי"],
-        "joker": ["עבודה כללית / שונות"]
+        "joker": ["עבודה כללית"]
     };
 
     const ralColors = ["RAL 9010 (לבן)", "RAL 9016 (לבן בוהק)", "RAL 9005 (שחור)", "RAL 7016 (אפור אנטרציט)", "RAL 1013 (שמנת)", "RAL 7035 (אפור בהיר)", "RAL 7000 (אפור סנאי)"];
@@ -294,20 +260,22 @@
                     ${ralColors.map(c => `<option value="${c}">${c}</option>`).join('')}
                 </select>
 
-                <label style="margin-top:10px">זכוכית:</label>
-                <div class="row">
-                    <select class="glass-type">
-                        <option value="טריפלקס 3+3">טריפלקס 3+3</option>
-                        <option value="טריפלקס 4+4">טריפלקס 4+4</option>
-                        <option value="בידודית 4-6-4">בידודית 4-6-4</option>
-                        <option value="בידודית 6-12-6">בידודית 6-12-6</option>
-                        <option value="מחוסמת 6">מחוסמת 6 מ"מ</option>
-                    </select>
-                    <select class="glass-finish">
-                        <option value="שקוף">שקוף</option>
-                        <option value="חלבי">חלבי</option>
-                        <option value="אנטי-סאן">אנטי-סאן</option>
-                    </select>
+                <div class="glass-section">
+                    <label style="margin-top:10px">זכוכית:</label>
+                    <div class="row">
+                        <select class="glass-type">
+                            <option value="טריפלקס 3+3">טריפלקס 3+3</option>
+                            <option value="טריפלקס 4+4">טריפלקס 4+4</option>
+                            <option value="בידודית 4-6-4">בידודית 4-6-4</option>
+                            <option value="בידודית 6-12-6">בידודית 6-12-6</option>
+                            <option value="מחוסמת 6">מחוסמת 6 מ"מ</option>
+                        </select>
+                        <select class="glass-finish">
+                            <option value="שקוף">שקוף</option>
+                            <option value="חלבי">חלבי</option>
+                            <option value="אנטי-סאן">אנטי-סאן</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="row" style="margin-top:15px">
@@ -382,21 +350,23 @@
         const jokerPanel = card.querySelector('.joker-panel');
         const profSelect = card.querySelector('.profile-select');
         const dirContainer = card.querySelector('.opening-dir-container');
+        const glassSection = card.querySelector('.glass-section');
 
+        // ג'וקר
         if(type === 'joker') {
-            stdInputs.style.display = 'none';
-            extraPanel.style.display = 'none';
-            jokerPanel.style.display = 'block';
-            return;
+            stdInputs.style.display = 'none'; extraPanel.style.display = 'none'; jokerPanel.style.display = 'block'; return;
         }
 
-        stdInputs.style.display = 'block';
-        jokerPanel.style.display = 'none';
+        stdInputs.style.display = 'block'; jokerPanel.style.display = 'none';
         
-        if(type === 'hinge' || type === 'door' || type === 'tilt_turn') {
-            dirContainer.style.display = 'block';
+        // כיוון פתיחה
+        dirContainer.style.display = (type === 'hinge' || type === 'door' || type === 'tilt_turn') ? 'block' : 'none';
+
+        // הסתרת זכוכיות בפרגולה/גדר/רשת/תריס
+        if(type === 'pergola' || type === 'fence' || type === 'shutter' || type === 'screen_roll') {
+            glassSection.style.display = 'none';
         } else {
-            dirContainer.style.display = 'none';
+            glassSection.style.display = 'block';
         }
 
         profSelect.innerHTML = "";
@@ -408,77 +378,29 @@
 
         let html = '';
         if(type === 'sliding') {
-            html = `
-                <div class="row">
-                    <div><label>מס' כנפיים</label><input type="number" class="sl-sashes" value="2"></div>
-                    <div><label>סוג מפגש</label><select class="sl-meeting"><option value="side">צד לצד</option><option value="center">מפגש מרכזי (נושק)</option></select></div>
-                </div>
-                <label>חלוקה ("בלגי"):</label><select class="sl-div"><option value="none">ללא</option><option value="strips">פסים</option><option value="grid">קוביות</option></select>
-            `;
+            html = `<div class="row"><div><label>מס' כנפיים</label><input type="number" class="sl-sashes" value="2"></div><div><label>סוג מפגש</label><select class="sl-meeting"><option value="side">צד לצד</option><option value="center">מפגש מרכזי (נושק)</option></select></div></div><label>חלוקה ("בלגי"):</label><select class="sl-div"><option value="none">ללא</option><option value="strips">פסים</option><option value="grid">קוביות</option></select>`;
         }
         else if(type === 'pocket') {
-            html = `<label>הרכב כנף:</label><select class="pkt-comp"><option>זכוכית בלבד</option><option>זכוכית + תריס</option><option>זכוכית + תריס + רשת</option></select>
-                    <label>סוג מסילה:</label><select class="pkt-rail"><option>2 נתיבים</option><option>3 נתיבים</option></select>`;
+            html = `<label>הרכב כנף:</label><select class="pkt-comp"><option>זכוכית בלבד</option><option>זכוכית + תריס</option><option>זכוכית + תריס + רשת</option></select><label>סוג מסילה:</label><select class="pkt-rail"><option>2 נתיבים</option><option>3 נתיבים</option></select>`;
         }
         else if(type === 'fixed') {
-            html = `
-                <label>האם יש חיתוך/מגרעת?</label>
-                <div class="notch-grid">
-                    <div class="notch-btn" onclick="selectNotch(this, 'TL')">⌜</div>
-                    <div class="notch-btn" onclick="selectNotch(this, 'TR')">⌝</div>
-                    <div class="notch-btn" onclick="selectNotch(this, 'BL')">⌞</div>
-                    <div class="notch-btn" onclick="selectNotch(this, 'BR')">⌟</div>
-                </div>
-                <input type="hidden" class="notch-pos">
-                <div class="row notch-dims" style="display:none">
-                    <input type="number" class="notch-w" placeholder="רוחב חיתוך">
-                    <input type="number" class="notch-h" placeholder="גובה חיתוך">
-                </div>
-            `;
+            html = `<label>האם יש חיתוך/מגרעת?</label><div class="notch-grid"><div class="notch-btn" onclick="selectNotch(this, 'TL')">⌜</div><div class="notch-btn" onclick="selectNotch(this, 'TR')">⌝</div><div class="notch-btn" onclick="selectNotch(this, 'BL')">⌞</div><div class="notch-btn" onclick="selectNotch(this, 'BR')">⌟</div></div><input type="hidden" class="notch-pos"><div class="row notch-dims" style="display:none"><input type="number" class="notch-w" placeholder="רוחב חיתוך"><input type="number" class="notch-h" placeholder="גובה חיתוך"></div>`;
         }
         else if(type === 'door') {
-            html = `
-                <label>תוספות קבועים:</label>
-                <div class="row">
-                    <input type="number" class="dr-top" placeholder="גובה קבוע עליון">
-                    <input type="number" class="dr-side" placeholder="רוחב קבוע צד">
-                </div>
-                <label style="margin-top:10px">מחזיר שמן:</label><select class="dr-closer"><option value="none">ללא</option><option value="top">חיצוני</option><option value="floor">רצפתי</option></select>
-            `;
+            html = `<label>תוספות קבועים:</label><div class="row"><input type="number" class="dr-top" placeholder="גובה קבוע עליון"><input type="number" class="dr-side" placeholder="רוחב קבוע צד"></div><label style="margin-top:10px">מחזיר שמן:</label><select class="dr-closer"><option value="none">ללא</option><option value="top">חיצוני</option><option value="floor">רצפתי</option></select>`;
         }
         else if(type === 'shutter') {
-            html = `
-                <div class="row">
-                    <div><label>ארגז</label><select class="sht-box"><option value="hidden">פנימי/נסתר</option><option value="external">חיצוני</option></select></div>
-                    <div><label>שלב</label><select class="sht-slat"><option value="light">שלב אור</option><option value="foam">מוקצף</option></select></div>
-                </div>
-                <div class="row" style="margin-top:10px">
-                    <div><label>מנוע</label><select class="sht-motor"><option>חשמלי</option><option>ידני</option><option>סומפי</option></select></div>
-                </div>
-            `;
+            html = `<div class="row"><div><label>ארגז</label><select class="sht-box"><option value="hidden">פנימי/נסתר</option><option value="external">חיצוני</option></select></div><div><label>שלב</label><select class="sht-slat"><option value="light">שלב אור</option><option value="foam">מוקצף</option></select></div></div><div class="row" style="margin-top:10px"><div><label>מנוע</label><select class="sht-motor"><option>חשמלי</option><option>ידני</option><option>סומפי</option></select></div></div>`;
         }
         else if(type === 'pergola') {
-            html = `
-                <div class="row">
-                    <div><label>סוג</label><select class="prg-type" onchange="togglePergolaPost(this)"><option value="wall">תלויה</option><option value="stand">עומדת</option></select></div>
-                    <div class="prg-post-div" style="display:none"><label>גובה עמוד</label><input type="number" class="prg-post-h" placeholder="250"></div>
-                </div>
-                <div class="row" style="margin-top:10px">
-                    <div><label>כיוון הצללה</label><select class="prg-dir"><option value="width">לרוחב (פסים)</option><option value="length">לאורך (פסים)</option><option value="grid">שתי וערב (כוורת)</option></select></div>
-                    <div style="display:flex; align-items:center;"><input type="checkbox" class="prg-gutter" style="width:20px; height:20px"> <span style="margin-right:10px">מרזב</span></div>
-                </div>
-            `;
+            html = `<div class="row"><div><label>סוג</label><select class="prg-type" onchange="togglePergolaPost(this)"><option value="wall">תלויה</option><option value="stand">עומדת</option></select></div><div class="prg-post-div" style="display:none"><label>גובה עמוד</label><input type="number" class="prg-post-h" placeholder="250"></div></div><div class="row" style="margin-top:10px"><div><label>כיוון הצללה</label><select class="prg-dir"><option value="width">לרוחב (פסים)</option><option value="length">לאורך (פסים)</option><option value="grid">שתי וערב (כוורת)</option></select></div><div style="display:flex; align-items:center;"><input type="checkbox" class="prg-gutter" style="width:20px; height:20px"> <span style="margin-right:10px">מרזב</span></div></div>`;
         }
         else if(type === 'fence') {
             html = `<label>מרווח בין שלבים (ס"מ):</label><input type="number" class="fence-space" value="2" placeholder="לדוגמה: 2">`;
         }
         
-        if(html) {
-            extraPanel.innerHTML = html;
-            extraPanel.style.display = 'block';
-        } else {
-            extraPanel.style.display = 'none';
-        }
+        extraPanel.innerHTML = html ? html : '';
+        extraPanel.style.display = html ? 'block' : 'none';
     }
 
     function togglePergolaPost(select) {
@@ -495,14 +417,8 @@
     }
 
     // --- לוגיקת ג'וקר ---
-    function openDrawing(btn) {
-        activeDrawingBtn = btn;
-        document.getElementById('drawingModal').style.display = 'flex';
-        initCanvas();
-    }
-    
+    function openDrawing(btn) { activeDrawingBtn = btn; document.getElementById('drawingModal').style.display = 'flex'; initCanvas(); }
     function closeDrawing() { document.getElementById('drawingModal').style.display = 'none'; }
-
     function previewImage(input) {
         if(input.files && input.files[0]) {
             const reader = new FileReader();
@@ -515,11 +431,9 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
-    
     function clearJokerImage(btn) {
         const container = btn.closest('.img-container');
-        const img = container.querySelector('.img-display');
-        img.src = "";
+        container.querySelector('.img-display').src = "";
         container.style.display = "none";
         btn.closest('.joker-panel').querySelector('input[type="file"]').value = "";
     }
@@ -530,27 +444,19 @@
         ctx = canvas.getContext('2d');
         ctx.fillStyle = "white"; ctx.fillRect(0,0, canvas.width, canvas.height);
         ctx.strokeStyle = "black"; ctx.lineWidth = 3; ctx.lineCap = "round";
-        
-        canvas.addEventListener('touchstart', startDraw);
-        canvas.addEventListener('touchmove', draw);
-        canvas.addEventListener('touchend', stopDraw);
-        canvas.addEventListener('mousedown', startDraw);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDraw);
+        canvas.addEventListener('touchstart', startDraw); canvas.addEventListener('touchmove', draw); canvas.addEventListener('touchend', stopDraw);
+        canvas.addEventListener('mousedown', startDraw); canvas.addEventListener('mousemove', draw); canvas.addEventListener('mouseup', stopDraw);
     }
-    
     function startDraw(e) { isDrawing = true; draw(e); }
     function stopDraw() { isDrawing = false; ctx.beginPath(); }
     function draw(e) {
-        if (!isDrawing) return;
-        e.preventDefault();
+        if (!isDrawing) return; e.preventDefault();
         const rect = canvas.getBoundingClientRect();
         const x = (e.clientX || e.touches[0].clientX) - rect.left;
         const y = (e.clientY || e.touches[0].clientY) - rect.top;
         ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y);
     }
     function clearCanvas() { ctx.fillStyle="white"; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.beginPath(); }
-    
     function saveDrawing() {
         const dataURL = canvas.toDataURL();
         const container = activeDrawingBtn.closest('.joker-panel').querySelector('.img-container');
@@ -574,35 +480,45 @@
             }
             itemsSum += (q * p);
         });
-        
         const install = parseFloat(document.getElementById('installationCost').value) || 0;
         const totalSub = itemsSum + install;
         const vat = totalSub * 0.18; 
         const final = totalSub + vat;
-
         document.getElementById('itemsSubtotal').innerText = itemsSum.toLocaleString() + " ₪";
         document.getElementById('installSubtotal').innerText = install.toLocaleString() + " ₪";
         document.getElementById('totalSub').innerText = totalSub.toLocaleString() + " ₪";
         document.getElementById('totalVat').innerText = vat.toLocaleString() + " ₪";
         document.getElementById('totalFinal').innerText = final.toLocaleString() + " ₪";
-
         document.getElementById('resultBox').style.display = 'block';
         setTimeout(() => document.getElementById('bottomNav').scrollIntoView({behavior:'smooth'}), 200);
     }
 
-    // --- הפקת PDF (תיקון הסתרה) ---
-    function generatePDF() {
-        // 1. עדכון כותרות
-        document.getElementById('pdf-client').innerText = "לקוח: " + document.getElementById('clientName').value;
-        document.getElementById('pdf-date').innerText = "תאריך: " + new Date(document.getElementById('quoteDate').value).toLocaleDateString('he-IL');
-        document.getElementById('pdf-number').innerText = "מס' הצעה: " + document.getElementById('quoteNumber').value;
+    // --- PDF Logic: תצוגה מקדימה והורדה ---
+    function showPdfPreview() {
+        const clientName = document.getElementById('clientName').value || "ישראל ישראלי";
+        const quoteDate = new Date(document.getElementById('quoteDate').value).toLocaleDateString('he-IL');
+        const quoteNum = document.getElementById('quoteNumber').value || "1";
+        
+        // בניית ה-HTML של ה-PDF
+        let htmlContent = `
+            <div class="invoice-header">
+                <h1 style="margin:0; color:#0d47a1; font-size: 32px;">יהונתן אלומיניום</h1>
+                <p style="margin:5px 0; font-size: 18px; color: #555;">הצעת מחיר מקצועית</p>
+                <div style="display:flex; justify-content:space-between; margin-top:30px; font-weight:bold; font-size: 16px;">
+                    <span>לקוח: ${clientName}</span>
+                    <span>תאריך: ${quoteDate}</span>
+                    <span>מס' הצעה: ${quoteNum}</span>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr><th style="width:5%">#</th><th style="width:45%">תיאור מוצר</th><th style="width:15%">מידות (ס"מ)</th><th style="width:10%">כמות</th><th style="width:10%">מחיר יח'</th><th style="width:15%">סה"כ</th></tr>
+                </thead>
+                <tbody>
+        `;
 
-        // 2. בניית הטבלה
-        const tbody = document.getElementById('pdf-table-body');
-        tbody.innerHTML = "";
         let index = 1;
         let itemsSum = 0;
-
         document.querySelectorAll('.item-card').forEach(card => {
             const typeSelect = card.querySelector('.item-type');
             const typeName = typeSelect.options[typeSelect.selectedIndex].text;
@@ -617,26 +533,23 @@
                 dims = "-";
             } else {
                 const profile = card.querySelector('.profile-select').value;
-                const glass = card.querySelector('.glass-type').value;
                 const color = card.querySelector('.color-select').value;
-                desc += `<br>פרופיל: ${profile}<br>צבע: ${color}, זכוכית: ${glass}`;
+                desc += `<br>פרופיל: ${profile}<br>צבע: ${color}`;
+                // הוספת זכוכית רק אם המוצר אינו פרגולה/גדר וכו'
+                if(typeSelect.value !== 'pergola' && typeSelect.value !== 'fence') {
+                    const glass = card.querySelector('.glass-type').value;
+                    desc += `, זכוכית: ${glass}`;
+                }
                 dims = `${card.querySelector('.w-input').value} / ${card.querySelector('.h-input').value}`;
                 qty = parseFloat(card.querySelector('.qty-input').value) || 1;
                 price = parseFloat(card.querySelector('.price-input').value) || 0;
             }
-
             const total = qty * price;
             itemsSum += total;
 
-            const row = `<tr>
-                <td>${index++}</td>
-                <td>${desc}</td>
-                <td style="direction:ltr; text-align:center">${dims}</td>
-                <td style="text-align:center">${qty}</td>
-                <td>${price.toLocaleString()} ₪</td>
-                <td>${total.toLocaleString()} ₪</td>
+            htmlContent += `<tr>
+                <td>${index++}</td><td>${desc}</td><td style="direction:ltr; text-align:center">${dims}</td><td style="text-align:center">${qty}</td><td>${price.toLocaleString()} ₪</td><td>${total.toLocaleString()} ₪</td>
             </tr>`;
-            tbody.innerHTML += row;
         });
 
         const install = parseFloat(document.getElementById('installationCost').value) || 0;
@@ -644,28 +557,38 @@
         const vat = totalBeforeVat * 0.18;
         const finalTotal = totalBeforeVat + vat;
 
-        document.getElementById('pdf-subtotal').innerText = totalBeforeVat.toLocaleString() + " ₪";
-        document.getElementById('pdf-vat').innerText = vat.toLocaleString() + " ₪";
-        document.getElementById('pdf-total').innerText = finalTotal.toLocaleString() + " ₪";
+        htmlContent += `
+                </tbody>
+            </table>
+            <div class="summary-box">
+                <div class="summary-row"><span>סה"כ מוצרים + התקנה:</span><span>${totalBeforeVat.toLocaleString()} ₪</span></div>
+                <div class="summary-row"><span>מע"מ (18%):</span><span>${vat.toLocaleString()} ₪</span></div>
+                <div class="summary-row total"><span>סה"כ לתשלום:</span><span>${finalTotal.toLocaleString()} ₪</span></div>
+            </div>
+            <div style="clear:both"></div>
+            <div style="margin-top:60px; font-size:12px; color:#555; border-top:1px solid #ccc; padding-top:15px; line-height: 1.8;">
+                * המחיר כולל הובלה והתקנה.<br>* הצעת מחיר זאת משמשת כחוזה עבודה.<br>* הסחורה בבעלות יהונתן אלומיניום עד התשלום המלא.<br>* הצעת מחיר תקפה ל-5 ימי עסקים.<br><strong>בכבוד רב, יהונתן אלומיניום</strong>
+            </div>
+        `;
 
-        // 3. הפקה עם טריק ההצגה וההסתרה
-        const element = document.getElementById('invoice-template');
-        element.style.display = 'block'; // מציג רק לצורך הצילום
-        
+        document.getElementById('pdfPaperContent').innerHTML = htmlContent;
+        document.getElementById('pdfPreviewModal').style.display = 'flex';
+    }
+
+    function downloadActualPdf() {
+        const element = document.getElementById('pdfPaperContent');
+        const clientName = document.getElementById('clientName').value || "הצעה";
         const opt = {
             margin: 0.5,
-            filename: `הצעת_מחיר_${document.getElementById('clientName').value}.pdf`,
+            filename: `הצעת_מחיר_${clientName}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
-
-        html2pdf().set(opt).from(element).save().then(() => {
-            element.style.display = 'none'; // מסתיר מיד אחרי
-        });
+        html2pdf().set(opt).from(element).save();
     }
 
-    // --- PRO ARCHITECT ENGINE v3.0 (Pergola Fix) ---
+    // --- PRO ARCHITECT ENGINE v5.0 ---
     function generateSketch(btn) {
         const card = btn.closest('.card');
         const typeSelect = card.querySelector('.item-type');
@@ -688,6 +611,11 @@
         
         // כותרת
         let title = `${typeName} - ${profile}`;
+        // אם פרגולה - מוסיף גובה עמוד לכותרת
+        if(type === 'pergola' && card.querySelector('.prg-type').value === 'stand') {
+            const ph = card.querySelector('.prg-post-h').value;
+            title += ` | גובה עמוד: ${ph} ס"מ`;
+        }
         ctx.font = "20px Arial"; ctx.fillStyle = "#555";
         ctx.fillText(title, 600, 140);
 
@@ -702,6 +630,7 @@
         
         ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
 
+        // שרטוטים
         if (type === 'sliding') {
             ctx.strokeRect(startX, startY, dw, dh);
             const sashes = parseInt(card.querySelector('.sl-sashes').value) || 2;
@@ -790,10 +719,7 @@
         }
         
         else if (type === 'pergola') {
-            const isStand = card.querySelector('.prg-type').value === 'stand';
-            const postH = parseFloat(card.querySelector('.prg-post-h').value) || 250;
             const roofH = dh * 0.15; 
-
             ctx.fillStyle = "#eee"; ctx.fillRect(startX, startY, dw, roofH); 
             ctx.strokeStyle = "#333"; ctx.lineWidth = 3; ctx.strokeRect(startX, startY, dw, roofH); 
 
@@ -803,22 +729,8 @@
             if(dir === 'length' || dir === 'grid') { for(let x=startX; x<startX+dw; x+=15) { ctx.beginPath(); ctx.moveTo(x, startY); ctx.lineTo(x, startY+roofH); ctx.stroke(); } }
             
             ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
-            if(isStand) {
-                ctx.fillStyle = "#333";
-                ctx.fillRect(startX + 20, startY + roofH, 15, dh - roofH);
-                ctx.fillRect(startX + dw - 35, startY + roofH, 15, dh - roofH);
-                
-                ctx.strokeStyle = "red"; ctx.lineWidth = 1;
-                const postX = startX + dw + 20;
-                ctx.beginPath(); 
-                ctx.moveTo(postX, startY + roofH); ctx.lineTo(postX + 10, startY + roofH);
-                ctx.moveTo(postX, startY + dh); ctx.lineTo(postX + 10, startY + dh);
-                ctx.moveTo(postX + 5, startY + roofH); ctx.lineTo(postX + 5, startY + dh);
-                ctx.stroke();
-                ctx.save(); ctx.translate(postX + 25, startY + (roofH + dh)/2); ctx.rotate(Math.PI/2);
-                ctx.fillStyle = "red"; ctx.font = "bold 16px Arial"; ctx.textAlign = "center";
-                ctx.fillText(`h=${postH}`, 0, 0); ctx.restore();
-            } else {
+            // ביטול ציור עמודים - רק ציון "קיר" אם תלויה
+            if(card.querySelector('.prg-type').value === 'wall') {
                 ctx.setLineDash([10, 5]); ctx.strokeStyle = "#aaa"; ctx.lineWidth = 4;
                 ctx.beginPath(); ctx.moveTo(startX - 20, startY - 20); ctx.lineTo(startX - 20, startY + dh); ctx.stroke();
                 ctx.setLineDash([]);
