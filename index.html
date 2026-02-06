@@ -19,16 +19,16 @@
         body { font-family: 'Rubik', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: var(--text-dark); -webkit-tap-highlight-color: transparent; height: 100vh; overflow-x: hidden; }
         
         /* מסך כניסה */
-        #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0d47a1 0%, #002171 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: opacity 0.5s; }
+        #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0d47a1 0%, #002171 100%); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: opacity 0.5s; }
         .login-box { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .btn-login { background: var(--primary); color: white; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
         .login-box input { width: 90%; margin-bottom: 10px; text-align: center; font-size: 20px; letter-spacing: 2px; border: 1px solid #ccc; padding: 10px; border-radius: 8px; }
 
-        /* כותרת - תיקון גלילה */
-        header { background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%); color: white; padding: 30px 20px 30px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); margin-bottom: 20px; }
+        /* כותרת */
+        header { background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%); color: white; padding: 30px 20px 30px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); margin-bottom: 20px; position: relative; z-index: 10; }
         header h1 { margin: 0; font-size: 28px; font-weight: 800; }
         
-        .container { padding: 0 20px; max-width: 650px; margin: 0 auto; padding-bottom: 140px; }
+        .container { padding: 0 20px; max-width: 650px; margin: 0 auto; padding-bottom: 140px; position: relative; z-index: 1; }
         
         .card { background: var(--card); border-radius: 18px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); border: 1px solid white; }
         .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
@@ -67,17 +67,14 @@
         .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
         canvas#drawingPad { border: 2px dashed #cbd5e0; border-radius: 10px; touch-action: none; background: white; cursor: crosshair; width: 100%; height: 300px; }
 
-        /* סגנון ל-PDF המוסתר (תיקון: Off-screen ולא display:none) */
+        /* סגנון ל-PDF המוסתר - תיקון קריטי */
         #invoice-template { 
-            position: absolute; 
-            top: 0; 
-            left: -9999px; /* מעיף אותו החוצה מהמסך אבל משאיר אותו קיים */
+            display: none; /* מוסתר לחלוטין כברירת מחדל */
             width: 800px; 
             background: white; 
             padding: 40px;
             font-family: 'Arial', sans-serif; 
             direction: rtl; 
-            z-index: -1;
         }
         #invoice-template table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
         #invoice-template th { background-color: #0d47a1; color: white; padding: 12px; text-align: right; border: 1px solid #ddd; font-size: 14px; }
@@ -280,7 +277,7 @@
                 <option value="pergola">פרגולות</option>
                 <option value="fence">גדרות</option>
                 <option value="shower">מקלחונים</option>
-                <option value="joker">כללי / ג'וקר</option>
+                <option value="joker">כללי</option>
             </select>
 
             <div class="extra-panel"></div>
@@ -524,7 +521,6 @@
         const img = container.querySelector('.img-display');
         img.src = "";
         container.style.display = "none";
-        // איפוס ה-input file כדי שאפשר יהיה להעלות שוב
         btn.closest('.joker-panel').querySelector('input[type="file"]').value = "";
     }
     
@@ -594,7 +590,7 @@
         setTimeout(() => document.getElementById('bottomNav').scrollIntoView({behavior:'smooth'}), 200);
     }
 
-    // --- הפקת PDF (טבלה בלבד, ללא הסתרה מוחלטת) ---
+    // --- הפקת PDF (תיקון הסתרה) ---
     function generatePDF() {
         // 1. עדכון כותרות
         document.getElementById('pdf-client').innerText = "לקוח: " + document.getElementById('clientName').value;
@@ -643,7 +639,6 @@
             tbody.innerHTML += row;
         });
 
-        // 3. סיכום
         const install = parseFloat(document.getElementById('installationCost').value) || 0;
         const totalBeforeVat = itemsSum + install;
         const vat = totalBeforeVat * 0.18;
@@ -653,8 +648,9 @@
         document.getElementById('pdf-vat').innerText = vat.toLocaleString() + " ₪";
         document.getElementById('pdf-total').innerText = finalTotal.toLocaleString() + " ₪";
 
-        // 4. הפקה באמצעות Off-screen Div
+        // 3. הפקה עם טריק ההצגה וההסתרה
         const element = document.getElementById('invoice-template');
+        element.style.display = 'block'; // מציג רק לצורך הצילום
         
         const opt = {
             margin: 0.5,
@@ -664,7 +660,9 @@
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
 
-        html2pdf().set(opt).from(element).save();
+        html2pdf().set(opt).from(element).save().then(() => {
+            element.style.display = 'none'; // מסתיר מיד אחרי
+        });
     }
 
     // --- PRO ARCHITECT ENGINE v3.0 (Pergola Fix) ---
@@ -672,7 +670,7 @@
         const card = btn.closest('.card');
         const typeSelect = card.querySelector('.item-type');
         const type = typeSelect.value;
-        const typeName = typeSelect.options[typeSelect.selectedIndex].text; // השם המלא בעברית
+        const typeName = typeSelect.options[typeSelect.selectedIndex].text; 
         const w = parseFloat(card.querySelector('.w-input').value) || 100;
         const h = parseFloat(card.querySelector('.h-input').value) || 100;
         const profile = card.querySelector('.profile-select').value;
@@ -688,7 +686,7 @@
         const client = document.getElementById('clientName').value || "לקוח";
         ctx.fillText(`לקוח: ${client} | תאריך: ${new Date().toLocaleDateString('he-IL')}`, 600, 100);
         
-        // תיקון כותרת: שימוש בשם מוצר מלא + שם הפרופיל
+        // כותרת
         let title = `${typeName} - ${profile}`;
         ctx.font = "20px Arial"; ctx.fillStyle = "#555";
         ctx.fillText(title, 600, 140);
@@ -704,7 +702,6 @@
         
         ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
 
-        // 1. הזזה
         if (type === 'sliding') {
             ctx.strokeRect(startX, startY, dw, dh);
             const sashes = parseInt(card.querySelector('.sl-sashes').value) || 2;
@@ -792,56 +789,42 @@
              for(let y=0; y<dh; y+=gap) { ctx.strokeRect(startX, startY+y, dw, gap-2); }
         }
         
-        // --- תיקון פרגולות ---
         else if (type === 'pergola') {
             const isStand = card.querySelector('.prg-type').value === 'stand';
             const postH = parseFloat(card.querySelector('.prg-post-h').value) || 250;
-            const roofH = dh * 0.15; // גובה הגג בשרטוט
+            const roofH = dh * 0.15; 
 
-            // 1. ציור הגג
             ctx.fillStyle = "#eee"; ctx.fillRect(startX, startY, dw, roofH); 
             ctx.strokeStyle = "#333"; ctx.lineWidth = 3; ctx.strokeRect(startX, startY, dw, roofH); 
 
-            // 2. ציור פסים לפי כיוון (בתוך הגג)
             const dir = card.querySelector('.prg-dir').value;
             ctx.strokeStyle = "#999"; ctx.lineWidth = 1;
-            if(dir === 'width' || dir === 'grid') { // לרוחב
-                for(let y=startY; y<startY+roofH; y+=15) { ctx.beginPath(); ctx.moveTo(startX, y); ctx.lineTo(startX+dw, y); ctx.stroke(); }
-            }
-            if(dir === 'length' || dir === 'grid') { // לאורך
-                for(let x=startX; x<startX+dw; x+=15) { ctx.beginPath(); ctx.moveTo(x, startY); ctx.lineTo(x, startY+roofH); ctx.stroke(); }
-            }
+            if(dir === 'width' || dir === 'grid') { for(let y=startY; y<startY+roofH; y+=15) { ctx.beginPath(); ctx.moveTo(startX, y); ctx.lineTo(startX+dw, y); ctx.stroke(); } }
+            if(dir === 'length' || dir === 'grid') { for(let x=startX; x<startX+dw; x+=15) { ctx.beginPath(); ctx.moveTo(x, startY); ctx.lineTo(x, startY+roofH); ctx.stroke(); } }
             
-            // 3. לוגיקת עמודים / תליה
             ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
             if(isStand) {
-                // עמודים יורדים עד למטה
                 ctx.fillStyle = "#333";
-                ctx.fillRect(startX + 20, startY + roofH, 15, dh - roofH); // עמוד שמאלי
-                ctx.fillRect(startX + dw - 35, startY + roofH, 15, dh - roofH); // עמוד ימני
+                ctx.fillRect(startX + 20, startY + roofH, 15, dh - roofH);
+                ctx.fillRect(startX + dw - 35, startY + roofH, 15, dh - roofH);
                 
-                // קו מידה לגובה העמוד
                 ctx.strokeStyle = "red"; ctx.lineWidth = 1;
                 const postX = startX + dw + 20;
                 ctx.beginPath(); 
-                ctx.moveTo(postX, startY + roofH); ctx.lineTo(postX + 10, startY + roofH); // קו עליון
-                ctx.moveTo(postX, startY + dh); ctx.lineTo(postX + 10, startY + dh); // קו תחתון
-                ctx.moveTo(postX + 5, startY + roofH); ctx.lineTo(postX + 5, startY + dh); // קו מחבר
+                ctx.moveTo(postX, startY + roofH); ctx.lineTo(postX + 10, startY + roofH);
+                ctx.moveTo(postX, startY + dh); ctx.lineTo(postX + 10, startY + dh);
+                ctx.moveTo(postX + 5, startY + roofH); ctx.lineTo(postX + 5, startY + dh);
                 ctx.stroke();
                 ctx.save(); ctx.translate(postX + 25, startY + (roofH + dh)/2); ctx.rotate(Math.PI/2);
                 ctx.fillStyle = "red"; ctx.font = "bold 16px Arial"; ctx.textAlign = "center";
                 ctx.fillText(`h=${postH}`, 0, 0); ctx.restore();
             } else {
-                // תלויה - סימון קיר בצד שמאל
                 ctx.setLineDash([10, 5]); ctx.strokeStyle = "#aaa"; ctx.lineWidth = 4;
                 ctx.beginPath(); ctx.moveTo(startX - 20, startY - 20); ctx.lineTo(startX - 20, startY + dh); ctx.stroke();
                 ctx.setLineDash([]);
                 ctx.fillStyle = "#555"; ctx.font = "14px Arial"; ctx.fillText("קיר תומך", startX - 60, startY + dh/2);
             }
-            
-            if(card.querySelector('.prg-gutter').checked) { 
-                ctx.beginPath(); ctx.arc(startX+dw+10, startY+roofH-10, 10, 0, 2*Math.PI); ctx.stroke(); 
-            }
+            if(card.querySelector('.prg-gutter').checked) { ctx.beginPath(); ctx.arc(startX+dw+10, startY+roofH-10, 10, 0, 2*Math.PI); ctx.stroke(); }
         }
         
         else if(type === 'fence') {
@@ -853,7 +836,6 @@
         }
         else { ctx.strokeRect(startX, startY, dw, dh); ctx.strokeRect(startX+10, startY+10, dw-20, dh-20); }
 
-        // קווי מידה כלליים
         ctx.strokeStyle = "#0000aa"; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(startX, startY+dh+20); ctx.lineTo(startX, startY+dh+50); ctx.moveTo(startX+dw, startY+dh+20); ctx.lineTo(startX+dw, startY+dh+50); ctx.moveTo(startX, startY+dh+35); ctx.lineTo(startX+dw, startY+dh+35); ctx.stroke();
         ctx.fillStyle = "#0000aa"; ctx.font = "bold 30px Arial"; ctx.textAlign = "center"; ctx.fillText(`${w}`, startX+dw/2, startY+dh+65);
