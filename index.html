@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="יהונתן PRO">
     <title>יהונתן אלומיניום PRO</title>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
     <style>
         /* --- העיצוב המקורי (ללא שינוי) --- */
         :root { --primary: #0d47a1; --primary-light: #42a5f5; --bg: #f0f4f8; --card: #ffffff; --text-dark: #1a202c; --whatsapp: #25D366; --border: #cbd5e0; --input-bg: #f7fafc; --danger: #e53e3e; }
@@ -164,7 +170,6 @@
 </div>
 
 <script>
-    // --- מאגר פרופילים מעודכן ---
     const profilesDB = {
         "sliding": ["קליל 7000 קלאסי", "קליל 9000", "קליל 9200", "קליל 1700 בלגי", "קליל 2200 אופיס"],
         "pocket": ["כיס בודד (2 נתיבים)", "כיס בודד (3 נתיבים)", "כיס כפול (2 נתיבים)", "כיס כפול (3 נתיבים)"],
@@ -185,7 +190,7 @@
     const klilColors = ["לבן קליל", "שמנת קליל", "אפור IRON 400", "שחור IRON 420", "לבן IRON 100", "בז' IRON 200"];
 
     let itemCount = 0;
-    let activeDrawingBtn = null; // כדי לדעת לאיזה כרטיס לשמור את הציור
+    let activeDrawingBtn = null; 
     
     document.addEventListener('DOMContentLoaded', () => { 
         document.getElementById('quoteDate').valueAsDate = new Date();
@@ -346,7 +351,6 @@
         stdInputs.style.display = 'block';
         jokerPanel.style.display = 'none';
         
-        // הצגת כיוון פתיחה רק במוצרים רלוונטיים
         if(type === 'hinge' || type === 'door' || type === 'tilt_turn') {
             dirContainer.style.display = 'block';
         } else {
@@ -448,7 +452,6 @@
         panel.querySelector('.notch-dims').style.display = 'flex';
     }
 
-    // --- לוגיקת ג'וקר וציור ---
     function openDrawing(btn) {
         activeDrawingBtn = btn;
         document.getElementById('drawingModal').style.display = 'flex';
@@ -471,7 +474,6 @@
         }
     }
     
-    // Canvas Logic
     let canvas, ctx, isDrawing = false;
     function initCanvas() {
         canvas = document.getElementById('drawingPad');
@@ -479,11 +481,9 @@
         ctx.fillStyle = "white"; ctx.fillRect(0,0, canvas.width, canvas.height);
         ctx.strokeStyle = "black"; ctx.lineWidth = 3; ctx.lineCap = "round";
         
-        // Touch events
         canvas.addEventListener('touchstart', startDraw);
         canvas.addEventListener('touchmove', draw);
         canvas.addEventListener('touchend', stopDraw);
-        // Mouse events
         canvas.addEventListener('mousedown', startDraw);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDraw);
@@ -509,7 +509,6 @@
         closeDrawing();
     }
 
-    // --- חישובים ---
     function calculateAll() {
         let itemsSum = 0;
         document.querySelectorAll('.item-card').forEach(card => {
@@ -555,7 +554,7 @@
         html2pdf().set(opt).from(element).save();
     }
 
-    // --- מנוע השרטוט האדריכלי החכם (PRO ARCHITECT ENGINE) ---
+    // --- PRO ARCHITECT ENGINE v2.0 ---
     function generateSketch(btn) {
         const card = btn.closest('.card');
         const type = card.querySelector('.item-type').value;
@@ -567,10 +566,7 @@
         canvas.width = 1200; canvas.height = 900;
         const ctx = canvas.getContext('2d');
         
-        // רקע לבן
         ctx.fillStyle = "white"; ctx.fillRect(0,0,1200,900);
-        
-        // כותרות
         ctx.fillStyle = "#0d47a1"; ctx.font = "bold 40px Arial"; ctx.textAlign = "center";
         ctx.fillText("יהונתן אלומיניום", 600, 60);
         ctx.fillStyle = "#333"; ctx.font = "24px Arial";
@@ -579,7 +575,6 @@
         ctx.font = "20px Arial"; ctx.fillStyle = "#555";
         ctx.fillText(`מוצר: ${profile}`, 600, 140);
 
-        // חישוב קנה מידה (Scale)
         const maxDrawW = 700; const maxDrawH = 500;
         const ratio = w / h;
         let dw, dh;
@@ -591,9 +586,7 @@
         
         ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
 
-        // --- שרטוט לפי קטגוריה ---
-        
-        // 1. חלון הזזה
+        // 1. הזזה
         if (type === 'sliding') {
             ctx.strokeRect(startX, startY, dw, dh);
             const sashes = parseInt(card.querySelector('.sl-sashes').value) || 2;
@@ -601,27 +594,20 @@
             const meeting = card.querySelector('.sl-meeting').value;
             
             for(let i=0; i<sashes; i++) {
-                // הסטת עומק לחפיפה
                 const offset = (i % 2 === 0) ? 0 : 15;
                 ctx.fillStyle = "rgba(230, 240, 255, 0.5)";
                 ctx.fillRect(startX+(i*sashW)+offset, startY+10, sashW-10, dh-20);
                 ctx.strokeRect(startX+(i*sashW)+offset, startY+10, sashW-10, dh-20);
                 
-                // ידית
                 ctx.fillStyle = "black";
-                // אם מפגש מרכזי - ידיות באמצע. אחרת בצד.
                 if(meeting === 'center' && (i === Math.floor(sashes/2) || i === Math.floor(sashes/2)-1)) {
-                     // ידית במרכז המפגש
                      const handleX = (i === Math.floor(sashes/2)-1) ? startX+(i*sashW)+sashW-5 : startX+(i*sashW)+5;
                      ctx.fillRect(handleX+offset, startY+dh/2-15, 6, 30);
                 } else if(meeting !== 'center') {
-                     // רגיל
                      ctx.fillRect(startX+(i*sashW)+offset+5, startY+dh/2-15, 6, 30);
                 }
             }
-            // חצים
             ctx.beginPath(); ctx.moveTo(startX, startY+dh/2); ctx.lineTo(startX+dw, startY+dh/2); ctx.lineWidth=1; ctx.stroke(); ctx.lineWidth=3;
-            // חצים בקצוות
             ctx.beginPath();
             ctx.moveTo(startX+20, startY+dh/2-10); ctx.lineTo(startX+10, startY+dh/2); ctx.lineTo(startX+20, startY+dh/2+10);
             ctx.moveTo(startX+dw-20, startY+dh/2-10); ctx.lineTo(startX+dw-10, startY+dh/2); ctx.lineTo(startX+dw-20, startY+dh/2+10);
@@ -631,63 +617,50 @@
         // 2. כיס
         else if (type === 'pocket') {
             ctx.setLineDash([15, 10]); ctx.strokeStyle = "#aaa"; 
-            ctx.strokeRect(startX+dw, startY, 150, dh); // הקיר
+            ctx.strokeRect(startX+dw, startY, 150, dh); 
             ctx.setLineDash([]); ctx.strokeStyle = "#333";
-            
-            ctx.strokeRect(startX, startY, dw, dh); // פתח
-            // מסילה חודרת
+            ctx.strokeRect(startX, startY, dw, dh); 
             ctx.beginPath(); ctx.moveTo(startX, startY+dh-5); ctx.lineTo(startX+dw+140, startY+dh-5); ctx.stroke();
-            // חץ
             ctx.beginPath(); ctx.moveTo(startX+dw-30, startY+dh/2); ctx.lineTo(startX+dw+60, startY+dh/2); 
             ctx.lineTo(startX+dw+40, startY+dh/2-10); ctx.stroke();
             ctx.fillText("כיס", startX+dw+50, startY+dh/2-20);
         }
 
-        // 3. ציר, 4. קיפ, 5. דריי-קיפ
+        // 3-5. ציר/קיפ/דריי-קיפ
         else if (['hinge', 'kipp', 'tilt_turn'].includes(type)) {
-            ctx.strokeRect(startX, startY, dw, dh); // משקוף
-            ctx.strokeRect(startX+10, startY+10, dw-20, dh-20); // כנף
+            ctx.strokeRect(startX, startY, dw, dh); 
+            ctx.strokeRect(startX+10, startY+10, dw-20, dh-20); 
             
             ctx.setLineDash([15, 15]); ctx.lineWidth = 2; ctx.beginPath();
             const dir = card.querySelector('.open-dir') ? card.querySelector('.open-dir').value : 'right';
 
-            // משולש ציר
             if (type === 'hinge' || type === 'tilt_turn') {
                 if (dir === 'right') { ctx.moveTo(startX+dw, startY); ctx.lineTo(startX, startY+dh/2); ctx.lineTo(startX+dw, startY+dh); } 
                 else { ctx.moveTo(startX, startY); ctx.lineTo(startX+dw, startY+dh/2); ctx.lineTo(startX, startY+dh); }
             }
-            
-            // משולש קיפ (V)
             if (type === 'kipp' || type === 'tilt_turn') {
                 ctx.moveTo(startX, startY+dh); ctx.lineTo(startX+dw/2, startY); ctx.lineTo(startX+dw, startY+dh);
             }
             ctx.stroke(); ctx.setLineDash([]); ctx.lineWidth = 3;
             
-            // ידית
             ctx.fillStyle = "black";
             if(dir === 'right') ctx.fillRect(startX+20, startY+dh/2-20, 10, 40);
             else ctx.fillRect(startX+dw-30, startY+dh/2-20, 10, 40);
-            if(type === 'kipp') ctx.fillRect(startX+dw/2-20, startY+20, 40, 10); // ידית עליונה לקיפ
+            if(type === 'kipp') ctx.fillRect(startX+dw/2-20, startY+20, 40, 10);
         }
 
-        // 6. קבוע (עם חיתוך)
+        // 6. קבוע
         else if (type === 'fixed') {
              const pos = card.querySelector('.notch-pos')?.value;
              if(pos) {
                  const cutW = (parseFloat(card.querySelector('.notch-w').value) / w) * dw;
                  const cutH = (parseFloat(card.querySelector('.notch-h').value) / h) * dh;
-                 
                  ctx.beginPath(); ctx.moveTo(startX, startY);
-                 // לוגיקת חיתוך לפי פינה
                  if(pos === 'TR') { ctx.lineTo(startX+dw-cutW, startY); ctx.lineTo(startX+dw-cutW, startY+cutH); ctx.lineTo(startX+dw, startY+cutH); ctx.lineTo(startX+dw, startY+dh); ctx.lineTo(startX, startY+dh); }
                  else if(pos === 'TL') { ctx.moveTo(startX+cutW, startY); ctx.lineTo(startX+dw, startY); ctx.lineTo(startX+dw, startY+dh); ctx.lineTo(startX, startY+dh); ctx.lineTo(startX, startY+cutH); ctx.lineTo(startX+cutW, startY+cutH); }
-                 // (אפשר להוסיף BL/BR באותה לוגיקה)
                  else { ctx.lineTo(startX+dw, startY); ctx.lineTo(startX+dw, startY+dh); ctx.lineTo(startX, startY+dh); }
-
                  ctx.closePath(); 
                  ctx.fillStyle = "#f0f8ff"; ctx.fill(); ctx.stroke();
-                 
-                 // מידות אדומות על החיתוך
                  ctx.fillStyle = "red"; ctx.font = "bold 20px Arial";
                  if(pos === 'TR') { ctx.fillText(card.querySelector('.notch-w').value, startX+dw-cutW/2-10, startY-10); ctx.fillText(card.querySelector('.notch-h').value, startX+dw+5, startY+cutH/2); }
              } else {
@@ -700,25 +673,19 @@
              let curX = startX; let curY = startY; let doorW = dw; let doorH = dh;
              const topH = parseFloat(card.querySelector('.dr-top')?.value) || 0;
              const sideW = parseFloat(card.querySelector('.dr-side')?.value) || 0;
-             
              if(topH > 0) { const dH = (topH/h)*dh; ctx.strokeRect(startX, startY, dw, dH); curY += dH; doorH -= dH; }
              if(sideW > 0) { const dW = (sideW/w)*dw; ctx.strokeRect(startX, curY, dW, doorH); curX += dW; doorW -= dW; }
-
-             ctx.strokeRect(curX, curY, doorW, doorH); // מסגרת דלת
+             ctx.strokeRect(curX, curY, doorW, doorH); 
              
-             // קשת פתיחה (Arc)
              const dir = card.querySelector('.open-dir').value;
              ctx.setLineDash([5,5]); ctx.beginPath();
              if(dir === 'right') { ctx.moveTo(curX+doorW, curY); ctx.lineTo(curX, curY+doorH/2); } 
              else { ctx.moveTo(curX, curY); ctx.lineTo(curX+doorW, curY+doorH/2); }
              ctx.stroke(); 
-             // קשת ממש
              ctx.beginPath();
              if(dir === 'right') ctx.arc(curX+doorW, curY+doorH/2, doorW, Math.PI, 0.5*Math.PI, true);
              else ctx.arc(curX, curY+doorH/2, doorW, 0, 0.5*Math.PI, false);
              ctx.stroke(); ctx.setLineDash([]);
-
-             // מחזיר שמן
              if(card.querySelector('.dr-closer').value !== 'none') {
                  ctx.strokeRect(curX+doorW/2-30, curY, 60, 20);
                  ctx.beginPath(); ctx.moveTo(curX+doorW/2, curY+20); ctx.lineTo(curX+doorW/2+40, curY+50); ctx.stroke();
@@ -730,28 +697,22 @@
              const isHidden = card.querySelector('.sht-box').value === 'hidden';
              const isLight = card.querySelector('.sht-slat').value === 'light';
              const boxH = dh * 0.15;
-             
              if(isHidden) { ctx.setLineDash([5,5]); ctx.strokeRect(startX, startY-boxH, dw, boxH); ctx.setLineDash([]); }
              else { ctx.fillStyle = "#ddd"; ctx.fillRect(startX, startY-boxH, dw, boxH); ctx.strokeRect(startX, startY-boxH, dw, boxH); }
-             
              ctx.strokeRect(startX, startY, dw, dh);
-             // שלבים
              const gap = isLight ? 25 : 15;
-             for(let y=0; y<dh; y+=gap) {
-                 ctx.strokeRect(startX, startY+y, dw, gap-2);
-             }
+             for(let y=0; y<dh; y+=gap) { ctx.strokeRect(startX, startY+y, dw, gap-2); }
         }
 
         // 10. פרגולה
         else if (type === 'pergola') {
-            ctx.fillStyle = "#eee"; ctx.fillRect(startX, startY, dw, dh*0.1); ctx.strokeRect(startX, startY, dw, dh*0.1); // מסגרת גג
+            ctx.fillStyle = "#eee"; ctx.fillRect(startX, startY, dw, dh*0.1); ctx.strokeRect(startX, startY, dw, dh*0.1); 
             const isStand = card.querySelector('.prg-type').value === 'stand';
             if(isStand) {
                 ctx.fillStyle = "#333";
-                ctx.fillRect(startX+20, startY+dh*0.1, 20, dh*0.9); // עמוד 1
-                ctx.fillRect(startX+dw-40, startY+dh*0.1, 20, dh*0.9); // עמוד 2
+                ctx.fillRect(startX+20, startY+dh*0.1, 20, dh*0.9); 
+                ctx.fillRect(startX+dw-40, startY+dh*0.1, 20, dh*0.9); 
             }
-            // מרזב
             if(card.querySelector('.prg-gutter').checked) {
                 ctx.beginPath(); ctx.arc(startX+dw+10, startY+dh*0.1-10, 10, 0, 2*Math.PI); ctx.stroke();
             }
@@ -761,7 +722,6 @@
         else if(type === 'fence') {
              ctx.strokeRect(startX, startY, dw, dh);
              const spaceCm = parseInt(card.querySelector('.fence-space').value) || 2;
-             // המרה פיקטיבית: כל 1 ס"מ = 5 פיקסלים
              const spacePx = spaceCm * 5; 
              const barH = 10;
              for(let y=10; y<dh; y += (barH + spacePx)) {
@@ -769,22 +729,14 @@
              }
         }
 
-        // ברירת מחדל
-        else {
-            ctx.strokeRect(startX, startY, dw, dh);
-            ctx.strokeRect(startX+10, startY+10, dw-20, dh-20);
-        }
+        else { ctx.strokeRect(startX, startY, dw, dh); ctx.strokeRect(startX+10, startY+10, dw-20, dh-20); }
 
-        // --- סיום: קווי מידה ---
         ctx.strokeStyle = "#0000aa"; ctx.lineWidth = 1;
-        // רוחב
         ctx.beginPath(); ctx.moveTo(startX, startY+dh+20); ctx.lineTo(startX, startY+dh+50); ctx.moveTo(startX+dw, startY+dh+20); ctx.lineTo(startX+dw, startY+dh+50); ctx.moveTo(startX, startY+dh+35); ctx.lineTo(startX+dw, startY+dh+35); ctx.stroke();
         ctx.fillStyle = "#0000aa"; ctx.font = "bold 30px Arial"; ctx.textAlign = "center"; ctx.fillText(`${w}`, startX+dw/2, startY+dh+65);
-        // גובה
         ctx.beginPath(); ctx.moveTo(startX+dw+20, startY); ctx.lineTo(startX+dw+50, startY); ctx.moveTo(startX+dw+20, startY+dh); ctx.lineTo(startX+dw+50, startY+dh); ctx.moveTo(startX+dw+35, startY); ctx.lineTo(startX+dw+35, startY+dh); ctx.stroke();
         ctx.save(); ctx.translate(startX+dw+65, startY+dh/2); ctx.rotate(-Math.PI/2); ctx.fillText(`${h}`, 0, 0); ctx.restore();
 
-        // הורדה
         const link = document.createElement('a');
         link.download = `Sketch_${client}_${type}.png`;
         link.href = canvas.toDataURL();
