@@ -639,18 +639,30 @@
 
     function sendWhatsapp() { window.open(`https://wa.me/?text=${encodeURIComponent(document.getElementById('previewText').value)}`); }
 
-    // --- PDF ---
+    // --- PDF FIXED (Clone Method) ---
     function downloadActualPdf() {
         const element = document.getElementById('pdfPaperContent');
         const clientName = document.getElementById('clientName').value || "הצעה";
         const opt = {
-            margin: [0.5, 0.5, 0.5, 0.5],
+            margin: [0, 0, 0, 0],
             filename: `הצעת_מחיר_${clientName}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, logging: false },
+            html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
-        html2pdf().set(opt).from(element).save();
+        
+        // יצירת עותק נקי ללא גלילה - הפתרון לבעיית הדף הלבן
+        const clone = element.cloneNode(true);
+        clone.style.width = '790px';
+        clone.style.position = 'absolute';
+        clone.style.left = '-9999px';
+        clone.style.top = '0';
+        clone.style.height = 'auto';
+        document.body.appendChild(clone);
+
+        html2pdf().set(opt).from(clone).save().then(() => {
+            document.body.removeChild(clone);
+        });
     }
     
     // --- שרטוטים ---
