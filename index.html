@@ -572,7 +572,7 @@
         setTimeout(() => document.getElementById('bottomNav').scrollIntoView({behavior:'smooth'}), 200);
     }
 
-    // --- התיקון לוואטסאפ (V11) ---
+    // --- מנוע וואטסאפ החדש (V12) ---
     function openPreview() {
         let txt = `*הצעת מחיר - יהונתן אלומיניום*\nלקוח: ${document.getElementById('clientName').value}\nהצעה מס': ${document.getElementById('quoteNumber').value}\n\n`;
         document.querySelectorAll('.item-card').forEach(c => {
@@ -591,12 +591,32 @@
                 const config = c.querySelector('.shower-config').value === 'front' ? 'חזית' : 'פינתי';
                 const qty = c.querySelector('.qty-input').value;
                 const price = c.querySelector('.price-input').value;
-                txt += `🔹 *מקלחון ${config}* (${profile})\nכמות: ${qty} | מחיר: ${price} ₪\n\n`;
+                const glass = c.querySelector('.glass-type').value;
+                const finish = c.querySelector('.glass-finish').value;
+                const hwColor = c.querySelector('.hardware-color').value;
+                
+                // מידות מקלחון
+                let dims = "";
+                const h = c.querySelector('.h-input').value;
+                if (c.querySelector('.shower-config').value === 'front') dims = `${c.querySelector('.w-input').value} / ${h}`;
+                else dims = `${c.querySelector('.w-right-input').value}x${c.querySelector('.w-left-input').value} / ${h}`;
+
+                txt += `🔹 *מקלחון ${config}* (${profile})\nזכוכית: ${glass} ${finish}\nפרזול: ${hwColor}\nמידות: ${dims}\nכמות: ${qty} | מחיר: ${price} ₪\n\n`;
             } else {
                 const profile = c.querySelector('.profile-select').value;
+                const color = c.querySelector('.color-shade').value;
                 const qty = c.querySelector('.qty-input').value;
                 const price = c.querySelector('.price-input').value;
                 
+                let specs = `דגם: ${profile}\nצבע: ${color}`;
+                
+                // הוספת זכוכית אם רלוונטי
+                if(type !== 'pergola' && type !== 'fence' && type !== 'shutter' && type !== 'screen_roll') {
+                    const glass = c.querySelector('.glass-type').value;
+                    const finish = c.querySelector('.glass-finish').value;
+                    specs += `\nזכוכית: ${glass} ${finish}`;
+                }
+
                 // מידות
                 let dims = "";
                 if (type === 'fixed' || type === 'showcase') {
@@ -607,7 +627,7 @@
                      dims = `${c.querySelector('.w-input').value} / ${c.querySelector('.h-input').value}`;
                 }
                 
-                txt += `🔹 *${typeName}* (${profile})\nמידות: ${dims}\nכמות: ${qty} | מחיר: ${price} ₪\n\n`;
+                txt += `🔹 *${typeName}*\n${specs}\nמידות: ${dims}\nכמות: ${qty} | מחיר: ${price} ₪\n\n`;
             }
         });
         const install = document.getElementById('installationCost').value;
@@ -619,7 +639,7 @@
 
     function sendWhatsapp() { window.open(`https://wa.me/?text=${encodeURIComponent(document.getElementById('previewText').value)}`); }
 
-    // --- התיקון ל-PDF (V11) ---
+    // --- PDF ---
     function downloadActualPdf() {
         const element = document.getElementById('pdfPaperContent');
         const clientName = document.getElementById('clientName').value || "הצעה";
@@ -630,11 +650,10 @@
             html2canvas: { scale: 2, useCORS: true, logging: false },
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
-        // שימוש בשיטה היציבה יותר
         html2pdf().set(opt).from(element).save();
     }
     
-    // שרטוטים (נשאר ללא שינוי, תקין מ-V10)
+    // --- שרטוטים ---
     function generateSketch(btn) {
         const card = btn.closest('.card');
         const typeSelect = card.querySelector('.item-type');
@@ -825,6 +844,21 @@
         link.download = `Sketch_${client}_${type}.png`;
         link.href = canvas.toDataURL();
         link.click();
+    }
+
+    function drawArrow(ctx, x, y, dir) {
+        ctx.beginPath(); ctx.lineWidth = 2;
+        if (dir === 'right') { ctx.moveTo(x-20, y); ctx.lineTo(x+20, y); ctx.lineTo(x+10, y-10); ctx.moveTo(x+20, y); ctx.lineTo(x+10, y+10); }
+        else { ctx.moveTo(x+20, y); ctx.lineTo(x-20, y); ctx.lineTo(x-10, y-10); ctx.moveTo(x-20, y); ctx.lineTo(x-10, y+10); }
+        ctx.stroke(); ctx.lineWidth = 3;
+    }
+
+    function drawTriangle(ctx, x, y, w, h, dir) {
+        ctx.setLineDash([15, 15]); ctx.lineWidth = 2; ctx.beginPath();
+        if (dir === 'right') { ctx.moveTo(x, y); ctx.lineTo(x+w, y+h/2); ctx.lineTo(x, y+h); }
+        else if (dir === 'left') { ctx.moveTo(x+w, y); ctx.lineTo(x, y+h/2); ctx.lineTo(x+w, y+h); }
+        else if (dir === 'top') { ctx.moveTo(x, y+h); ctx.lineTo(x+w/2, y); ctx.lineTo(x+w, y+h); }
+        ctx.stroke(); ctx.setLineDash([]); ctx.lineWidth = 3;
     }
 </script>
 </body>
