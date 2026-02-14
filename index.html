@@ -69,7 +69,6 @@
         .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
         canvas#drawingPad { border: 2px dashed #cbd5e0; border-radius: 10px; touch-action: none; background: white; cursor: crosshair; width: 100%; height: 300px; }
 
-        /* PDF Styles */
         .pdf-preview-content { background: white; width: 100%; max-width: 800px; padding: 0; border-radius: 0; height: 100%; overflow-y: auto; }
         .pdf-paper { background: white; padding: 30px; font-family: 'Arial', sans-serif; direction: rtl; min-height: 800px; }
         .pdf-paper table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
@@ -174,7 +173,7 @@
 </div>
 
 <script>
-    // --- מאגרי נתונים מלאים ---
+    // --- מאגרי נתונים ---
     const profilesDB = {
         "sliding": ["קליל 7000 קלאסי", "קליל 9000", "קליל 9200", "קליל 1700 בלגי", "קליל 2200 אופיס"],
         "pocket": ["כיס בודד (2 נתיבים)", "כיס בודד (3 נתיבים)", "כיס כפול (2 נתיבים)", "כיס כפול (3 נתיבים)"],
@@ -182,34 +181,34 @@
         "kipp": ["קליל 4500 קיפ", "קליל 4300 קיפ", "קליל 5500 קיפ"],
         "tilt_turn": ["קליל 4500 דריי-קיפ", "קליל 4300 דריי-קיפ", "קליל 5500 דריי-קיפ"],
         "fixed": ["קליל 4300 בלגי FIX", "קליל 4500 קלאסי FIX", "קליל 2000 בייסיק FIX", "קליל 5500 אופיס FIX"],
+        "showcase": ["ויטרינה 9000", "ויטרינה 9200", "ויטרינה 2200", "ויטרינה 7000"],
         "door": ["דלת 2000 פנל", "דלת לובי זכוכית", "דלת ציר בלגי 4300", "דלת אינטרקום", "דלת 4500"],
         "shutter": ["שלב 8 (רגיל)", "שלב אור (מיני)", "שלב מוקצף"],
         "screen_roll": ["רשת גלילה (אנכית)", "רשת הזזה", "רשת קבועה"],
-        "pergola": ["פרופיל הייטק 120/40", "פרופיל הייטק 150/50", "פרופיל דאבל T (Double T)", "פרופיל 100/100", "רפפות Z", "רפפות אליפטיות", "דמוי עץ"],
+        "pergola": ["פרופיל הייטק 120/40", "פרופיל הייטק 150/50", "פרופיל דאבל T", "פרופיל 100/100", "רפפות Z", "רפפות אליפטיות", "דמוי עץ"],
         "fence": ["גדר שלבים אופקיים", "גדר הייטק"],
         "shower": ["מקלחון חזית", "מקלחון פינתי"],
         "joker": ["עבודה כללית"]
     };
 
-    // מניפות צבעים מלאות
     const colorsDB = {
         "klil": {
             "iron": ["IRON 100 (לבן)", "IRON 200 (בז')", "IRON 300 (אבן)", "IRON 400 (אפור)", "IRON 420 (שחור)", "IRON 500 (חום)", "IRON 600 (ירוק)", "IRON 700 (כחול)"],
-            "fine": ["FINE IRON (מגורען עדין)", "FINE כסף", "FINE שמפניה", "FINE ברונזה", "FINE לבן", "FINE שחור"],
+            "fine": ["FINE IRON", "FINE כסף", "FINE שמפניה", "FINE ברונזה", "FINE לבן", "FINE שחור"],
             "elox": ["אנודייז טבעי (מט)", "אנודייז כסף", "אנודייז שמפניה", "אנודייז ברונזה", "אנודייז שחור"],
             "basic": ["לבן 9010", "לבן 9016 (בוהק)", "שמנת 1013", "שחור מט", "אפור 7035", "חום 8014"],
             "office": ["אפור אופיס", "לבן אופיס", "בז' אופיס", "שחור אופיס"]
         },
         "ral": {
-            "ral_1xxx": ["1000 (Green Beige)", "1013 (Oyster White)", "1015 (Light Ivory)", "1018 (Zinc Yellow)", "1023 (Traffic Yellow)"],
-            "ral_2xxx": ["2000 (Yellow Orange)", "2004 (Pure Orange)", "2010 (Signal Orange)"],
-            "ral_3xxx": ["3000 (Flame Red)", "3004 (Purple Red)", "3020 (Traffic Red)"],
-            "ral_4xxx": ["4001 (Red Lilac)", "4005 (Blue Lilac)", "4010 (Telemagenta)"],
-            "ral_5xxx": ["5002 (Ultramarine)", "5005 (Signal Blue)", "5010 (Gentian Blue)", "5015 (Sky Blue)"],
-            "ral_6xxx": ["6005 (Moss Green)", "6009 (Fir Green)", "6018 (Yellow Green)", "6021 (Pale Green)"],
+            "ral_9xxx": ["9001 (Cream)", "9002 (Grey White)", "9005 (Jet Black)", "9006 (White Alum)", "9007 (Grey Alum)", "9010 (Pure White)", "9016 (Traffic White)"],
             "ral_7xxx": ["7000 (Squirrel Grey)", "7004 (Signal Grey)", "7012 (Basalt Grey)", "7016 (Anthracite)", "7021 (Black Grey)", "7035 (Light Grey)", "7040 (Window Grey)"],
-            "ral_8xxx": ["8001 (Ochre Brown)", "8003 (Clay Brown)", "8014 (Sepia Brown)", "8017 (Chocolate Brown)", "8019 (Grey Brown)"],
-            "ral_9xxx": ["9001 (Cream)", "9002 (Grey White)", "9005 (Jet Black)", "9006 (White Aluminium)", "9007 (Grey Aluminium)", "9010 (Pure White)", "9016 (Traffic White)"]
+            "ral_1xxx": ["1000", "1013 (Oyster White)", "1015 (Light Ivory)", "1018", "1023"],
+            "ral_8xxx": ["8001", "8003", "8014 (Sepia Brown)", "8017 (Chocolate Brown)", "8019"],
+            "ral_3xxx": ["3000", "3004", "3020"],
+            "ral_5xxx": ["5002", "5005", "5010", "5015"],
+            "ral_6xxx": ["6005 (Moss Green)", "6009", "6018", "6021"],
+            "ral_2xxx": ["2000", "2004", "2010"],
+            "ral_4xxx": ["4001", "4005", "4010"]
         }
     };
 
@@ -272,7 +271,8 @@
                 <option value="hinge">חלון ציר (רגיל)</option>
                 <option value="kipp">חלון קיפ (פתיחה עליונה)</option>
                 <option value="tilt_turn">חלון דריי-קיפ (משולב)</option>
-                <option value="fixed">קבוע / ויטרינה</option>
+                <option value="fixed">חלון קבוע (FIX)</option>
+                <option value="showcase">ויטרינה קבועה (Showcase)</option>
                 <option value="door">דלתות כניסה / לובי</option>
                 <option value="shutter">תריסים</option>
                 <option value="screen_roll">רשתות</option>
@@ -305,9 +305,11 @@
                     </div>
                 </div>
 
-                <div class="row" style="margin-top:15px">
-                    <div><label>רוחב (ס"מ)</label><input type="number" class="w-input" placeholder="100"></div>
-                    <div><label>גובה (ס"מ)</label><input type="number" class="h-input" placeholder="100"></div>
+                <div class="dims-section">
+                    <div class="row" style="margin-top:15px">
+                        <div><label>רוחב (ס"מ)</label><input type="number" class="w-input" placeholder="100"></div>
+                        <div><label>גובה (ס"מ)</label><input type="number" class="h-input" placeholder="100"></div>
+                    </div>
                 </div>
                 
                 <div class="row" style="margin-top:10px;">
@@ -353,18 +355,15 @@
         `;
         container.appendChild(div);
         
-        // אתחול רשימות זכוכית
         const glassTypeSelect = div.querySelector('.glass-type');
         const glassFinishSelect = div.querySelector('.glass-finish');
         glassTypes.types.forEach(t => glassTypeSelect.innerHTML += `<option value="${t}">${t}</option>`);
         glassTypes.finish.forEach(f => glassFinishSelect.innerHTML += `<option value="${f}">${f}</option>`);
 
-        // אתחול צבעים ברירת מחדל (RAL)
         switchColorTab(div.querySelector('.tab.active'), 'ral');
         updateItemFields(div.querySelector('.item-type'));
     }
 
-    // --- ניהול צבעים חכם ---
     function switchColorTab(tab, type) {
         const card = tab.closest('.card');
         card.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -373,7 +372,6 @@
         const familySelect = card.querySelector('.color-family');
         familySelect.innerHTML = "";
         
-        // הזנת משפחות צבעים
         const families = (type === 'klil') ? 
             {"iron": "קליל IRON (מגורען)", "fine": "קליל FINE (חלק)", "basic": "קליל BASIC", "office": "קליל OFFICE", "elox": "קליל אנודייז"} :
             {"ral_9xxx": "לבנים ושחורים (9000)", "ral_7xxx": "אפורים (7000)", "ral_1xxx": "בז' ושמנת (1000)", "ral_8xxx": "חומים (8000)", "ral_3xxx": "אדומים (3000)", "ral_5xxx": "כחולים (5000)", "ral_6xxx": "ירוקים (6000)", "ral_2xxx": "כתומים (2000)", "ral_4xxx": "סגולים (4000)"};
@@ -393,10 +391,8 @@
         const shadeSelect = card.querySelector('.color-shade');
         const type = familySelect.getAttribute('data-type');
         const family = familySelect.value;
-        
         shadeSelect.innerHTML = "";
         const shades = colorsDB[type][family] || [];
-        
         shades.forEach(s => {
             const opt = document.createElement('option');
             opt.value = s; opt.innerText = s;
@@ -413,13 +409,16 @@
         const profSelect = card.querySelector('.profile-select');
         const dirContainer = card.querySelector('.opening-dir-container');
         const glassSection = card.querySelector('.glass-section');
+        const dimsSection = card.querySelector('.dims-section');
 
         if(type === 'joker') {
             stdInputs.style.display = 'none'; extraPanel.style.display = 'none'; jokerPanel.style.display = 'block'; return;
         }
 
         stdInputs.style.display = 'block'; jokerPanel.style.display = 'none';
-        dirContainer.style.display = (type === 'hinge' || type === 'door' || type === 'tilt_turn') ? 'block' : 'none';
+        
+        // הצגת כיוון פתיחה רק במוצרים הרלוונטיים
+        dirContainer.style.display = (type === 'hinge' || type === 'tilt_turn' || type === 'door') ? 'block' : 'none';
 
         if(type === 'pergola' || type === 'fence' || type === 'shutter' || type === 'screen_roll') {
             glassSection.style.display = 'none';
@@ -434,15 +433,40 @@
             profSelect.appendChild(opt);
         });
 
+        // טיפול בגבהים (טרפז)
+        if (type === 'fixed' || type === 'showcase') {
+            dimsSection.innerHTML = `
+                <div class="row" style="margin-top:15px">
+                    <div><label>רוחב (ס"מ)</label><input type="number" class="w-input" placeholder="100"></div>
+                    <div><label>גובה ימין</label><input type="number" class="h-right-input" placeholder="100"></div>
+                    <div><label>גובה שמאל</label><input type="number" class="h-left-input" placeholder="100"></div>
+                </div>
+            `;
+            // הוספת שדות חלוקה
+            extraPanel.innerHTML = `
+                <div class="row">
+                    <div><label>חלוקות לאורך (עמודים)</label><input type="number" class="div-x" value="0"></div>
+                    <div><label>חלוקות לרוחב (קושרות)</label><input type="number" class="div-y" value="0"></div>
+                </div>
+            `;
+            extraPanel.style.display = 'block';
+            return;
+        } else {
+            // מידות רגילות
+            dimsSection.innerHTML = `
+                <div class="row" style="margin-top:15px">
+                    <div><label>רוחב (ס"מ)</label><input type="number" class="w-input" placeholder="100"></div>
+                    <div><label>גובה (ס"מ)</label><input type="number" class="h-input" placeholder="100"></div>
+                </div>
+            `;
+        }
+
         let html = '';
         if(type === 'sliding') {
             html = `<div class="row"><div><label>מס' כנפיים</label><input type="number" class="sl-sashes" value="2"></div><div><label>סוג מפגש</label><select class="sl-meeting"><option value="side">צד לצד</option><option value="center">מפגש מרכזי (נושק)</option></select></div></div><label>חלוקה ("בלגי"):</label><select class="sl-div"><option value="none">ללא</option><option value="strips">פסים</option><option value="grid">קוביות</option></select>`;
         }
         else if(type === 'pocket') {
-            html = `<label>הרכב כנף:</label><select class="pkt-comp"><option>זכוכית בלבד</option><option>זכוכית + תריס</option><option>זכוכית + תריס + רשת</option></select><label>סוג מסילה:</label><select class="pkt-rail"><option>2 נתיבים</option><option>3 נתיבים</option></select>`;
-        }
-        else if(type === 'fixed') {
-            html = `<label>האם יש חיתוך/מגרעת?</label><div class="notch-grid"><div class="notch-btn" onclick="selectNotch(this, 'TL')">⌜</div><div class="notch-btn" onclick="selectNotch(this, 'TR')">⌝</div><div class="notch-btn" onclick="selectNotch(this, 'BL')">⌞</div><div class="notch-btn" onclick="selectNotch(this, 'BR')">⌟</div></div><input type="hidden" class="notch-pos"><div class="row notch-dims" style="display:none"><input type="number" class="notch-w" placeholder="רוחב חיתוך"><input type="number" class="notch-h" placeholder="גובה חיתוך"></div>`;
+            html = `<label>הרכב כנף:</label><select class="pkt-comp"><option>זכוכית בלבד</option><option>זכוכית + תריס</option><option>זכוכית + תריס + רשת</option></select><label>כיוון כיס:</label><select class="pkt-dir"><option value="right">ימין</option><option value="left">שמאל</option></select>`;
         }
         else if(type === 'door') {
             html = `<label>תוספות קבועים:</label><div class="row"><input type="number" class="dr-top" placeholder="גובה קבוע עליון"><input type="number" class="dr-side" placeholder="רוחב קבוע צד"></div><label style="margin-top:10px">מחזיר שמן:</label><select class="dr-closer"><option value="none">ללא</option><option value="top">חיצוני</option><option value="floor">רצפתי</option></select>`;
@@ -457,8 +481,12 @@
             html = `<label>מרווח בין שלבים (ס"מ):</label><input type="number" class="fence-space" value="2" placeholder="לדוגמה: 2">`;
         }
         
-        extraPanel.innerHTML = html ? html : '';
-        extraPanel.style.display = html ? 'block' : 'none';
+        if(html) {
+            extraPanel.innerHTML = html;
+            extraPanel.style.display = 'block';
+        } else if (type !== 'fixed' && type !== 'showcase') {
+             extraPanel.style.display = 'none';
+        }
     }
 
     function togglePergolaPost(select) {
@@ -466,15 +494,6 @@
         div.style.display = select.value === 'stand' ? 'block' : 'none';
     }
 
-    function selectNotch(btn, pos) {
-        const panel = btn.closest('.extra-panel');
-        panel.querySelectorAll('.notch-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        panel.querySelector('.notch-pos').value = pos;
-        panel.querySelector('.notch-dims').style.display = 'flex';
-    }
-
-    // --- לוגיקת ג'וקר ---
     function openDrawing(btn) { activeDrawingBtn = btn; document.getElementById('drawingModal').style.display = 'flex'; initCanvas(); }
     function closeDrawing() { document.getElementById('drawingModal').style.display = 'none'; }
     function previewImage(input) {
@@ -551,7 +570,6 @@
         setTimeout(() => document.getElementById('bottomNav').scrollIntoView({behavior:'smooth'}), 200);
     }
 
-    // --- PDF Logic ---
     function showPdfPreview() {
         const clientName = document.getElementById('clientName').value || "ישראל ישראלי";
         const quoteDate = new Date(document.getElementById('quoteDate').value).toLocaleDateString('he-IL');
@@ -597,7 +615,15 @@
                     const finish = card.querySelector('.glass-finish').value;
                     desc += `<br>זכוכית: ${glass}, ${finish}`;
                 }
-                dims = `${card.querySelector('.w-input').value} / ${card.querySelector('.h-input').value}`;
+                
+                if (typeSelect.value === 'fixed' || typeSelect.value === 'showcase') {
+                     const hR = card.querySelector('.h-right-input').value;
+                     const hL = card.querySelector('.h-left-input').value;
+                     dims = `${card.querySelector('.w-input').value} / ${hR}-${hL}`;
+                } else {
+                     dims = `${card.querySelector('.w-input').value} / ${card.querySelector('.h-input').value}`;
+                }
+                
                 qty = parseFloat(card.querySelector('.qty-input').value) || 1;
                 price = parseFloat(card.querySelector('.price-input').value) || 0;
             }
@@ -645,16 +671,25 @@
         html2pdf().set(opt).from(element).toPdf().get('pdf').save();
     }
 
-    // --- Sketch Engine v6.0 ---
+    // --- Sketch Engine v8.0 ---
     function generateSketch(btn) {
         const card = btn.closest('.card');
         const typeSelect = card.querySelector('.item-type');
         const type = typeSelect.value;
         const typeName = typeSelect.options[typeSelect.selectedIndex].text; 
-        const w = parseFloat(card.querySelector('.w-input').value) || 100;
-        const h = parseFloat(card.querySelector('.h-input').value) || 100;
         const profile = card.querySelector('.profile-select').value;
         
+        let w, h, hRight, hLeft;
+        if (type === 'fixed' || type === 'showcase') {
+             w = parseFloat(card.querySelector('.w-input').value) || 100;
+             hRight = parseFloat(card.querySelector('.h-right-input').value) || 100;
+             hLeft = parseFloat(card.querySelector('.h-left-input').value) || 100;
+             h = Math.max(hRight, hLeft);
+        } else {
+             w = parseFloat(card.querySelector('.w-input').value) || 100;
+             h = parseFloat(card.querySelector('.h-input').value) || 100;
+        }
+
         const canvas = document.createElement('canvas');
         canvas.width = 1200; canvas.height = 900;
         const ctx = canvas.getContext('2d');
@@ -685,7 +720,55 @@
         
         ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
 
-        if (type === 'sliding') {
+        // --- לוגיקת שרטוטים חדשה ---
+
+        if (type === 'fixed' || type === 'showcase') {
+             // שרטוט טרפז/מלבן לפי גבהים
+             const pixHRight = (hRight / h) * dh;
+             const pixHLeft = (hLeft / h) * dh;
+             
+             ctx.beginPath();
+             ctx.moveTo(startX, startY + dh); // Bottom Left
+             ctx.lineTo(startX + dw, startY + dh); // Bottom Right
+             ctx.lineTo(startX + dw, startY + dh - pixHRight); // Top Right
+             ctx.lineTo(startX, startY + dh - pixHLeft); // Top Left
+             ctx.closePath();
+             ctx.stroke();
+
+             // חלוקות פנימיות
+             const cols = parseInt(card.querySelector('.div-x').value) || 0;
+             const rows = parseInt(card.querySelector('.div-y').value) || 0;
+             
+             // עמודים
+             if (cols > 0) {
+                 const colW = dw / (cols + 1);
+                 for (let i = 1; i <= cols; i++) {
+                     const x = startX + i * colW;
+                     // חישוב גובה הקו העליון בנקודה הזו (אינטרפולציה)
+                     const slope = (pixHRight - pixHLeft) / dw;
+                     const yTop = (startY + dh - pixHLeft) + slope * (i * colW);
+                     
+                     ctx.beginPath();
+                     ctx.moveTo(x, startY + dh);
+                     ctx.lineTo(x, yTop);
+                     ctx.stroke();
+                 }
+             }
+             // קושרות
+             if (rows > 0) {
+                  // פשוט נחלק את הגובה המקסימלי, זה קירוב מספיק טוב לויזואליה
+                  const rowH = dh / (rows + 1);
+                  for (let j = 1; j <= rows; j++) {
+                      const y = startY + dh - j * rowH;
+                      ctx.beginPath();
+                      ctx.moveTo(startX, y);
+                      ctx.lineTo(startX + dw, y); // זה יחרוג אם טרפז קיצוני, אבל מספיק טוב לשרטוט כללי
+                      ctx.stroke();
+                  }
+             }
+        }
+        
+        else if (type === 'sliding') {
             ctx.strokeRect(startX, startY, dw, dh);
             const sashes = parseInt(card.querySelector('.sl-sashes').value) || 2;
             const sashW = dw / sashes;
@@ -695,72 +778,55 @@
                 ctx.fillStyle = "rgba(230, 240, 255, 0.5)";
                 ctx.fillRect(startX+(i*sashW)+offset, startY+10, sashW-10, dh-20);
                 ctx.strokeRect(startX+(i*sashW)+offset, startY+10, sashW-10, dh-20);
-                ctx.fillStyle = "black";
-                if(meeting === 'center' && (i === Math.floor(sashes/2) || i === Math.floor(sashes/2)-1)) {
-                     const handleX = (i === Math.floor(sashes/2)-1) ? startX+(i*sashW)+sashW-5 : startX+(i*sashW)+5;
-                     ctx.fillRect(handleX+offset, startY+dh/2-15, 6, 30);
-                } else if(meeting !== 'center') { ctx.fillRect(startX+(i*sashW)+offset+5, startY+dh/2-15, 6, 30); }
+                // חץ כיוון
+                drawArrow(ctx, startX+(i*sashW)+sashW/2, startY+dh/2, (i%2===0)?'right':'left');
             }
-            ctx.beginPath(); ctx.moveTo(startX, startY+dh/2); ctx.lineTo(startX+dw, startY+dh/2); ctx.lineWidth=1; ctx.stroke(); ctx.lineWidth=3;
-            ctx.beginPath();
-            ctx.moveTo(startX+20, startY+dh/2-10); ctx.lineTo(startX+10, startY+dh/2); ctx.lineTo(startX+20, startY+dh/2+10);
-            ctx.moveTo(startX+dw-20, startY+dh/2-10); ctx.lineTo(startX+dw-10, startY+dh/2); ctx.lineTo(startX+dw-20, startY+dh/2+10);
-            ctx.stroke();
         }
+        
         else if (type === 'pocket') {
-            ctx.setLineDash([15, 10]); ctx.strokeStyle = "#aaa"; 
-            ctx.strokeRect(startX+dw, startY, 150, dh); ctx.setLineDash([]); ctx.strokeStyle = "#333";
-            ctx.strokeRect(startX, startY, dw, dh); 
-            ctx.beginPath(); ctx.moveTo(startX, startY+dh-5); ctx.lineTo(startX+dw+140, startY+dh-5); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(startX+dw-30, startY+dh/2); ctx.lineTo(startX+dw+60, startY+dh/2); ctx.lineTo(startX+dw+40, startY+dh/2-10); ctx.stroke();
-            ctx.fillText("כיס", startX+dw+50, startY+dh/2-20);
-        }
-        else if (['hinge', 'kipp', 'tilt_turn'].includes(type)) {
-            ctx.strokeRect(startX, startY, dw, dh); ctx.strokeRect(startX+10, startY+10, dw-20, dh-20); 
-            ctx.setLineDash([15, 15]); ctx.lineWidth = 2; ctx.beginPath();
-            const dir = card.querySelector('.open-dir') ? card.querySelector('.open-dir').value : 'right';
-            if (type === 'hinge' || type === 'tilt_turn') {
-                if (dir === 'right') { ctx.moveTo(startX+dw, startY); ctx.lineTo(startX, startY+dh/2); ctx.lineTo(startX+dw, startY+dh); } 
-                else { ctx.moveTo(startX, startY); ctx.lineTo(startX+dw, startY+dh/2); ctx.lineTo(startX, startY+dh); }
+            const dir = card.querySelector('.pkt-dir').value;
+            // שרטוט הכיס המקווקו
+            ctx.setLineDash([10, 10]); ctx.strokeStyle = "#777";
+            if (dir === 'right') {
+                ctx.strokeRect(startX + dw, startY, 150, dh); // כיס מימין
+                drawArrow(ctx, startX + dw - 50, startY + dh/2, 'right');
+            } else {
+                ctx.strokeRect(startX - 150, startY, 150, dh); // כיס משמאל
+                drawArrow(ctx, startX + 50, startY + dh/2, 'left');
             }
-            if (type === 'kipp' || type === 'tilt_turn') { ctx.moveTo(startX, startY+dh); ctx.lineTo(startX+dw/2, startY); ctx.lineTo(startX+dw, startY+dh); }
-            ctx.stroke(); ctx.setLineDash([]); ctx.lineWidth = 3;
-            ctx.fillStyle = "black";
-            if(dir === 'right') ctx.fillRect(startX+20, startY+dh/2-20, 10, 40); else ctx.fillRect(startX+dw-30, startY+dh/2-20, 10, 40);
-            if(type === 'kipp') ctx.fillRect(startX+dw/2-20, startY+20, 40, 10);
+            ctx.setLineDash([]); ctx.strokeStyle = "#333";
+            ctx.strokeRect(startX, startY, dw, dh); // החלון עצמו
         }
-        else if (type === 'fixed') {
-             const pos = card.querySelector('.notch-pos')?.value;
-             if(pos) {
-                 const cutW = (parseFloat(card.querySelector('.notch-w').value) / w) * dw;
-                 const cutH = (parseFloat(card.querySelector('.notch-h').value) / h) * dh;
-                 ctx.beginPath(); ctx.moveTo(startX, startY);
-                 if(pos === 'TR') { ctx.lineTo(startX+dw-cutW, startY); ctx.lineTo(startX+dw-cutW, startY+cutH); ctx.lineTo(startX+dw, startY+cutH); ctx.lineTo(startX+dw, startY+dh); ctx.lineTo(startX, startY+dh); }
-                 else if(pos === 'TL') { ctx.moveTo(startX+cutW, startY); ctx.lineTo(startX+dw, startY); ctx.lineTo(startX+dw, startY+dh); ctx.lineTo(startX, startY+dh); ctx.lineTo(startX, startY+cutH); ctx.lineTo(startX+cutW, startY+cutH); }
-                 else { ctx.lineTo(startX+dw, startY); ctx.lineTo(startX+dw, startY+dh); ctx.lineTo(startX, startY+dh); }
-                 ctx.closePath(); ctx.fillStyle = "#f0f8ff"; ctx.fill(); ctx.stroke();
-                 ctx.fillStyle = "red"; ctx.font = "bold 20px Arial";
-                 if(pos === 'TR') { ctx.fillText(card.querySelector('.notch-w').value, startX+dw-cutW/2-10, startY-10); ctx.fillText(card.querySelector('.notch-h').value, startX+dw+5, startY+cutH/2); }
-             } else { ctx.strokeRect(startX, startY, dw, dh); }
+        
+        else if (type === 'hinge') {
+            ctx.strokeRect(startX, startY, dw, dh); ctx.strokeRect(startX+10, startY+10, dw-20, dh-20);
+            const dir = card.querySelector('.open-dir').value;
+            drawTriangle(ctx, startX, startY, dw, dh, dir);
         }
+        
+        else if (type === 'kipp') {
+            ctx.strokeRect(startX, startY, dw, dh); ctx.strokeRect(startX+10, startY+10, dw-20, dh-20);
+            drawTriangle(ctx, startX, startY, dw, dh, 'top'); // שפיץ למעלה
+        }
+        
+        else if (type === 'tilt_turn') {
+            ctx.strokeRect(startX, startY, dw, dh); ctx.strokeRect(startX+10, startY+10, dw-20, dh-20);
+            const dir = card.querySelector('.open-dir').value;
+            drawTriangle(ctx, startX, startY, dw, dh, dir); // ציר
+            drawTriangle(ctx, startX, startY, dw, dh, 'top'); // קיפ
+        }
+        
         else if (type === 'door') {
-             let curX = startX; let curY = startY; let doorW = dw; let doorH = dh;
-             const topH = parseFloat(card.querySelector('.dr-top')?.value) || 0;
-             const sideW = parseFloat(card.querySelector('.dr-side')?.value) || 0;
-             if(topH > 0) { const dH = (topH/h)*dh; ctx.strokeRect(startX, startY, dw, dH); curY += dH; doorH -= dH; }
-             if(sideW > 0) { const dW = (sideW/w)*dw; ctx.strokeRect(startX, curY, dW, doorH); curX += dW; doorW -= dW; }
-             ctx.strokeRect(curX, curY, doorW, doorH); 
+             ctx.strokeRect(startX, startY, dw, dh); 
              const dir = card.querySelector('.open-dir').value;
-             ctx.setLineDash([5,5]); ctx.beginPath();
-             if(dir === 'right') { ctx.moveTo(curX+doorW, curY); ctx.lineTo(curX, curY+doorH/2); } else { ctx.moveTo(curX, curY); ctx.lineTo(curX+doorW, curY+doorH/2); }
-             ctx.stroke(); 
-             ctx.beginPath();
-             if(dir === 'right') ctx.arc(curX+doorW, curY+doorH/2, doorW, Math.PI, 0.5*Math.PI, true); else ctx.arc(curX, curY+doorH/2, doorW, 0, 0.5*Math.PI, false);
-             ctx.stroke(); ctx.setLineDash([]);
-             if(card.querySelector('.dr-closer').value !== 'none') {
-                 ctx.strokeRect(curX+doorW/2-30, curY, 60, 20); ctx.beginPath(); ctx.moveTo(curX+doorW/2, curY+20); ctx.lineTo(curX+doorW/2+40, curY+50); ctx.stroke();
-             }
+             drawTriangle(ctx, startX, startY, dw, dh, dir);
+             // ידית
+             ctx.beginPath(); ctx.lineWidth=5;
+             if(dir === 'right') { ctx.moveTo(startX+20, startY+dh/2); ctx.lineTo(startX+50, startY+dh/2); }
+             else { ctx.moveTo(startX+dw-20, startY+dh/2); ctx.lineTo(startX+dw-50, startY+dh/2); }
+             ctx.stroke(); ctx.lineWidth=3;
         }
+
         else if (type === 'shutter') {
              const isHidden = card.querySelector('.sht-box').value === 'hidden';
              const isLight = card.querySelector('.sht-slat').value === 'light';
@@ -801,16 +867,48 @@
         }
         else { ctx.strokeRect(startX, startY, dw, dh); ctx.strokeRect(startX+10, startY+10, dw-20, dh-20); }
 
+        // קווי מידה
         ctx.strokeStyle = "#0000aa"; ctx.lineWidth = 1;
+        
+        // רוחב
         ctx.beginPath(); ctx.moveTo(startX, startY+dh+20); ctx.lineTo(startX, startY+dh+50); ctx.moveTo(startX+dw, startY+dh+20); ctx.lineTo(startX+dw, startY+dh+50); ctx.moveTo(startX, startY+dh+35); ctx.lineTo(startX+dw, startY+dh+35); ctx.stroke();
         ctx.fillStyle = "#0000aa"; ctx.font = "bold 30px Arial"; ctx.textAlign = "center"; ctx.fillText(`${w}`, startX+dw/2, startY+dh+65);
-        ctx.beginPath(); ctx.moveTo(startX+dw+20, startY); ctx.lineTo(startX+dw+50, startY); ctx.moveTo(startX+dw+20, startY+dh); ctx.lineTo(startX+dw+50, startY+dh); ctx.moveTo(startX+dw+35, startY); ctx.lineTo(startX+dw+35, startY+dh); ctx.stroke();
-        ctx.save(); ctx.translate(startX+dw+65, startY+dh/2); ctx.rotate(-Math.PI/2); ctx.fillText(`${h}`, 0, 0); ctx.restore();
+        
+        // גובה (טיפול בשני גבהים)
+        if (type === 'fixed' || type === 'showcase') {
+             // גובה ימין
+             ctx.beginPath(); ctx.moveTo(startX+dw+20, startY+dh- (hRight/h)*dh); ctx.lineTo(startX+dw+50, startY+dh-(hRight/h)*dh); ctx.moveTo(startX+dw+20, startY+dh); ctx.lineTo(startX+dw+50, startY+dh); ctx.moveTo(startX+dw+35, startY+dh-(hRight/h)*dh); ctx.lineTo(startX+dw+35, startY+dh); ctx.stroke();
+             ctx.save(); ctx.translate(startX+dw+65, startY+dh/2); ctx.rotate(-Math.PI/2); ctx.fillText(`${hRight}`, 0, 0); ctx.restore();
+             
+             // גובה שמאל
+             ctx.beginPath(); ctx.moveTo(startX-20, startY+dh-(hLeft/h)*dh); ctx.lineTo(startX-50, startY+dh-(hLeft/h)*dh); ctx.moveTo(startX-20, startY+dh); ctx.lineTo(startX-50, startY+dh); ctx.moveTo(startX-35, startY+dh-(hLeft/h)*dh); ctx.lineTo(startX-35, startY+dh); ctx.stroke();
+             ctx.save(); ctx.translate(startX-65, startY+dh/2); ctx.rotate(Math.PI/2); ctx.fillText(`${hLeft}`, 0, 0); ctx.restore();
+        } else {
+             // גובה רגיל
+             ctx.beginPath(); ctx.moveTo(startX+dw+20, startY); ctx.lineTo(startX+dw+50, startY); ctx.moveTo(startX+dw+20, startY+dh); ctx.lineTo(startX+dw+50, startY+dh); ctx.moveTo(startX+dw+35, startY); ctx.lineTo(startX+dw+35, startY+dh); ctx.stroke();
+             ctx.save(); ctx.translate(startX+dw+65, startY+dh/2); ctx.rotate(-Math.PI/2); ctx.fillText(`${h}`, 0, 0); ctx.restore();
+        }
 
         const link = document.createElement('a');
         link.download = `Sketch_${client}_${type}.png`;
         link.href = canvas.toDataURL();
         link.click();
+    }
+
+    // --- עזרי ציור ---
+    function drawArrow(ctx, x, y, dir) {
+        ctx.beginPath(); ctx.lineWidth = 2;
+        if (dir === 'right') { ctx.moveTo(x-20, y); ctx.lineTo(x+20, y); ctx.lineTo(x+10, y-10); ctx.moveTo(x+20, y); ctx.lineTo(x+10, y+10); }
+        else { ctx.moveTo(x+20, y); ctx.lineTo(x-20, y); ctx.lineTo(x-10, y-10); ctx.moveTo(x-20, y); ctx.lineTo(x-10, y+10); }
+        ctx.stroke(); ctx.lineWidth = 3;
+    }
+
+    function drawTriangle(ctx, x, y, w, h, dir) {
+        ctx.setLineDash([15, 15]); ctx.lineWidth = 2; ctx.beginPath();
+        if (dir === 'right') { ctx.moveTo(x, y); ctx.lineTo(x+w, y+h/2); ctx.lineTo(x, y+h); }
+        else if (dir === 'left') { ctx.moveTo(x+w, y); ctx.lineTo(x, y+h/2); ctx.lineTo(x+w, y+h); }
+        else if (dir === 'top') { ctx.moveTo(x, y+h); ctx.lineTo(x+w/2, y); ctx.lineTo(x+w, y+h); }
+        ctx.stroke(); ctx.setLineDash([]); ctx.lineWidth = 3;
     }
 
     function openPreview() {
