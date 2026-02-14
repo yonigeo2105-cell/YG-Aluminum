@@ -417,7 +417,7 @@
 
         stdInputs.style.display = 'block'; jokerPanel.style.display = 'none';
         
-        // הצגת כיוון פתיחה רק במוצרים הרלוונטיים
+        // הצגת כיוון פתיחה רק במוצרים הרלוונטיים (כולל דריי קיפ)
         dirContainer.style.display = (type === 'hinge' || type === 'tilt_turn' || type === 'door') ? 'block' : 'none';
 
         if(type === 'pergola' || type === 'fence' || type === 'shutter' || type === 'screen_roll') {
@@ -720,22 +720,27 @@
         
         ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
 
-        // --- לוגיקת שרטוטים חדשה ---
+        // --- לוגיקת שרטוטים חדשה (קליפינג) ---
 
         if (type === 'fixed' || type === 'showcase') {
-             // שרטוט טרפז/מלבן לפי גבהים
              const pixHRight = (hRight / h) * dh;
              const pixHLeft = (hLeft / h) * dh;
              
+             // יצירת הנתיב (Path) של הטרפז
              ctx.beginPath();
-             ctx.moveTo(startX, startY + dh); // Bottom Left
-             ctx.lineTo(startX + dw, startY + dh); // Bottom Right
-             ctx.lineTo(startX + dw, startY + dh - pixHRight); // Top Right
-             ctx.lineTo(startX, startY + dh - pixHLeft); // Top Left
+             ctx.moveTo(startX, startY + dh); // BL
+             ctx.lineTo(startX + dw, startY + dh); // BR
+             ctx.lineTo(startX + dw, startY + dh - pixHRight); // TR
+             ctx.lineTo(startX, startY + dh - pixHLeft); // TL
              ctx.closePath();
-             ctx.stroke();
+             
+             // שמירה וקליפינג (מסכה)
+             ctx.save();
+             ctx.clip(); 
+             
+             // ציור המסגרת והחלוקות בתוך המסכה
+             ctx.stroke(); // קו המסגרת
 
-             // חלוקות פנימיות
              const cols = parseInt(card.querySelector('.div-x').value) || 0;
              const rows = parseInt(card.querySelector('.div-y').value) || 0;
              
@@ -744,28 +749,27 @@
                  const colW = dw / (cols + 1);
                  for (let i = 1; i <= cols; i++) {
                      const x = startX + i * colW;
-                     // חישוב גובה הקו העליון בנקודה הזו (אינטרפולציה)
-                     const slope = (pixHRight - pixHLeft) / dw;
-                     const yTop = (startY + dh - pixHLeft) + slope * (i * colW);
-                     
-                     ctx.beginPath();
-                     ctx.moveTo(x, startY + dh);
-                     ctx.lineTo(x, yTop);
-                     ctx.stroke();
+                     ctx.beginPath(); ctx.moveTo(x, startY); ctx.lineTo(x, startY + dh + 100); ctx.stroke(); // מציירים בכוונה ארוך, הקליפ יחתוך
                  }
              }
              // קושרות
              if (rows > 0) {
-                  // פשוט נחלק את הגובה המקסימלי, זה קירוב מספיק טוב לויזואליה
                   const rowH = dh / (rows + 1);
                   for (let j = 1; j <= rows; j++) {
                       const y = startY + dh - j * rowH;
-                      ctx.beginPath();
-                      ctx.moveTo(startX, y);
-                      ctx.lineTo(startX + dw, y); // זה יחרוג אם טרפז קיצוני, אבל מספיק טוב לשרטוט כללי
-                      ctx.stroke();
+                      ctx.beginPath(); ctx.moveTo(startX, y); ctx.lineTo(startX + dw, y); ctx.stroke();
                   }
              }
+             
+             // שחרור המסכה
+             ctx.restore();
+             
+             // ציור המסגרת שוב למעלה ליתר ביטחון (למראה נקי)
+             ctx.beginPath();
+             ctx.moveTo(startX, startY + dh); ctx.lineTo(startX + dw, startY + dh); 
+             ctx.lineTo(startX + dw, startY + dh - pixHRight); ctx.lineTo(startX, startY + dh - pixHLeft); 
+             ctx.closePath();
+             ctx.stroke();
         }
         
         else if (type === 'sliding') {
@@ -785,17 +789,16 @@
         
         else if (type === 'pocket') {
             const dir = card.querySelector('.pkt-dir').value;
-            // שרטוט הכיס המקווקו
             ctx.setLineDash([10, 10]); ctx.strokeStyle = "#777";
             if (dir === 'right') {
-                ctx.strokeRect(startX + dw, startY, 150, dh); // כיס מימין
+                ctx.strokeRect(startX + dw, startY, 150, dh); 
                 drawArrow(ctx, startX + dw - 50, startY + dh/2, 'right');
             } else {
-                ctx.strokeRect(startX - 150, startY, 150, dh); // כיס משמאל
+                ctx.strokeRect(startX - 150, startY, 150, dh); 
                 drawArrow(ctx, startX + 50, startY + dh/2, 'left');
             }
             ctx.setLineDash([]); ctx.strokeStyle = "#333";
-            ctx.strokeRect(startX, startY, dw, dh); // החלון עצמו
+            ctx.strokeRect(startX, startY, dw, dh); 
         }
         
         else if (type === 'hinge') {
@@ -806,21 +809,20 @@
         
         else if (type === 'kipp') {
             ctx.strokeRect(startX, startY, dw, dh); ctx.strokeRect(startX+10, startY+10, dw-20, dh-20);
-            drawTriangle(ctx, startX, startY, dw, dh, 'top'); // שפיץ למעלה
+            drawTriangle(ctx, startX, startY, dw, dh, 'top'); 
         }
         
         else if (type === 'tilt_turn') {
             ctx.strokeRect(startX, startY, dw, dh); ctx.strokeRect(startX+10, startY+10, dw-20, dh-20);
             const dir = card.querySelector('.open-dir').value;
-            drawTriangle(ctx, startX, startY, dw, dh, dir); // ציר
-            drawTriangle(ctx, startX, startY, dw, dh, 'top'); // קיפ
+            drawTriangle(ctx, startX, startY, dw, dh, dir); 
+            drawTriangle(ctx, startX, startY, dw, dh, 'top'); 
         }
         
         else if (type === 'door') {
              ctx.strokeRect(startX, startY, dw, dh); 
              const dir = card.querySelector('.open-dir').value;
              drawTriangle(ctx, startX, startY, dw, dh, dir);
-             // ידית
              ctx.beginPath(); ctx.lineWidth=5;
              if(dir === 'right') { ctx.moveTo(startX+20, startY+dh/2); ctx.lineTo(startX+50, startY+dh/2); }
              else { ctx.moveTo(startX+dw-20, startY+dh/2); ctx.lineTo(startX+dw-50, startY+dh/2); }
