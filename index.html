@@ -738,7 +738,7 @@
 
     function sendWhatsapp() { window.open(`https://wa.me/?text=${encodeURIComponent(document.getElementById('previewText').value)}`); }
 
-    // --- מנוע PDF משופר: הפתרון האולטימטיבי ("הדפסה חיה") ---
+    // --- מנוע PDF משופר עם השהיית רנדור (Delay) ---
     function showPdfPreview() {
         const clientName = document.getElementById('clientName').value || "ישראל ישראלי";
         const quoteDate = new Date(document.getElementById('quoteDate').value).toLocaleDateString('he-IL');
@@ -848,7 +848,6 @@
         
         const originalElement = document.getElementById('pdfPaperContent');
         
-        // יצירת אלמנט הדפסה פיזי מעל כל המסך כדי שהמנוע יראה אותו בצורה פתוחה וחיה 
         const printContainer = document.createElement('div');
         printContainer.innerHTML = originalElement.innerHTML;
         printContainer.className = 'pdf-paper';
@@ -857,15 +856,18 @@
         printContainer.style.right = '0';
         printContainer.style.width = '800px';
         printContainer.style.background = 'white';
-        printContainer.style.zIndex = '999999'; // מעל הכל
+        printContainer.style.zIndex = '999999'; 
         
         document.body.appendChild(printContainer);
-        document.getElementById('pdfPreviewModal').style.display = 'none'; // מסתירים את המודל המקורי
+        document.getElementById('pdfPreviewModal').style.display = 'none'; 
         
-        html2pdf().set(opt).from(printContainer).save().then(() => {
-            document.body.removeChild(printContainer); // מוחקים את הזמני
-            document.getElementById('pdfPreviewModal').style.display = 'flex'; // מחזירים את התצוגה המקדימה
-        });
+        // תיקון "הדף הלבן": השהיה של 500 מילישניות כדי לתת לדפדפן לצייר את הפיקסלים לפני הצילום
+        setTimeout(() => {
+            html2pdf().set(opt).from(printContainer).save().then(() => {
+                document.body.removeChild(printContainer); 
+                document.getElementById('pdfPreviewModal').style.display = 'flex'; 
+            });
+        }, 500);
     }
     
     // --- שרטוטים משולבים עם מונובלוק ---
@@ -1038,6 +1040,7 @@
 
         if (type !== 'shower') {
             ctx.strokeStyle = "#0000aa"; ctx.lineWidth = 1;
+            // קווי מידה לפי הגודל הכללי המקורי (כולל הארגז אם יש)
             ctx.beginPath(); ctx.moveTo(startX, origStartY+origDh+20); ctx.lineTo(startX, origStartY+origDh+50); ctx.moveTo(startX+dw, origStartY+origDh+20); ctx.lineTo(startX+dw, origStartY+origDh+50); ctx.moveTo(startX, origStartY+origDh+35); ctx.lineTo(startX+dw, origStartY+origDh+35); ctx.stroke();
             ctx.fillStyle = "#0000aa"; ctx.font = "bold 30px Arial"; ctx.textAlign = "center"; ctx.fillText(`${w}`, startX+dw/2, origStartY+origDh+65);
             
