@@ -62,7 +62,6 @@
         .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
         canvas#drawingPad { border: 2px dashed #cbd5e0; border-radius: 10px; touch-action: none; background: white; cursor: crosshair; width: 100%; height: 300px; }
 
-        .pdf-preview-content { background: white; width: 100%; max-width: 800px; padding: 0; border-radius: 0; height: 100%; overflow-y: auto; }
         .pdf-paper { background: white; padding: 30px; font-family: 'Arial', sans-serif; direction: rtl; min-height: 800px; }
         .pdf-paper table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
         .pdf-paper th { background-color: #0d47a1; color: white; padding: 12px; text-align: right; border: 1px solid #ddd; font-size: 14px; }
@@ -140,7 +139,7 @@
 
 <div class="bottom-actions" id="bottomNav" style="display:none">
     <button class="btn-action btn-calc" onclick="calculateAll()">חשב סה"כ לתשלום</button>
-    <button class="btn-action btn-pdf" onclick="showPdfPreview()">📄 הצג והורד PDF</button>
+    <button class="btn-action btn-pdf" onclick="downloadDirectPdf()">📄 הורד הצעת מחיר (PDF)</button>
 </div>
 
 <div class="modal-overlay" id="previewModal">
@@ -151,16 +150,6 @@
             <button class="btn-login" style="background:#ccc; color:black" onclick="document.getElementById('previewModal').style.display='none'">סגור</button>
             <button class="btn-login" style="background:var(--whatsapp)" onclick="sendWhatsapp()">שלח</button>
         </div>
-    </div>
-</div>
-
-<div class="modal-overlay" id="pdfPreviewModal" style="background: white;">
-    <div class="pdf-preview-content">
-        <div style="background: #eee; padding: 10px; display: flex; gap: 10px; position:sticky; top:0; border-bottom:1px solid #ccc; z-index:10;">
-            <button class="btn-login" style="background:#e53e3e; margin:0; flex:1" onclick="document.getElementById('pdfPreviewModal').style.display='none'">סגור</button>
-            <button class="btn-login" style="background:var(--primary); margin:0; flex:2" onclick="downloadActualPdf()">⬇️ הורד קובץ PDF</button>
-        </div>
-        <div id="pdfPaperContent" class="pdf-paper"></div>
     </div>
 </div>
 
@@ -738,8 +727,8 @@
 
     function sendWhatsapp() { window.open(`https://wa.me/?text=${encodeURIComponent(document.getElementById('previewText').value)}`); }
 
-    // --- מנוע PDF משופר עם השהיית רנדור (Delay) ---
-    function showPdfPreview() {
+    // --- מנוע PDF ישיר ומוחלט (Direct Download) ---
+    function downloadDirectPdf() {
         const clientName = document.getElementById('clientName').value || "ישראל ישראלי";
         const quoteDate = new Date(document.getElementById('quoteDate').value).toLocaleDateString('he-IL');
         const quoteNum = document.getElementById('quoteNumber').value || "1";
@@ -832,12 +821,18 @@
             </div>
         `;
 
-        document.getElementById('pdfPaperContent').innerHTML = htmlContent;
-        document.getElementById('pdfPreviewModal').style.display = 'flex';
-    }
+        // יצירת קונטיינר פיזי מוסתר לחלוטין שמנוע ה-PDF יכול לראות
+        const printContainer = document.createElement('div');
+        printContainer.innerHTML = htmlContent;
+        printContainer.className = 'pdf-paper';
+        printContainer.style.position = 'absolute';
+        printContainer.style.top = '-9999px'; 
+        printContainer.style.left = '-9999px';
+        printContainer.style.width = '800px';
+        printContainer.style.background = 'white';
+        
+        document.body.appendChild(printContainer);
 
-    function downloadActualPdf() {
-        const clientName = document.getElementById('clientName').value || "הצעה";
         const opt = {
             margin: [0.5, 0.5, 0.5, 0.5],
             filename: `הצעת_מחיר_${clientName}.pdf`,
@@ -846,26 +841,10 @@
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
         
-        const originalElement = document.getElementById('pdfPaperContent');
-        
-        const printContainer = document.createElement('div');
-        printContainer.innerHTML = originalElement.innerHTML;
-        printContainer.className = 'pdf-paper';
-        printContainer.style.position = 'absolute';
-        printContainer.style.top = '0';
-        printContainer.style.right = '0';
-        printContainer.style.width = '800px';
-        printContainer.style.background = 'white';
-        printContainer.style.zIndex = '999999'; 
-        
-        document.body.appendChild(printContainer);
-        document.getElementById('pdfPreviewModal').style.display = 'none'; 
-        
-        // תיקון "הדף הלבן": השהיה של 500 מילישניות כדי לתת לדפדפן לצייר את הפיקסלים לפני הצילום
+        // השהיה קצרה להבטחת רינדור מושלם, ואז הדפסה ומחיקה של הדף הזמני
         setTimeout(() => {
             html2pdf().set(opt).from(printContainer).save().then(() => {
-                document.body.removeChild(printContainer); 
-                document.getElementById('pdfPreviewModal').style.display = 'flex'; 
+                document.body.removeChild(printContainer);
             });
         }, 500);
     }
