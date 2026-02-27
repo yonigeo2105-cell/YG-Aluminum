@@ -37,7 +37,8 @@
         input, select, textarea { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 16px; background-color: var(--input-bg); margin-bottom: 15px; font-family: 'Rubik', sans-serif; box-sizing: border-box; }
         
         .row { display: flex; gap: 12px; } .row > div { flex: 1; }
-        .btn-add-item { width: 100%; background: white; color: var(--primary); border: 2px dashed var(--primary-light); padding: 15px; border-radius: 15px; font-size: 16px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; }
+        .btn-add-item { background: white; color: var(--primary); border: 2px dashed var(--primary-light); padding: 15px; border-radius: 15px; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; flex: 2;}
+        .btn-save-draft { background: #4a5568; color: white; border: none; padding: 15px; border-radius: 15px; font-size: 16px; font-weight: 700; cursor: pointer; flex: 1;}
         
         .bottom-actions { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px 25px; box-shadow: 0 -5px 25px rgba(0,0,0,0.1); z-index: 100; border-radius: 20px 20px 0 0; display: flex; gap: 10px; }
         .btn-action { flex: 1; padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer; text-align: center; }
@@ -86,6 +87,10 @@
         <p>נא להקיש סיסמה</p>
         <input type="password" id="passwordInput" placeholder="****" inputmode="numeric">
         <button class="btn-login" onclick="checkLogin()">היכנס</button>
+        <div id="draftBtnContainer" style="display:none; margin-top:20px;">
+            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.3); margin-bottom:15px;">
+            <button class="btn-login" style="background:#2b6cb0;" onclick="loadDraft()">📂 המשך טיוטה אחרונה</button>
+        </div>
         <p id="loginError" style="color:red; font-size:12px; margin-top:10px; display:none;">סיסמה שגויה</p>
     </div>
 </div>
@@ -108,7 +113,10 @@
     
     <div id="itemsContainer"></div>
     
-    <button class="btn-add-item" onclick="addItem()">➕ הוסף מוצר חדש</button>
+    <div class="row" style="margin-bottom:20px;">
+        <button class="btn-add-item" onclick="addItem()">➕ הוסף מוצר</button>
+        <button class="btn-save-draft" onclick="saveDraft()">💾 שמור טיוטה</button>
+    </div>
     
     <div class="card" style="background:#ebf8ff; border:1px solid #bee3f8;">
         <div class="card-title">🛠️ תוספות והתקנה</div>
@@ -125,7 +133,7 @@
             <div class="price-line"><span>מע"מ (18%):</span><span id="totalVat">0 ₪</span></div>
             <div class="total-line"><span>סה"כ לתשלום:</span><span id="totalFinal">0 ₪</span></div>
             
-            <button class="btn-add-item" style="margin-top:20px; background:var(--whatsapp); color:white; border:none;" onclick="openPreview()">שלח הצעה בוואטסאפ</button>
+            <button class="btn-action" style="margin-top:20px; width:100%; background:var(--whatsapp); color:white;" onclick="openPreview()">שלח הצעה בוואטסאפ</button>
         </div>
     </div>
 </div>
@@ -232,8 +240,9 @@
     
     document.addEventListener('DOMContentLoaded', () => { 
         document.getElementById('quoteDate').valueAsDate = new Date();
-        const saved = localStorage.getItem('quoteCounter'); 
-        document.getElementById('quoteNumber').value = saved ? saved : 1; 
+        const savedNum = localStorage.getItem('quoteCounter'); 
+        document.getElementById('quoteNumber').value = savedNum ? savedNum : 1; 
+        if(localStorage.getItem('myAlumDraft')) document.getElementById('draftBtnContainer').style.display = 'block';
     });
 
     function checkLogin() {
@@ -249,6 +258,58 @@
         }
     }
 
+    // --- שמירת וטעינת טיוטות ---
+    function saveDraft() {
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            if(el.type === 'checkbox') { if(el.checked) el.setAttribute('checked', 'checked'); else el.removeAttribute('checked'); }
+            else { 
+                el.setAttribute('value', el.value);
+                if(el.tagName === 'TEXTAREA') el.innerText = el.value;
+                if(el.tagName === 'SELECT') {
+                    Array.from(el.options).forEach(opt => {
+                        if(opt.value === el.value || opt.text === el.value) opt.setAttribute('selected', 'selected');
+                        else opt.removeAttribute('selected');
+                    });
+                }
+            }
+        });
+        const data = {
+            html: document.getElementById('itemsContainer').innerHTML,
+            client: document.getElementById('clientName').value,
+            qDate: document.getElementById('quoteDate').value,
+            qNum: document.getElementById('quoteNumber').value,
+            install: document.getElementById('installationCost').value,
+            itemCount: itemCount
+        };
+        localStorage.setItem('myAlumDraft', JSON.stringify(data));
+        alert('הטיוטה נשמרה בהצלחה במכשיר!');
+    }
+
+    function loadDraft() {
+        const data = JSON.parse(localStorage.getItem('myAlumDraft'));
+        if(!data) return;
+        document.getElementById('clientName').value = data.client || '';
+        document.getElementById('quoteDate').value = data.qDate || '';
+        document.getElementById('quoteNumber').value = data.qNum || '';
+        document.getElementById('installationCost').value = data.install || '';
+        document.getElementById('itemsContainer').innerHTML = data.html || '';
+        itemCount = data.itemCount || 0;
+        
+        document.getElementById('itemsContainer').querySelectorAll('input, select, textarea').forEach(el => {
+            if(el.type === 'checkbox') el.checked = el.hasAttribute('checked');
+            else if(el.tagName === 'SELECT') { const selectedOpt = el.querySelector('option[selected]'); if(selectedOpt) el.value = selectedOpt.value; }
+            else el.value = el.getAttribute('value') || '';
+        });
+        
+        document.getElementById('loginScreen').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.querySelector('.container').style.display = 'block';
+            document.getElementById('bottomNav').style.display = 'flex';
+        }, 500);
+    }
+
+    // --- הוספת מוצרים ---
     function addItem() {
         itemCount++;
         const container = document.getElementById('itemsContainer');
@@ -387,6 +448,11 @@
         shades.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.innerText = s; shadeSelect.appendChild(opt); });
     }
 
+    function toggleMonoblock(cb) {
+        const opts = cb.closest('.extra-panel').querySelector('.monoblock-options');
+        if(opts) opts.style.display = cb.checked ? 'block' : 'none';
+    }
+
     function updateItemFields(select) {
         const card = select.closest('.card');
         const type = select.value;
@@ -467,7 +533,32 @@
         dimsSection.innerHTML = `<div class="row" style="margin-top:15px"><div><label>רוחב (ס"מ)</label><input type="number" class="w-input" placeholder="100"></div><div><label>גובה (ס"מ)</label><input type="number" class="h-input" placeholder="100"></div></div>`;
 
         let html = '';
-        if(type === 'sliding') { html = `<div class="row"><div><label>מס' כנפיים</label><input type="number" class="sl-sashes" value="2"></div><div><label>סוג מפגש</label><select class="sl-meeting"><option value="side">צד לצד</option><option value="center">מפגש מרכזי</option></select></div></div><label>חלוקה:</label><select class="sl-div"><option value="none">ללא</option><option value="strips">פסים</option><option value="grid">קוביות</option></select>`; }
+        if(type === 'sliding') { 
+            html = `
+            <div class="row"><div><label>מס' כנפיים</label><input type="number" class="sl-sashes" value="2"></div><div><label>סוג מפגש</label><select class="sl-meeting"><option value="side">צד לצד</option><option value="center">מפגש מרכזי</option></select></div></div><label>חלוקה:</label><select class="sl-div"><option value="none">ללא</option><option value="strips">פסים</option><option value="grid">קוביות</option></select>
+            <div style="margin-top:10px; border-top:1px solid #ccc; padding-top:10px;">
+                <div class="checkbox-row"><input type="checkbox" class="cb-slat-blind"> <span>תריס שלבים</span></div>
+                <div class="checkbox-row"><input type="checkbox" class="cb-net"> <span>רשת</span></div>
+                <div class="checkbox-row"><input type="checkbox" class="cb-monoblock" onchange="toggleMonoblock(this)"> <span style="font-weight:bold; color:var(--primary)">תריס מונובלוק</span></div>
+                <div class="monoblock-options" style="display:none; background:#e2e8f0; padding:10px; border-radius:8px; margin-top:5px;">
+                    <div class="row"><div><label>גובה ארגז (ס"מ)</label><input type="number" class="mono-h" value="28"></div><div><label>שלב</label><select class="mono-slat"><option>שלב אור</option><option>מוקצף</option></select></div></div>
+                    <div class="row" style="margin-top:10px"><div><label>מנוע</label><select class="mono-motor"><option>חשמלי</option><option>ידני</option><option>סומפי</option></select></div></div>
+                </div>
+            </div>`; 
+        }
+        else if(type === 'hinge') { 
+            html = `
+            <div style="margin-top:10px; border-top:1px solid #ccc; padding-top:10px;">
+                <div class="checkbox-row"><input type="checkbox" class="cb-monoblock" onchange="toggleMonoblock(this)"> <span style="font-weight:bold; color:var(--primary)">תריס מונובלוק</span></div>
+                <div class="monoblock-options" style="display:none; background:#e2e8f0; padding:10px; border-radius:8px; margin-top:5px;">
+                    <div class="row"><div><label>גובה ארגז (ס"מ)</label><input type="number" class="mono-h" value="28"></div><div><label>שלב</label><select class="mono-slat"><option>שלב אור</option><option>מוקצף</option></select></div></div>
+                    <div class="row" style="margin-top:10px"><div><label>מנוע</label><select class="mono-motor"><option>חשמלי</option><option>ידני</option><option>סומפי</option></select></div></div>
+                </div>
+            </div>`; 
+        }
+        else if(type === 'kipp' || type === 'tilt_turn') { 
+            html = `<div style="margin-top:10px; border-top:1px solid #ccc; padding-top:10px;"><div class="checkbox-row"><input type="checkbox" class="cb-net-pull"> <span>רשת נשלפת</span></div></div>`; 
+        }
         else if(type === 'pocket') { html = `<label>הרכב כנף:</label><select class="pkt-comp"><option>זכוכית בלבד</option><option>זכוכית + תריס</option><option>זכוכית + תריס + רשת</option></select><label>כיוון כיס:</label><select class="pkt-dir"><option value="right">ימין</option><option value="left">שמאל</option></select>`; }
         else if(type === 'door') { html = `<label>תוספות קבועים:</label><div class="row"><input type="number" class="dr-top" placeholder="גובה קבוע עליון"><input type="number" class="dr-side" placeholder="רוחב קבוע צד"></div><label style="margin-top:10px">מחזיר שמן:</label><select class="dr-closer"><option value="none">ללא</option><option value="top">חיצוני</option><option value="floor">רצפתי</option></select>`; }
         else if(type === 'shutter') { html = `<div class="row"><div><label>ארגז</label><select class="sht-box"><option value="hidden">פנימי/נסתר</option><option value="external">חיצוני</option></select></div><div><label>שלב</label><select class="sht-slat"><option value="light">שלב אור</option><option value="foam">מוקצף</option></select></div></div><div class="row" style="margin-top:10px"><div><label>מנוע</label><select class="sht-motor"><option>חשמלי</option><option>ידני</option><option>סומפי</option></select></div></div>`; }
@@ -494,7 +585,7 @@
         }
     }
 
-    // --- ציור ---
+    // --- ציור ידני ג'וקר ---
     function openDrawing(btn) { activeDrawingBtn = btn; document.getElementById('drawingModal').style.display = 'flex'; initCanvas(); }
     function closeDrawing() { document.getElementById('drawingModal').style.display = 'none'; }
     function previewImage(input) {
@@ -572,7 +663,17 @@
         setTimeout(() => document.getElementById('bottomNav').scrollIntoView({behavior:'smooth'}), 200);
     }
 
-    // --- מנוע וואטסאפ החדש (V12) ---
+    function getExtrasText(c) {
+        let ex = "";
+        const cbMono = c.querySelector('.cb-monoblock');
+        if(cbMono && cbMono.checked) ex += `\nמונובלוק: ארגז ${c.querySelector('.mono-h').value} ס"מ, שלב ${c.querySelector('.mono-slat').value}, מנוע ${c.querySelector('.mono-motor').value}`;
+        const cbSlat = c.querySelector('.cb-slat-blind'); if(cbSlat && cbSlat.checked) ex += `\nתוספות: תריס שלבים`;
+        const cbNet = c.querySelector('.cb-net'); if(cbNet && cbNet.checked) ex += `\nתוספות: רשת`;
+        const cbNetPull = c.querySelector('.cb-net-pull'); if(cbNetPull && cbNetPull.checked) ex += `\nתוספות: רשת נשלפת`;
+        return ex;
+    }
+
+    // --- וואטסאפ מורחב ---
     function openPreview() {
         let txt = `*הצעת מחיר - יהונתן אלומיניום*\nלקוח: ${document.getElementById('clientName').value}\nהצעה מס': ${document.getElementById('quoteNumber').value}\n\n`;
         document.querySelectorAll('.item-card').forEach(c => {
@@ -595,7 +696,6 @@
                 const finish = c.querySelector('.glass-finish').value;
                 const hwColor = c.querySelector('.hardware-color').value;
                 
-                // מידות מקלחון
                 let dims = "";
                 const h = c.querySelector('.h-input').value;
                 if (c.querySelector('.shower-config').value === 'front') dims = `${c.querySelector('.w-input').value} / ${h}`;
@@ -609,15 +709,14 @@
                 const price = c.querySelector('.price-input').value;
                 
                 let specs = `דגם: ${profile}\nצבע: ${color}`;
-                
-                // הוספת זכוכית אם רלוונטי
                 if(type !== 'pergola' && type !== 'fence' && type !== 'shutter' && type !== 'screen_roll') {
                     const glass = c.querySelector('.glass-type').value;
                     const finish = c.querySelector('.glass-finish').value;
                     specs += `\nזכוכית: ${glass} ${finish}`;
                 }
+                
+                specs += getExtrasText(c);
 
-                // מידות
                 let dims = "";
                 if (type === 'fixed' || type === 'showcase') {
                      const hR = c.querySelector('.h-right-input').value;
@@ -639,33 +738,123 @@
 
     function sendWhatsapp() { window.open(`https://wa.me/?text=${encodeURIComponent(document.getElementById('previewText').value)}`); }
 
-    // --- PDF FIXED (Clone Method) ---
+    // --- מנוע PDF משופר (שכפול נסתר עוקף באגים של גלילה) ---
+    function showPdfPreview() {
+        const clientName = document.getElementById('clientName').value || "ישראל ישראלי";
+        const quoteDate = new Date(document.getElementById('quoteDate').value).toLocaleDateString('he-IL');
+        const quoteNum = document.getElementById('quoteNumber').value || "1";
+        
+        let htmlContent = `
+            <div class="invoice-header">
+                <h1 style="margin:0; color:#0d47a1; font-size: 32px;">יהונתן אלומיניום</h1>
+                <p style="margin:5px 0; font-size: 18px; color: #555;">הצעת מחיר מקצועית</p>
+                <div style="display:flex; justify-content:space-between; margin-top:30px; font-weight:bold; font-size: 16px;">
+                    <span>לקוח: ${clientName}</span>
+                    <span>תאריך: ${quoteDate}</span>
+                    <span>מס' הצעה: ${quoteNum}</span>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr><th style="width:5%">#</th><th style="width:45%">תיאור מוצר</th><th style="width:15%">מידות (ס"מ)</th><th style="width:10%">כמות</th><th style="width:10%">מחיר יח'</th><th style="width:15%">סה"כ</th></tr>
+                </thead>
+                <tbody>
+        `;
+
+        let index = 1; let itemsSum = 0;
+        document.querySelectorAll('.item-card').forEach(card => {
+            const typeSelect = card.querySelector('.item-type');
+            const type = typeSelect.value;
+            const typeName = typeSelect.options[typeSelect.selectedIndex].text;
+            let desc = `<b>${typeName}</b>`;
+            let dims = ""; let qty = 0, price = 0;
+
+            if(type === 'joker') {
+                desc += `<br>${card.querySelector('.joker-title').value} - ${card.querySelector('.joker-desc').value}`;
+                qty = parseFloat(card.querySelector('.qty-input-joker').value) || 1;
+                price = parseFloat(card.querySelector('.price-input-joker').value) || 0;
+                dims = "-";
+            } else {
+                const profile = card.querySelector('.profile-select').value;
+                
+                if (type !== 'shower') {
+                     const shade = card.querySelector('.color-shade').value;
+                     desc += `<br>פרופיל: ${profile}<br>צבע: ${shade}`;
+                } else {
+                     const hwColor = card.querySelector('.hardware-color').value;
+                     desc += `<br>דגם: ${profile}<br>פרזול: ${hwColor}`;
+                }
+
+                if(type !== 'pergola' && type !== 'fence' && type !== 'shutter' && type !== 'screen_roll') {
+                    const glass = card.querySelector('.glass-type').value;
+                    const finish = card.querySelector('.glass-finish').value;
+                    desc += `<br>זכוכית: ${glass}, ${finish}`;
+                }
+                
+                desc += getExtrasText(card).replace(/\n/g, '<br>');
+                
+                if (type === 'fixed' || type === 'showcase') {
+                     const hR = card.querySelector('.h-right-input').value;
+                     const hL = card.querySelector('.h-left-input').value;
+                     dims = `${card.querySelector('.w-input').value} / ${hR}-${hL}`;
+                } else if (type === 'shower') {
+                     const config = card.querySelector('.shower-config').value;
+                     const h = card.querySelector('.h-input').value;
+                     if (config === 'front') dims = `${card.querySelector('.w-input').value} / ${h}`;
+                     else dims = `${card.querySelector('.w-right-input').value}x${card.querySelector('.w-left-input').value} / ${h}`;
+                } else {
+                     dims = `${card.querySelector('.w-input').value} / ${card.querySelector('.h-input').value}`;
+                }
+                
+                qty = parseFloat(card.querySelector('.qty-input').value) || 1;
+                price = parseFloat(card.querySelector('.price-input').value) || 0;
+            }
+            const total = qty * price; itemsSum += total;
+            htmlContent += `<tr><td>${index++}</td><td>${desc}</td><td style="direction:ltr; text-align:center">${dims}</td><td style="text-align:center">${qty}</td><td>${price.toLocaleString()} ₪</td><td>${total.toLocaleString()} ₪</td></tr>`;
+        });
+
+        const install = parseFloat(document.getElementById('installationCost').value) || 0;
+        const totalBeforeVat = itemsSum + install;
+        const vat = totalBeforeVat * 0.18;
+        const finalTotal = totalBeforeVat + vat;
+
+        htmlContent += `
+                </tbody>
+            </table>
+            <div class="summary-box">
+                <div class="summary-row"><span>סה"כ מוצרים + התקנה:</span><span>${totalBeforeVat.toLocaleString()} ₪</span></div>
+                <div class="summary-row"><span>מע"מ (18%):</span><span>${vat.toLocaleString()} ₪</span></div>
+                <div class="summary-row total"><span>סה"כ לתשלום:</span><span>${finalTotal.toLocaleString()} ₪</span></div>
+            </div>
+            <div style="clear:both"></div>
+            <div style="margin-top:60px; font-size:12px; color:#555; border-top:1px solid #ccc; padding-top:15px; line-height: 1.8;">
+                * המחיר כולל הובלה והתקנה.<br>* הצעת מחיר זאת משמשת כחוזה עבודה.<br>* הסחורה בבעלות יהונתן אלומיניום עד התשלום המלא.<br>* הצעת מחיר תקפה ל-5 ימי עסקים.<br><strong>בכבוד רב, יהונתן אלומיניום</strong>
+            </div>
+        `;
+
+        document.getElementById('pdfPaperContent').innerHTML = htmlContent;
+        document.getElementById('pdfPreviewModal').style.display = 'flex';
+    }
+
     function downloadActualPdf() {
         const element = document.getElementById('pdfPaperContent');
         const clientName = document.getElementById('clientName').value || "הצעה";
         const opt = {
-            margin: [0, 0, 0, 0],
+            margin: [0.5, 0.5, 0.5, 0.5],
             filename: `הצעת_מחיר_${clientName}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
         };
         
-        // יצירת עותק נקי ללא גלילה - הפתרון לבעיית הדף הלבן
         const clone = element.cloneNode(true);
-        clone.style.width = '790px';
-        clone.style.position = 'absolute';
-        clone.style.left = '-9999px';
-        clone.style.top = '0';
-        clone.style.height = 'auto';
+        clone.style.width = '790px'; clone.style.position = 'absolute'; clone.style.left = '-9999px'; clone.style.top = '0'; clone.style.height = 'auto';
         document.body.appendChild(clone);
 
-        html2pdf().set(opt).from(clone).save().then(() => {
-            document.body.removeChild(clone);
-        });
+        html2pdf().set(opt).from(clone).save().then(() => { document.body.removeChild(clone); });
     }
     
-    // --- שרטוטים ---
+    // --- שרטוטים משולבים עם מונובלוק ---
     function generateSketch(btn) {
         const card = btn.closest('.card');
         const typeSelect = card.querySelector('.item-type');
@@ -685,9 +874,12 @@
         ctx.fillText(`לקוח: ${client} | תאריך: ${new Date().toLocaleDateString('he-IL')}`, 600, 100);
         
         let title = `${typeName} - ${profile}`;
-        if(type === 'pergola' && card.querySelector('.prg-type').value === 'stand') {
-            title += ` | גובה עמוד: ${card.querySelector('.prg-post-h').value} ס"מ`;
-        }
+        if(type === 'pergola' && card.querySelector('.prg-type').value === 'stand') title += ` | גובה עמוד: ${card.querySelector('.prg-post-h').value} ס"מ`;
+        
+        const cbMono = card.querySelector('.cb-monoblock');
+        let hasMonoblock = (cbMono && cbMono.checked);
+        let monoH = 0; if(hasMonoblock) { monoH = parseFloat(card.querySelector('.mono-h').value) || 28; title += ` | מונובלוק`; }
+
         ctx.font = "20px Arial"; ctx.fillStyle = "#555";
         ctx.fillText(title, 600, 140);
         
@@ -702,8 +894,7 @@
              h = Math.max(hRight, hLeft);
         } else if (type === 'shower') {
              h = parseFloat(card.querySelector('.h-input').value) || 190;
-             const conf = card.querySelector('.shower-config').value;
-             if (conf === 'front') w = parseFloat(card.querySelector('.w-input').value) || 100;
+             if (card.querySelector('.shower-config').value === 'front') w = parseFloat(card.querySelector('.w-input').value) || 100;
              else w = (parseFloat(card.querySelector('.w-right-input').value)||80) + (parseFloat(card.querySelector('.w-left-input').value)||80) + 20; 
         } else {
              w = parseFloat(card.querySelector('.w-input').value) || 100;
@@ -716,7 +907,19 @@
         
         startX = (1200 - dw) / 2;
         startY = 250;
+        const origStartY = startY; const origDh = dh; // שומרים למידות הכלליות
+        
         ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
+
+        if(hasMonoblock) {
+            const boxPxH = (monoH / h) * dh;
+            ctx.fillStyle = "#f0f0f0"; ctx.fillRect(startX, startY, dw, boxPxH);
+            ctx.strokeRect(startX, startY, dw, boxPxH);
+            ctx.beginPath(); ctx.lineWidth = 1;
+            for(let y=10; y<boxPxH; y+=10) { ctx.moveTo(startX, startY+y); ctx.lineTo(startX+dw, startY+y); }
+            ctx.stroke(); ctx.lineWidth = 3;
+            startY += boxPxH; dh -= boxPxH; // מקטינים את החלון נטו
+        }
 
         if (type === 'shower') {
              const conf = card.querySelector('.shower-config').value;
@@ -737,52 +940,35 @@
              } else {
                  const wR = parseFloat(card.querySelector('.w-right-input').value)||80;
                  const wL = parseFloat(card.querySelector('.w-left-input').value)||80;
-                 const totalW = wR + wL;
-                 const pxR = (wR / totalW) * dw;
-                 const pxL = (wL / totalW) * dw;
-                 ctx.strokeRect(startX + pxL + 10, startY, pxR, dh);
-                 ctx.strokeRect(startX, startY, pxL, dh);
+                 const pxR = (wR / (wR+wL)) * dw; const pxL = (wL / (wR+wL)) * dw;
+                 ctx.strokeRect(startX + pxL + 10, startY, pxR, dh); ctx.strokeRect(startX, startY, pxL, dh);
                  ctx.lineWidth = 5; ctx.strokeStyle = "#0d47a1"; 
                  ctx.beginPath(); ctx.moveTo(startX+pxL+5, startY); ctx.lineTo(startX+pxL+5, startY+dh); ctx.stroke();
                  ctx.lineWidth = 3; ctx.strokeStyle = (hwColor === 'שחור מט') ? 'black' : '#888';
-                 
-                 const typeR = card.querySelector('.shower-side-r').value;
-                 const typeL = card.querySelector('.shower-side-l').value;
+                 const typeR = card.querySelector('.shower-side-r').value; const typeL = card.querySelector('.shower-side-l').value;
                  if(typeL === 'wing') drawTriangle(ctx, startX, startY, pxL, dh, 'left');
                  if(typeR === 'wing') drawTriangle(ctx, startX+pxL+10, startY, pxR, dh, 'right');
              }
-             
              ctx.fillStyle = "#0d47a1"; ctx.font = "bold 24px Arial"; 
              if (conf === 'front') ctx.fillText(w, startX+dw/2, startY-10);
              else { 
-                 const wR = parseFloat(card.querySelector('.w-right-input').value);
-                 const wL = parseFloat(card.querySelector('.w-left-input').value);
-                 ctx.fillText(wL, startX + (dw*(wL/(wL+wR))/2), startY-10);
-                 ctx.fillText(wR, startX + dw - (dw*(wR/(wL+wR))/2), startY-10);
+                 const wR = parseFloat(card.querySelector('.w-right-input').value); const wL = parseFloat(card.querySelector('.w-left-input').value);
+                 ctx.fillText(wL, startX + (dw*(wL/(wL+wR))/2), startY-10); ctx.fillText(wR, startX + dw - (dw*(wR/(wL+wR))/2), startY-10);
              }
         }
         else if (type === 'fixed' || type === 'showcase') {
-             const pixHRight = (hRight / h) * dh;
-             const pixHLeft = (hLeft / h) * dh;
+             const pixHRight = (hRight / h) * dh; const pixHLeft = (hLeft / h) * dh;
              ctx.beginPath(); ctx.moveTo(startX, startY + dh); ctx.lineTo(startX + dw, startY + dh); ctx.lineTo(startX + dw, startY + dh - pixHRight); ctx.lineTo(startX, startY + dh - pixHLeft); ctx.closePath();
              ctx.save(); ctx.clip(); ctx.stroke();
-             const cols = parseInt(card.querySelector('.div-x').value) || 0;
-             const rows = parseInt(card.querySelector('.div-y').value) || 0;
-             if (cols > 0) {
-                 const colW = dw / (cols + 1);
-                 for (let i = 1; i <= cols; i++) { const x = startX + i * colW; ctx.beginPath(); ctx.moveTo(x, startY); ctx.lineTo(x, startY + dh + 100); ctx.stroke(); }
-             }
-             if (rows > 0) {
-                  const rowH = dh / (rows + 1);
-                  for (let j = 1; j <= rows; j++) { const y = startY + dh - j * rowH; ctx.beginPath(); ctx.moveTo(startX, y); ctx.lineTo(startX + dw, y); ctx.stroke(); }
-             }
+             const cols = parseInt(card.querySelector('.div-x').value) || 0; const rows = parseInt(card.querySelector('.div-y').value) || 0;
+             if (cols > 0) { const colW = dw / (cols + 1); for (let i = 1; i <= cols; i++) { ctx.beginPath(); ctx.moveTo(startX + i * colW, startY); ctx.lineTo(startX + i * colW, startY + dh + 100); ctx.stroke(); } }
+             if (rows > 0) { const rowH = dh / (rows + 1); for (let j = 1; j <= rows; j++) { ctx.beginPath(); ctx.moveTo(startX, startY + dh - j * rowH); ctx.lineTo(startX + dw, startY + dh - j * rowH); ctx.stroke(); } }
              ctx.restore();
              ctx.beginPath(); ctx.moveTo(startX, startY + dh); ctx.lineTo(startX + dw, startY + dh); ctx.lineTo(startX + dw, startY + dh - pixHRight); ctx.lineTo(startX, startY + dh - pixHLeft); ctx.closePath(); ctx.stroke();
         }
         else if (type === 'sliding') {
             ctx.strokeRect(startX, startY, dw, dh);
-            const sashes = parseInt(card.querySelector('.sl-sashes').value) || 2;
-            const sashW = dw / sashes;
+            const sashes = parseInt(card.querySelector('.sl-sashes').value) || 2; const sashW = dw / sashes;
             for(let i=0; i<sashes; i++) {
                 const offset = (i % 2 === 0) ? 0 : 15;
                 ctx.strokeRect(startX+(i*sashW)+offset, startY+10, sashW-10, dh-20);
@@ -790,8 +976,7 @@
             }
         }
         else if (type === 'pocket') {
-            const dir = card.querySelector('.pkt-dir').value;
-            ctx.setLineDash([10, 10]); 
+            const dir = card.querySelector('.pkt-dir').value; ctx.setLineDash([10, 10]); 
             if (dir === 'right') { ctx.strokeRect(startX + dw, startY, 150, dh); drawArrow(ctx, startX + dw - 50, startY + dh/2, 'right'); } 
             else { ctx.strokeRect(startX - 150, startY, 150, dh); drawArrow(ctx, startX + 50, startY + dh/2, 'left'); }
             ctx.setLineDash([]); ctx.strokeRect(startX, startY, dw, dh); 
@@ -814,8 +999,7 @@
             drawTriangle(ctx, startX, startY, dw, dh, 'top'); 
         }
         else if (type === 'shutter') {
-             const isHidden = card.querySelector('.sht-box').value === 'hidden';
-             const boxH = dh * 0.15;
+             const isHidden = card.querySelector('.sht-box').value === 'hidden'; const boxH = dh * 0.15;
              if(isHidden) { ctx.setLineDash([5,5]); ctx.strokeRect(startX, startY-boxH, dw, boxH); ctx.setLineDash([]); }
              else { ctx.fillStyle = "#ddd"; ctx.fillRect(startX, startY-boxH, dw, boxH); ctx.strokeRect(startX, startY-boxH, dw, boxH); }
              ctx.strokeRect(startX, startY, dw, dh);
@@ -833,29 +1017,27 @@
         }
         else if(type === 'fence') {
              ctx.strokeRect(startX, startY, dw, dh);
-             const spaceCm = parseInt(card.querySelector('.fence-space').value) || 2;
-             const spacePx = spaceCm * 5; 
+             const spaceCm = parseInt(card.querySelector('.fence-space').value) || 2; const spacePx = spaceCm * 5; 
              for(let y=10; y<dh; y += (10 + spacePx)) { ctx.fillRect(startX, startY+y, dw, 10); }
         }
         else if (type !== 'shower') { ctx.strokeRect(startX, startY, dw, dh); }
 
         if (type !== 'shower') {
             ctx.strokeStyle = "#0000aa"; ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(startX, startY+dh+20); ctx.lineTo(startX, startY+dh+50); ctx.moveTo(startX+dw, startY+dh+20); ctx.lineTo(startX+dw, startY+dh+50); ctx.moveTo(startX, startY+dh+35); ctx.lineTo(startX+dw, startY+dh+35); ctx.stroke();
-            ctx.fillStyle = "#0000aa"; ctx.font = "bold 30px Arial"; ctx.textAlign = "center"; ctx.fillText(`${w}`, startX+dw/2, startY+dh+65);
+            // קווי מידה לפי הגודל הכללי המקורי (כולל הארגז אם יש)
+            ctx.beginPath(); ctx.moveTo(startX, origStartY+origDh+20); ctx.lineTo(startX, origStartY+origDh+50); ctx.moveTo(startX+dw, origStartY+origDh+20); ctx.lineTo(startX+dw, origStartY+origDh+50); ctx.moveTo(startX, origStartY+origDh+35); ctx.lineTo(startX+dw, origStartY+origDh+35); ctx.stroke();
+            ctx.fillStyle = "#0000aa"; ctx.font = "bold 30px Arial"; ctx.textAlign = "center"; ctx.fillText(`${w}`, startX+dw/2, origStartY+origDh+65);
             
             if (type === 'fixed' || type === 'showcase') {
-                 ctx.save(); ctx.translate(startX+dw+65, startY+dh/2); ctx.rotate(-Math.PI/2); ctx.fillText(`${hRight}`, 0, 0); ctx.restore();
-                 ctx.save(); ctx.translate(startX-65, startY+dh/2); ctx.rotate(Math.PI/2); ctx.fillText(`${hLeft}`, 0, 0); ctx.restore();
+                 ctx.save(); ctx.translate(startX+dw+65, origStartY+origDh/2); ctx.rotate(-Math.PI/2); ctx.fillText(`${hRight}`, 0, 0); ctx.restore();
+                 ctx.save(); ctx.translate(startX-65, origStartY+origDh/2); ctx.rotate(Math.PI/2); ctx.fillText(`${hLeft}`, 0, 0); ctx.restore();
             } else {
-                 ctx.save(); ctx.translate(startX+dw+65, startY+dh/2); ctx.rotate(-Math.PI/2); ctx.fillText(`${h}`, 0, 0); ctx.restore();
+                 ctx.save(); ctx.translate(startX+dw+65, origStartY+origDh/2); ctx.rotate(-Math.PI/2); ctx.fillText(`${h}`, 0, 0); ctx.restore();
             }
         }
 
         const link = document.createElement('a');
-        link.download = `Sketch_${client}_${type}.png`;
-        link.href = canvas.toDataURL();
-        link.click();
+        link.download = `Sketch_${client}_${type}.png`; link.href = canvas.toDataURL(); link.click();
     }
 
     function drawArrow(ctx, x, y, dir) {
