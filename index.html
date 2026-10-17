@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -11,164 +12,680 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>יהונתן אלומיניום PRO</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        :root { --primary: #0d47a1; --primary-light: #42a5f5; --bg: #f0f4f8; --card: #ffffff; --text-dark: #1a202c; --whatsapp: #25D366; --border: #cbd5e0; --input-bg: #f7fafc; --danger: #e53e3e; }
-        body { font-family: 'Rubik', sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: var(--text-dark); -webkit-tap-highlight-color: transparent; height: 100vh; overflow-x: hidden; }
+        :root {
+            --primary: #0d47a1;
+            --primary-light: #1e88e5;
+            --primary-soft: #e3f2fd;
+            --bg: #f0f4f8;
+            --card: #ffffff;
+            --text-dark: #1a202c;
+            --text-muted: #4a5568;
+            --whatsapp: #25D366;
+            --border: #cbd5e0;
+            --input-bg: #f8fafc;
+            --danger: #e53e3e;
+            --success: #2f855a;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+            -webkit-tap-highlight-color: transparent;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
         
-        #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0d47a1 0%, #002171 100%); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; transition: opacity 0.5s; }
-        .login-box { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .login-box h2 { color: var(--primary); margin-top: 0; margin-bottom: 10px; }
-        .btn-login { background: var(--primary); color: white; width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        .login-box input { width: 90%; margin-bottom: 10px; text-align: center; font-size: 20px; letter-spacing: 2px; border: 1px solid #ccc; padding: 10px; border-radius: 8px; }
+        /* מסך כניסה */
+        #loginScreen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0d47a1 0%, #002171 100%);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: opacity 0.35s ease;
+            padding: 20px;
+        }
+        .login-box {
+            background: white;
+            padding: 28px 24px;
+            border-radius: 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 340px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+            color: var(--text-dark);
+        }
+        .login-box h2 { color: var(--primary); margin: 0 0 6px 0; font-size: 22px; }
+        .login-box p { margin: 0 0 14px 0; color: var(--text-muted); font-size: 14px; }
+        .btn-login {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 8px;
+            font-family: 'Rubik', sans-serif;
+            transition: filter 0.15s;
+        }
+        .btn-login:active { filter: brightness(0.92); }
+        .login-box input {
+            width: 100%;
+            margin-bottom: 8px;
+            text-align: center;
+            font-size: 22px;
+            letter-spacing: 4px;
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 10px;
+            background: var(--input-bg);
+        }
 
-        header { background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%); color: white; padding: 30px 20px 30px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 100; }
-        header h1 { margin: 0; font-size: 28px; font-weight: 800; }
+        /* כותרת עליונה וסרגל כלים */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1976d2 100%);
+            color: white;
+            padding: 18px 16px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.18);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header h1 { margin: 0; font-size: 24px; font-weight: 800; }
+        header p { margin: 4px 0 0; opacity: 0.9; font-size: 13px; }
+        .header-toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-top-tool {
+            background: rgba(255,255,255,0.18);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.35);
+            padding: 7px 13px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Rubik', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-top-tool:hover { background: rgba(255,255,255,0.28); }
+
+        .container {
+            padding: 18px 14px 150px;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+        }
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            gap: 8px;
+        }
+        .card-title { font-size: 17px; font-weight: 700; color: var(--primary); }
+        .card-actions-inline { display: flex; gap: 6px; }
+        .btn-delete {
+            background: #fff5f5;
+            color: var(--danger);
+            border: 1px solid #fed7d7;
+            padding: 6px 11px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Rubik', sans-serif;
+        }
+        .btn-duplicate {
+            background: var(--primary-soft);
+            color: var(--primary);
+            border: 1px solid #90caf9;
+            padding: 6px 11px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Rubik', sans-serif;
+        }
         
-        .container { padding: 20px; max-width: 650px; margin: 0 auto; padding-bottom: 140px; }
-        .card { background: var(--card); border-radius: 18px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); border: 1px solid white; }
-        .card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .card-title { font-size: 18px; font-weight: 700; color: var(--primary); }
-        .btn-delete { background: #fff5f5; color: var(--danger); border: 1px solid #fed7d7; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        label { font-weight: 600; display: block; margin-bottom: 5px; font-size: 13.5px; color: #2d3748; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: var(--input-bg);
+            margin-bottom: 12px;
+            font-family: 'Rubik', sans-serif;
+            color: var(--text-dark);
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            background-color: #fff;
+        }
         
-        label { font-weight: 600; display: block; margin-bottom: 6px; font-size: 14px; }
-        input, select, textarea { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 16px; background-color: var(--input-bg); margin-bottom: 15px; font-family: 'Rubik', sans-serif; box-sizing: border-box; }
+        .row { display: flex; gap: 10px; align-items: flex-start; }
+        .row > div { flex: 1; min-width: 0; }
         
-        .row { display: flex; gap: 12px; } .row > div { flex: 1; }
-        .btn-add-item { background: white; color: var(--primary); border: 2px dashed var(--primary-light); padding: 15px; border-radius: 15px; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; flex: 2;}
-        .btn-save-draft { background: #4a5568; color: white; border: none; padding: 15px; border-radius: 15px; font-size: 16px; font-weight: 700; cursor: pointer; flex: 1;}
+        .btn-add-item {
+            background: white;
+            color: var(--primary);
+            border: 2px dashed var(--primary-light);
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            flex: 2;
+            font-family: 'Rubik', sans-serif;
+        }
+        .btn-save-draft {
+            background: #2d3748;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            flex: 1;
+            font-family: 'Rubik', sans-serif;
+        }
         
-        .bottom-actions { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px 25px; box-shadow: 0 -5px 25px rgba(0,0,0,0.1); z-index: 100; border-radius: 20px 20px 0 0; display: flex; gap: 10px; }
-        .btn-action { flex: 1; padding: 16px 10px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer; text-align: center; }
+        .bottom-actions {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: white;
+            padding: 12px 14px 20px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+            z-index: 100;
+            border-radius: 18px 18px 0 0;
+            display: flex;
+            gap: 8px;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        .btn-action {
+            flex: 1;
+            padding: 14px 8px;
+            border: none;
+            border-radius: 11px;
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+            cursor: pointer;
+            text-align: center;
+            font-family: 'Rubik', sans-serif;
+        }
         .btn-calc { background: linear-gradient(90deg, var(--primary) 0%, #1565c0 100%); color: white; }
         .btn-pdf { background: #e53e3e; color: white; }
         .btn-sketches-pdf { background: #2d3748; color: white; }
 
-        .result-box { background: white; border-radius: 20px; border: 2px solid var(--primary-light); margin-top: 25px; display: none; overflow: hidden; margin-bottom: 20px; }
-        .result-header { background: var(--primary-light); color: white; padding: 15px; text-align: center; font-weight: 700; }
-        .result-body { padding: 20px; }
-        .price-line { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .total-line { font-size: 24px; font-weight: 800; color: var(--primary); border-top: 2px dashed #cbd5e0; padding-top: 15px; margin-top: 15px; display: flex; justify-content: space-between; }
+        .result-box {
+            background: white;
+            border-radius: 18px;
+            border: 2px solid var(--primary-light);
+            margin-top: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .result-header {
+            background: var(--primary);
+            color: white;
+            padding: 13px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .result-body { padding: 18px; }
+        .price-line { display: flex; justify-content: space-between; margin-bottom: 9px; font-size: 15px; }
+        .total-line {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            border-top: 2px dashed #cbd5e0;
+            padding-top: 12px;
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
 
-        .extra-panel { background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e2e8f0; display: none; }
-        .btn-download-sketch { background-color: #2d3748; color: white; padding: 12px; border-radius: 8px; font-size: 15px; border: none; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .btn-add-profile { background: var(--primary); color: white; border: none; border-radius: 10px; padding: 0 16px; font-weight: 700; font-size: 14px; cursor: pointer; margin-bottom: 15px; white-space: nowrap; }
+        .extra-panel {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            border: 1px solid #e2e8f0;
+            display: none;
+        }
+        .sketch-actions-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .btn-download-sketch {
+            background-color: #2d3748;
+            color: white;
+            padding: 11px;
+            border-radius: 9px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: 'Rubik', sans-serif;
+        }
+        .btn-preview-sketch {
+            background-color: var(--primary-soft);
+            color: var(--primary);
+            border: 1px solid #90caf9;
+            padding: 11px;
+            border-radius: 9px;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: 'Rubik', sans-serif;
+        }
+        .live-sketch-box {
+            display: none;
+            margin-top: 12px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+        }
+        .live-sketch-box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #edf2f7;
+        }
+        .view-mode-pills {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+            margin-bottom: 10px;
+        }
+        .view-pill {
+            flex: 1;
+            padding: 8px 6px;
+            font-size: 12.5px;
+            font-weight: 700;
+            border-radius: 8px;
+            border: 1px solid var(--primary-light);
+            background: white;
+            color: var(--primary);
+            cursor: pointer;
+            text-align: center;
+            font-family: 'Rubik', sans-serif;
+        }
+        .view-pill.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-add-profile {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0 14px;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            white-space: nowrap;
+            font-family: 'Rubik', sans-serif;
+        }
         
-        .modal-overlay { position: fixed; top: 0; right: 0; left: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(5px); }
-        .modal-content { background: white; width: 95%; max-width: 450px; border-radius: 20px; padding: 20px; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
-        canvas#drawingPad { border: 2px dashed #cbd5e0; border-radius: 10px; touch-action: none; background: white; cursor: crosshair; width: 100%; height: 300px; }
+        .modal-overlay {
+            position: fixed;
+            top: 0; right: 0; left: 0; bottom: 0;
+            background: rgba(0,0,0,0.78);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+            padding: 14px;
+        }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 18px;
+            padding: 20px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .modal-content.wide-modal {
+            max-width: 820px;
+        }
+        canvas#drawingPad {
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            touch-action: none;
+            background: white;
+            cursor: crosshair;
+            width: 100%;
+            height: 280px;
+            display: block;
+        }
 
-        .shower-options { background: #fff; border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; margin-top: 10px; }
-        .checkbox-row { display: flex; align-items: center; margin-bottom: 8px; }
-        .checkbox-row input { width: 20px; height: 20px; margin: 0 0 0 10px; }
+        .shower-options {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 6px;
+        }
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .checkbox-row input[type="checkbox"] {
+            width: 19px;
+            height: 19px;
+            margin: 0;
+            cursor: pointer;
+        }
 
-        /* אזור ההדפסה הנסתר במסך רגיל */
+        /* הודעת Toast */
+        #toastBox {
+            position: fixed;
+            bottom: 95px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a202c;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 11000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none;
+            text-align: center;
+            max-width: 90%;
+        }
+
+        /* רשימת ארכיון הצעות */
+        .archive-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            background: var(--input-bg);
+            gap: 8px;
+        }
+        .archive-info { flex: 1; }
+        .archive-title { font-weight: 700; color: var(--primary); font-size: 14.5px; }
+        .archive-sub { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+
+        /* אזור ההדפסה */
         #printArea { display: none; }
 
-        /* הגדרות הדפסה (כאשר פותחים את חלון ה-PDF של המכשיר) */
         @media print {
             body * { visibility: hidden !important; }
             #printArea, #printArea * { visibility: visible !important; }
-            #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; direction: rtl; background: white; padding: 20px; }
-            @page { size: A4 portrait; margin: 1.5cm; }
-            body { background: white; }
+            #printArea {
+                display: block !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                direction: rtl;
+                background: white;
+                padding: 10px;
+            }
+            @page { size: A4 portrait; margin: 1.2cm; }
+            body { background: white; height: auto; overflow: visible; }
         }
     </style>
 </head>
 <body>
 
+<div id="toastBox"></div>
+
 <div id="loginScreen">
     <div class="login-box">
-        <div style="font-size: 40px; margin-bottom: 10px;">🛡️</div>
-        <h2>כניסה למערכת</h2>
-        <p>נא להקיש סיסמה</p>
-        <input type="password" id="passwordInput" placeholder="****" inputmode="numeric">
-        <button class="btn-login" onclick="checkLogin()">היכנס</button>
-        <div id="draftBtnContainer" style="display:none; margin-top:20px;">
-            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.3); margin-bottom:15px;">
-            <button class="btn-login" style="background:#2b6cb0;" onclick="loadDraft()">📂 המשך טיוטה אחרונה</button>
+        <div style="font-size: 38px; margin-bottom: 8px;">🛡️</div>
+        <h2>יהונתן אלומיניום PRO</h2>
+        <p>הקש קוד גישה לכניסה למערכת (1234)</p>
+        <input type="password" id="passwordInput" placeholder="****" inputmode="numeric" onkeydown="if(event.key==='Enter') checkLogin(false)">
+        <button type="button" class="btn-login" onclick="checkLogin(false)">היכנס למערכת</button>
+        <div id="draftBtnContainer" style="display:none; margin-top:14px;">
+            <button type="button" class="btn-login" style="background:#2b6cb0; margin-top:0;" onclick="checkLogin(true)">📂 היכנס וטען טיוטה אחרונה</button>
         </div>
-        <p id="loginError" style="color:red; font-size:12px; margin-top:10px; display:none;">סיסמה שגויה</p>
+        <p id="loginError" style="color:var(--danger); font-size:13px; font-weight:600; margin-top:10px; display:none;">סיסמה שגויה, נסה שנית (קוד ברירת מחדל: 1234)</p>
     </div>
 </div>
 
 <header>
     <h1>יהונתן אלומיניום</h1>
-    <p style="margin:5px 0 0; opacity:0.9;">מערכת הצעות מחיר</p>
+    <p>מערכת הצעות מחיר ושרטוטים אדריכליים</p>
+    <div class="header-toolbar" id="topToolbar" style="display:none;">
+        <button type="button" class="btn-top-tool" onclick="openArchiveModal()">📂 ארכיון הצעות</button>
+        <button type="button" class="btn-top-tool" onclick="loadDraft()">🔄 טען טיוטה אחרונה</button>
+        <button type="button" class="btn-top-tool" onclick="startNewQuote()">📄 הצעה חדשה</button>
+    </div>
 </header>
 
 <div class="container" id="mainApp" style="display:none">
     <div class="card">
-        <div class="card-title">👤 פרטי לקוח</div>
-        <label>שם הלקוח:</label>
-        <input type="text" id="clientName" placeholder="ישראל ישראלי">
+        <div class="card-title" style="margin-bottom:12px;">👤 פרטי לקוח והצעה</div>
+        <div class="row">
+            <div style="flex:1.3">
+                <label>שם הלקוח:</label>
+                <input type="text" id="clientName" placeholder="ישראל ישראלי" oninput="calculateAll(false)">
+            </div>
+            <div style="flex:1">
+                <label>טלפון לקוח (לוואטסאפ):</label>
+                <input type="tel" id="clientPhone" placeholder="050-0000000" dir="ltr" style="text-align:right">
+            </div>
+        </div>
         <div class="row">
             <div style="flex:1"><label>תאריך:</label><input type="date" id="quoteDate"></div>
-            <div style="flex:1"><label>מס' הצעה:</label><input type="number" id="quoteNumber" style="font-weight:700;text-align:center"></div>
+            <div style="flex:1"><label>מס' הצעה:</label><input type="number" id="quoteNumber" style="font-weight:700;text-align:center" min="1"></div>
         </div>
     </div>
     
     <div id="itemsContainer"></div>
     
-    <div class="row" style="margin-bottom:20px;">
-        <button class="btn-add-item" onclick="addItem()">➕ הוסף מוצר</button>
-        <button class="btn-save-draft" onclick="saveDraft()">💾 שמור טיוטה</button>
+    <div class="row" style="margin-bottom:18px;">
+        <button type="button" class="btn-add-item" onclick="addItem()">➕ הוסף מוצר להצעה</button>
+        <button type="button" class="btn-save-draft" onclick="saveDraft()">💾 שמור הצעה</button>
     </div>
     
     <div class="card" style="background:#ebf8ff; border:1px solid #bee3f8;">
-        <div class="card-title">🛠️ תוספות והתקנה</div>
-        <label>עלות הובלה, התקנה ופירוק (₪):</label>
-        <input type="number" id="installationCost" placeholder="0">
+        <div class="card-title" style="margin-bottom:12px;">🛠️ תוספות, התקנה והנחה</div>
+        <div class="row">
+            <div>
+                <label>הובלה, התקנה ופירוק (₪):</label>
+                <input type="number" id="installationCost" placeholder="0" oninput="calculateAll(false)">
+            </div>
+            <div>
+                <label>הנחה מיוחדת (₪):</label>
+                <input type="number" id="discountCost" placeholder="0" oninput="calculateAll(false)">
+            </div>
+        </div>
+        <label>הערות כלליות להצעה (יופיעו ב-PDF ובוואטסאפ):</label>
+        <input type="text" id="generalNotes" placeholder="לדוגמה: אספקה תוך 21 ימי עסקים, לא כולל עבודות טיח וצבע">
     </div>
     
     <div class="result-box" id="resultBox">
-        <div class="result-header">סיכום הזמנה</div>
+        <div class="result-header">סיכום הזמנה חי</div>
         <div class="result-body">
-            <div class="price-line"><span>סה"כ מוצרים:</span><span id="itemsSubtotal">0 ₪</span></div>
+            <div class="price-line"><span>סה"כ מוצרים (<span id="itemsCountLabel">0</span> יח'):</span><span id="itemsSubtotal">0 ₪</span></div>
             <div class="price-line"><span>תוספות והתקנה:</span><span id="installSubtotal">0 ₪</span></div>
-            <div class="price-line" style="border-top:1px solid #eee; padding-top:10px;"><span>סה"כ לפני מע"מ:</span><span id="totalSub">0 ₪</span></div>
+            <div class="price-line" id="discountLine" style="display:none; color:var(--success);"><span>הנחה:</span><span id="discountSubtotal">-0 ₪</span></div>
+            <div class="price-line" style="border-top:1px solid #eee; padding-top:10px; font-weight:600;"><span>סה"כ לפני מע"מ:</span><span id="totalSub">0 ₪</span></div>
             <div class="price-line"><span>מע"מ (18%):</span><span id="totalVat">0 ₪</span></div>
             <div class="total-line"><span>סה"כ לתשלום:</span><span id="totalFinal">0 ₪</span></div>
             
-            <button class="btn-action" style="margin-top:20px; width:100%; background:var(--whatsapp); color:white;" onclick="openPreview()">שלח הצעה בוואטסאפ</button>
+            <button type="button" class="btn-action" style="margin-top:16px; width:100%; background:var(--whatsapp); color:white;" onclick="openPreview()">💬 שלח הצעה מפורטת בוואטסאפ</button>
         </div>
     </div>
 </div>
 
 <div class="bottom-actions" id="bottomNav" style="display:none">
-    <button class="btn-action btn-calc" onclick="calculateAll()">חשב סה"כ</button>
-    <button class="btn-action btn-pdf" onclick="printInvoice()">📄 הצעת מחיר (PDF)</button>
-    <button class="btn-action btn-sketches-pdf" onclick="printAllSketches()">📐 דף שרטוטים</button>
+    <button type="button" class="btn-action btn-calc" onclick="calculateAll(true)">חשב סה"כ</button>
+    <button type="button" class="btn-action btn-pdf" onclick="printInvoice()">📄 הצעת מחיר (PDF)</button>
+    <button type="button" class="btn-action btn-sketches-pdf" onclick="printAllSketches()">📐 דף שרטוטים</button>
 </div>
 
+<!-- מודאל תצוגת וואטסאפ -->
 <div class="modal-overlay" id="previewModal">
     <div class="modal-content">
-        <h3 style="text-align:center;margin:0 0 15px 0;color:var(--primary)">טיוטת הודעה</h3>
-        <textarea id="previewText" style="width:100%; height:150px; font-family:sans-serif; border:1px solid #ccc; padding:10px; border-radius:10px;"></textarea>
-        <div style="display:flex; gap:10px; margin-top:10px;">
-            <button class="btn-login" style="background:#ccc; color:black" onclick="document.getElementById('previewModal').style.display='none'">סגור</button>
-            <button class="btn-login" style="background:var(--whatsapp)" onclick="sendWhatsapp()">שלח</button>
+        <h3 style="text-align:center;margin:0 0 12px 0;color:var(--primary)">טיוטת הודעה לוואטסאפ</h3>
+        <textarea id="previewText" style="width:100%; height:220px; font-family:inherit; border:1px solid #ccc; padding:10px; border-radius:10px; font-size:14px; line-height:1.45;"></textarea>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+            <button type="button" class="btn-login" style="background:#e2e8f0; color:#1a202c; flex:1" onclick="closeModal('previewModal')">סגור</button>
+            <button type="button" class="btn-login" style="background:#4a5568; color:white; flex:1" onclick="copyWhatsappText()">📋 העתק טקסט</button>
+            <button type="button" class="btn-login" style="background:var(--whatsapp); flex:1.3" onclick="sendWhatsapp()">שלח בוואטסאפ</button>
         </div>
     </div>
 </div>
 
+<!-- מודאל לוח שרטוט ידני -->
 <div class="modal-overlay" id="drawingModal">
     <div class="modal-content" style="max-width:500px">
-        <h3 style="text-align:center;margin:0 0 10px 0;">לוח שרטוט ידני</h3>
-        <canvas id="drawingPad" width="450" height="300"></canvas>
-        <div class="row" style="margin-top:15px">
-             <button class="btn-login" style="background:#e53e3e; flex:1" onclick="clearCanvas()">נקה</button>
-             <button class="btn-login" style="background:var(--whatsapp); flex:1" onclick="saveDrawing()">שמור שרטוט</button>
-             <button class="btn-login" style="background:#ccc; flex:1" onclick="closeDrawing()">ביטול</button>
+        <h3 style="text-align:center;margin:0 0 8px 0;color:var(--primary)">לוח שרטוט ידני</h3>
+        <p style="text-align:center;margin:0 0 10px 0;font-size:13px;color:var(--text-muted)">צייר באצבע או בעכבר על גבי הלוח</p>
+        <canvas id="drawingPad" width="600" height="380"></canvas>
+        <div class="row" style="margin-top:12px">
+             <button type="button" class="btn-login" style="background:var(--danger); flex:1" onclick="clearCanvas()">נקה לוח</button>
+             <button type="button" class="btn-login" style="background:var(--whatsapp); flex:1.3" onclick="saveDrawing()">שמור שרטוט</button>
+             <button type="button" class="btn-login" style="background:#cbd5e0; color:#1a202c; flex:1" onclick="closeDrawing()">ביטול</button>
         </div>
+    </div>
+</div>
+
+<!-- מודאל הוספת פרופיל חדש (מחליף prompt) -->
+<div class="modal-overlay" id="addProfileModal">
+    <div class="modal-content" style="max-width:380px">
+        <h3 style="text-align:center;margin:0 0 12px 0;color:var(--primary)">הוספת סוג פרופיל חדש</h3>
+        <label>שם הפרופיל / הדגם:</label>
+        <input type="text" id="newProfileNameInput" placeholder="לדוגמה: קליל 7300 בלגי" onkeydown="if(event.key==='Enter') confirmAddProfile()">
+        <div class="row" style="margin-top:8px">
+            <button type="button" class="btn-login" style="background:#e2e8f0; color:#1a202c; flex:1" onclick="closeModal('addProfileModal')">ביטול</button>
+            <button type="button" class="btn-login" style="background:var(--primary); flex:1" onclick="confirmAddProfile()">➕ הוסף ושמור</button>
+        </div>
+    </div>
+</div>
+
+<!-- מודאל ארכיון הצעות מחיר -->
+<div class="modal-overlay" id="archiveModal">
+    <div class="modal-content">
+        <h3 style="text-align:center;margin:0 0 12px 0;color:var(--primary)">📂 ארכיון הצעות מחיר שמורות</h3>
+        <div id="archiveListContainer" style="max-height:340px; overflow-y:auto; margin-bottom:12px;"></div>
+        <button type="button" class="btn-login" style="background:#e2e8f0; color:#1a202c;" onclick="closeModal('archiveModal')">סגור</button>
+    </div>
+</div>
+
+<!-- מודאל תצוגת מסמך והדפסה ל-PDF -->
+<div class="modal-overlay" id="printPreviewModal">
+    <div class="modal-content wide-modal">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:14px; gap:10px; flex-wrap:wrap;">
+            <h3 style="margin:0; color:var(--primary)" id="printModalTitle">תצוגה מקדימה להדפסה / PDF</h3>
+            <div style="display:flex; gap:8px;">
+                <button type="button" class="btn-login" style="width:auto; padding:9px 16px; margin:0; background:var(--primary);" onclick="window.print()">🖨️ הדפס / שמור כ-PDF</button>
+                <button type="button" class="btn-login" style="width:auto; padding:9px 16px; margin:0; background:#e2e8f0; color:#1a202c;" onclick="closeModal('printPreviewModal')">סגור</button>
+            </div>
+        </div>
+        <div id="printPreviewBody" style="background:white; border:1px solid #e2e8f0; border-radius:10px; padding:16px; overflow-x:auto;"></div>
     </div>
 </div>
 
 <div id="printArea"></div>
 
 <script>
-    // --- רשימת פרופילים עצמאית המאפשרת שילוב חופשי עם כל סוג מוצר + הוספה מהאפליקציה ---
+    // --- מעטפת בטוחה ל-localStorage ---
+    const memoryStorageFallback = {};
+    function safeGetStorage(key, fallback = null) {
+        try {
+            const val = localStorage.getItem(key);
+            return val !== null ? val : (memoryStorageFallback[key] ?? fallback);
+        } catch (e) {
+            return memoryStorageFallback[key] ?? fallback;
+        }
+    }
+    function safeSetStorage(key, val) {
+        memoryStorageFallback[key] = String(val);
+        try {
+            localStorage.setItem(key, String(val));
+        } catch (e) {}
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toastBox');
+        t.innerText = msg;
+        t.style.display = 'block';
+        clearTimeout(window._toastTimer);
+        window._toastTimer = setTimeout(() => { t.style.display = 'none'; }, 3000);
+    }
+
+    function closeModal(id) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    }
+
+    // --- רשימת פרופילים ---
     const defaultProfilesList = [
         "קליל 7000 קלאסי", "קליל 9000", "קליל 9200", "קליל 1700 בלגי", "קליל 2200 אופיס",
         "קליל 4500 קלאסי", "קליל 4300 בלגי", "קליל 5500 באוהאוס", "קליל 4400", "קליל 2000 בייסיק",
@@ -182,11 +699,15 @@
     ];
 
     function getAllProfiles() {
-        const custom = JSON.parse(localStorage.getItem('customAlumProfiles') || '[]');
+        let custom = [];
+        try {
+            custom = JSON.parse(safeGetStorage('customAlumProfiles', '[]') || '[]');
+        } catch (e) { custom = []; }
         return [...new Set([...defaultProfilesList, ...custom])];
     }
 
     function populateProfileSelect(selectEl, selectedVal) {
+        if (!selectEl) return;
         const current = selectedVal || selectEl.value;
         selectEl.innerHTML = "";
         getAllProfiles().forEach(p => {
@@ -198,21 +719,40 @@
         });
     }
 
+    let pendingProfileTargetBtn = null;
     function addNewProfilePrompt(btn) {
-        const newProf = prompt("הזן שם סוג פרופיל חדש:");
-        if (newProf && newProf.trim() !== "") {
-            const cleanProf = newProf.trim();
-            const custom = JSON.parse(localStorage.getItem('customAlumProfiles') || '[]');
-            if (!custom.includes(cleanProf) && !defaultProfilesList.includes(cleanProf)) {
-                custom.push(cleanProf);
-                localStorage.setItem('customAlumProfiles', JSON.stringify(custom));
-            }
-            document.querySelectorAll('.profile-select').forEach(sel => {
-                populateProfileSelect(sel, sel.value);
-            });
-            const currentSelect = btn.closest('.card').querySelector('.profile-select');
-            currentSelect.value = cleanProf;
+        pendingProfileTargetBtn = btn;
+        const inp = document.getElementById('newProfileNameInput');
+        inp.value = "";
+        document.getElementById('addProfileModal').style.display = 'flex';
+        setTimeout(() => inp.focus(), 80);
+    }
+
+    function confirmAddProfile() {
+        const inp = document.getElementById('newProfileNameInput');
+        const cleanProf = (inp.value || "").trim();
+        if (!cleanProf) {
+            showToast("נא להזין שם פרופיל");
+            return;
         }
+        let custom = [];
+        try {
+            custom = JSON.parse(safeGetStorage('customAlumProfiles', '[]') || '[]');
+        } catch (e) { custom = []; }
+        if (!custom.includes(cleanProf) && !defaultProfilesList.includes(cleanProf)) {
+            custom.push(cleanProf);
+            safeSetStorage('customAlumProfiles', JSON.stringify(custom));
+        }
+        document.querySelectorAll('.profile-select').forEach(sel => {
+            populateProfileSelect(sel, sel.value);
+        });
+        if (pendingProfileTargetBtn) {
+            const currentSelect = pendingProfileTargetBtn.closest('.card').querySelector('.profile-select');
+            if (currentSelect) currentSelect.value = cleanProf;
+            refreshLiveSketchIfOpen(pendingProfileTargetBtn.closest('.card'));
+        }
+        closeModal('addProfileModal');
+        showToast(`הפרופיל "${cleanProf}" נוסף בהצלחה`);
     }
 
     const glassTypes = {
@@ -231,99 +771,411 @@
             "רפלקטיבי (מראה)", "צ'ינצ'ילה", "סבתא", "גרניט", "פסים/תריס"
         ]
     };
-    
-    const showerGlass = ["מחוסמת 6 מ\"מ", "מחוסמת 8 מ\"מ"];
+    const showerGlass = ["מחוסמת 6 מ\"מ", "מחוסמת 8 מ\"מ", "מחוסמת 10 מ\"מ"];
 
     let itemCount = 0;
-    let activeDrawingBtn = null; 
-    
-    document.addEventListener('DOMContentLoaded', () => { 
+    let activeDrawingBtn = null;
+    let canvas, ctx, isDrawing = false, canvasInitialized = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('quoteDate').valueAsDate = new Date();
-        const savedNum = localStorage.getItem('quoteCounter'); 
-        document.getElementById('quoteNumber').value = savedNum ? savedNum : 1; 
-        if(localStorage.getItem('myAlumDraft')) document.getElementById('draftBtnContainer').style.display = 'block';
+        const savedNum = parseInt(safeGetStorage('quoteCounter', '1'), 10);
+        document.getElementById('quoteNumber').value = (!isNaN(savedNum) && savedNum > 0) ? savedNum : 1;
+        if (safeGetStorage('myAlumDraft')) {
+            document.getElementById('draftBtnContainer').style.display = 'block';
+        }
+        initCanvasOnce();
+        addItem();
     });
 
-    function checkLogin() {
-        if(document.getElementById('passwordInput').value === '1234') {
+    function checkLogin(shouldLoadDraft) {
+        const pwd = document.getElementById('passwordInput').value;
+        if (pwd === '1234') {
+            document.getElementById('loginError').style.display = 'none';
             document.getElementById('loginScreen').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('loginScreen').style.display = 'none';
-                document.querySelector('.container').style.display = 'block';
+                document.getElementById('mainApp').style.display = 'block';
                 document.getElementById('bottomNav').style.display = 'flex';
-            }, 500);
+                document.getElementById('topToolbar').style.display = 'flex';
+                if (shouldLoadDraft) {
+                    loadDraft();
+                } else {
+                    calculateAll(false);
+                }
+            }, 300);
         } else {
             document.getElementById('loginError').style.display = 'block';
         }
     }
 
-    // --- שמירת וטעינת טיוטות ---
-    function saveDraft() {
-        document.querySelectorAll('input, select, textarea').forEach(el => {
-            if(el.type === 'checkbox') { if(el.checked) el.setAttribute('checked', 'checked'); else el.removeAttribute('checked'); }
-            else { 
-                el.setAttribute('value', el.value);
-                if(el.tagName === 'TEXTAREA') el.innerText = el.value;
-                if(el.tagName === 'SELECT') {
-                    Array.from(el.options).forEach(opt => {
-                        if(opt.value === el.value || opt.text === el.value) opt.setAttribute('selected', 'selected');
-                        else opt.removeAttribute('selected');
-                    });
-                }
+    function startNewQuote() {
+        const currentNum = parseInt(document.getElementById('quoteNumber').value, 10) || 1;
+        const savedMax = parseInt(safeGetStorage('quoteCounter', '1'), 10) || 1;
+        const nextNum = Math.max(currentNum, savedMax) + 1;
+        safeSetStorage('quoteCounter', nextNum);
+
+        document.getElementById('clientName').value = '';
+        document.getElementById('clientPhone').value = '';
+        document.getElementById('quoteDate').valueAsDate = new Date();
+        document.getElementById('quoteNumber').value = nextNum;
+        document.getElementById('installationCost').value = '';
+        document.getElementById('discountCost').value = '';
+        document.getElementById('generalNotes').value = '';
+        document.getElementById('itemsContainer').innerHTML = '';
+        itemCount = 0;
+        addItem();
+        calculateAll(false);
+        showToast(`נפתחה הצעת מחיר חדשה מס' ${nextNum}`);
+    }
+
+    // --- קריאה וכתיבה של נתוני כרטיסיית מוצר כ-JSON נקי ---
+    function extractCardData(card) {
+        const getVal = (sel, def = '') => { const el = card.querySelector(sel); return el ? el.value : def; };
+        const getChk = (sel) => { const el = card.querySelector(sel); return !!(el && el.checked); };
+        const imgEl = card.querySelector('.img-display');
+        return {
+            type: getVal('.item-type', 'sliding'),
+            profile: getVal('.profile-select', ''),
+            colorShade: getVal('.color-shade', ''),
+            glassType: getVal('.glass-type', ''),
+            glassFinish: getVal('.glass-finish', ''),
+            w: getVal('.w-input', ''),
+            h: getVal('.h-input', ''),
+            hRight: getVal('.h-right-input', ''),
+            hLeft: getVal('.h-left-input', ''),
+            wRight: getVal('.w-right-input', ''),
+            wLeft: getVal('.w-left-input', ''),
+            openDir: getVal('.open-dir', 'right'),
+            qty: getVal('.qty-input', '1'),
+            price: getVal('.price-input', ''),
+            itemNotes: getVal('.item-notes', ''),
+            // sliding
+            slSashes: getVal('.sl-sashes', '2'),
+            slMeeting: getVal('.sl-meeting', 'side'),
+            slDiv: getVal('.sl-div', 'none'),
+            cbSlatBlind: getChk('.cb-slat-blind'),
+            cbNet: getChk('.cb-net'),
+            cbMonoblock: getChk('.cb-monoblock'),
+            monoH: getVal('.mono-h', '28'),
+            monoSlat: getVal('.mono-slat', 'שלב אור'),
+            monoMotor: getVal('.mono-motor', 'חשמלי'),
+            // kipp / tilt_turn
+            cbNetPull: getChk('.cb-net-pull'),
+            // pocket
+            pktComp: getVal('.pkt-comp', 'זכוכית בלבד'),
+            pktDir: getVal('.pkt-dir', 'right'),
+            // fixed / showcase
+            divX: getVal('.div-x', '0'),
+            divY: getVal('.div-y', '0'),
+            // door
+            drTop: getVal('.dr-top', ''),
+            drSide: getVal('.dr-side', ''),
+            drCloser: getVal('.dr-closer', 'none'),
+            // shutter
+            shtBox: getVal('.sht-box', 'hidden'),
+            shtSlat: getVal('.sht-slat', 'light'),
+            shtMotor: getVal('.sht-motor', 'חשמלי'),
+            // pergola
+            prgType: getVal('.prg-type', 'wall'),
+            prgPostH: getVal('.prg-post-h', '250'),
+            prgDir: getVal('.prg-dir', 'width'),
+            prgGutter: getChk('.prg-gutter'),
+            prgSketchMode: card.dataset.prgSketchMode || 'both',
+            // fence
+            fenceSpace: getVal('.fence-space', '2'),
+            // shower
+            showerConfig: getVal('.shower-config', 'front'),
+            showerLayoutType: getVal('.shower-layout-type', '1wing'),
+            showerSideR: getVal('.shower-side-r', 'wing'),
+            showerSideL: getVal('.shower-side-l', 'wing'),
+            handleType: getVal('.handle-type', 'knob'),
+            hardwareColor: getVal('.hardware-color', 'ניקל מבריק'),
+            cbStab: getChk('.cb-stab'),
+            cbSeal: getChk('.cb-seal'),
+            // joker
+            jokerTitle: getVal('.joker-title', ''),
+            jokerDesc: getVal('.joker-desc', ''),
+            qtyJoker: getVal('.qty-input-joker', '1'),
+            priceJoker: getVal('.price-input-joker', ''),
+            jokerImg: (imgEl && imgEl.src && imgEl.src.startsWith('data:')) ? imgEl.src : ''
+        };
+    }
+
+    function applyCardData(card, d) {
+        if (!d) return;
+        const setVal = (sel, val) => { const el = card.querySelector(sel); if (el && val !== undefined) el.value = val; };
+        const setChk = (sel, val) => { const el = card.querySelector(sel); if (el) el.checked = !!val; };
+
+        const typeSelect = card.querySelector('.item-type');
+        typeSelect.value = d.type || 'sliding';
+        card.dataset.prgSketchMode = d.prgSketchMode || 'both';
+        updateItemFields(typeSelect);
+
+        populateProfileSelect(card.querySelector('.profile-select'), d.profile);
+        setVal('.color-shade', d.colorShade);
+        setVal('.glass-type', d.glassType);
+        setVal('.glass-finish', d.glassFinish);
+        setVal('.open-dir', d.openDir);
+        setVal('.qty-input', d.qty);
+        setVal('.price-input', d.price);
+        setVal('.item-notes', d.itemNotes);
+
+        if (d.type === 'shower') {
+            setVal('.shower-config', d.showerConfig);
+            updateShowerDims(card.querySelector('.shower-config'));
+            setVal('.shower-layout-type', d.showerLayoutType);
+            setVal('.shower-side-r', d.showerSideR);
+            setVal('.shower-side-l', d.showerSideL);
+            setVal('.handle-type', d.handleType);
+            setVal('.hardware-color', d.hardwareColor);
+            setChk('.cb-stab', d.cbStab);
+            setChk('.cb-seal', d.cbSeal);
+        }
+
+        setVal('.w-input', d.w);
+        setVal('.h-input', d.h);
+        setVal('.h-right-input', d.hRight);
+        setVal('.h-left-input', d.hLeft);
+        setVal('.w-right-input', d.wRight);
+        setVal('.w-left-input', d.wLeft);
+
+        setVal('.sl-sashes', d.slSashes);
+        setVal('.sl-meeting', d.slMeeting);
+        setVal('.sl-div', d.slDiv);
+        setChk('.cb-slat-blind', d.cbSlatBlind);
+        setChk('.cb-net', d.cbNet);
+        setChk('.cb-monoblock', d.cbMonoblock);
+        const cbMono = card.querySelector('.cb-monoblock');
+        if (cbMono) toggleMonoblock(cbMono);
+        setVal('.mono-h', d.monoH);
+        setVal('.mono-slat', d.monoSlat);
+        setVal('.mono-motor', d.monoMotor);
+
+        setChk('.cb-net-pull', d.cbNetPull);
+        setVal('.pkt-comp', d.pktComp);
+        setVal('.pkt-dir', d.pktDir);
+        setVal('.div-x', d.divX);
+        setVal('.div-y', d.divY);
+        setVal('.dr-top', d.drTop);
+        setVal('.dr-side', d.drSide);
+        setVal('.dr-closer', d.drCloser);
+        setVal('.sht-box', d.shtBox);
+        setVal('.sht-slat', d.shtSlat);
+        setVal('.sht-motor', d.shtMotor);
+
+        setVal('.prg-type', d.prgType);
+        const prgTypeEl = card.querySelector('.prg-type');
+        if (prgTypeEl) togglePergolaPost(prgTypeEl);
+        setVal('.prg-post-h', d.prgPostH);
+        setVal('.prg-dir', d.prgDir);
+        setChk('.prg-gutter', d.prgGutter);
+
+        setVal('.fence-space', d.fenceSpace);
+
+        setVal('.joker-title', d.jokerTitle);
+        setVal('.joker-desc', d.jokerDesc);
+        setVal('.qty-input-joker', d.qtyJoker);
+        setVal('.price-input-joker', d.priceJoker);
+        if (d.jokerImg) {
+            const imgContainer = card.querySelector('.img-container');
+            const imgEl = card.querySelector('.img-display');
+            if (imgContainer && imgEl) {
+                imgEl.src = d.jokerImg;
+                imgContainer.style.display = 'block';
             }
+        }
+    }
+
+    function serializeCurrentQuote() {
+        const items = [];
+        document.querySelectorAll('.item-card').forEach(card => {
+            items.push(extractCardData(card));
         });
-        const data = {
-            html: document.getElementById('itemsContainer').innerHTML,
+        return {
+            version: 2,
+            savedAt: new Date().toLocaleString('he-IL'),
             client: document.getElementById('clientName').value,
+            phone: document.getElementById('clientPhone').value,
             qDate: document.getElementById('quoteDate').value,
             qNum: document.getElementById('quoteNumber').value,
             install: document.getElementById('installationCost').value,
-            itemCount: itemCount
+            discount: document.getElementById('discountCost').value,
+            notes: document.getElementById('generalNotes').value,
+            totalText: document.getElementById('totalFinal').innerText,
+            items: items
         };
-        localStorage.setItem('myAlumDraft', JSON.stringify(data));
-        alert('הטיוטה נשמרה בהצלחה במכשיר!');
+    }
+
+    function saveDraft() {
+        calculateAll(false);
+        const data = serializeCurrentQuote();
+        safeSetStorage('myAlumDraft', JSON.stringify(data));
+
+        // עדכון מונה הצעות אוטומטי
+        const qNumInt = parseInt(data.qNum, 10) || 1;
+        const savedMax = parseInt(safeGetStorage('quoteCounter', '1'), 10) || 1;
+        if (qNumInt >= savedMax) {
+            safeSetStorage('quoteCounter', qNumInt);
+        }
+
+        // שמירה בארכיון הצעות מחיר
+        let archive = [];
+        try {
+            archive = JSON.parse(safeGetStorage('myAlumQuotesArchive', '[]') || '[]');
+        } catch (e) { archive = []; }
+        const existingIdx = archive.findIndex(x => String(x.qNum) === String(data.qNum) && x.client === data.client);
+        if (existingIdx >= 0) {
+            archive[existingIdx] = data;
+        } else {
+            archive.unshift(data);
+            if (archive.length > 35) archive.pop();
+        }
+        safeSetStorage('myAlumQuotesArchive', JSON.stringify(archive));
+        showToast(`ההצעה נשמרה בהצלחה (הצעה מס' ${data.qNum})`);
+    }
+
+    function loadQuoteDataObject(data) {
+        if (!data) return;
+        document.getElementById('clientName').value = data.client || '';
+        document.getElementById('clientPhone').value = data.phone || '';
+        document.getElementById('quoteDate').value = data.qDate || '';
+        document.getElementById('quoteNumber').value = data.qNum || '1';
+        document.getElementById('installationCost').value = data.install || '';
+        document.getElementById('discountCost').value = data.discount || '';
+        document.getElementById('generalNotes').value = data.notes || '';
+
+        const container = document.getElementById('itemsContainer');
+        container.innerHTML = '';
+        itemCount = 0;
+
+        if (Array.isArray(data.items) && data.items.length > 0) {
+            data.items.forEach(itemData => {
+                const card = addItem(true);
+                applyCardData(card, itemData);
+            });
+        } else if (data.html) {
+            // תמיכה לאחור בטיוטה מהגרסה הישנה
+            container.innerHTML = data.html;
+            renumberItems();
+        } else {
+            addItem(true);
+        }
+        calculateAll(false);
     }
 
     function loadDraft() {
-        const data = JSON.parse(localStorage.getItem('myAlumDraft'));
-        if(!data) return;
-        document.getElementById('clientName').value = data.client || '';
-        document.getElementById('quoteDate').value = data.qDate || '';
-        document.getElementById('quoteNumber').value = data.qNum || '';
-        document.getElementById('installationCost').value = data.install || '';
-        document.getElementById('itemsContainer').innerHTML = data.html || '';
-        itemCount = data.itemCount || 0;
-        
-        document.getElementById('itemsContainer').querySelectorAll('input, select, textarea').forEach(el => {
-            if(el.type === 'checkbox') el.checked = el.hasAttribute('checked');
-            else if(el.tagName === 'SELECT') { const selectedOpt = el.querySelector('option[selected]'); if(selectedOpt) el.value = selectedOpt.value; }
-            else el.value = el.getAttribute('value') || '';
-        });
-        
-        document.getElementById('loginScreen').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.querySelector('.container').style.display = 'block';
-            document.getElementById('bottomNav').style.display = 'flex';
-        }, 500);
+        const raw = safeGetStorage('myAlumDraft');
+        if (!raw) {
+            showToast("לא נמצאה טיוטה שמורה במכשיר");
+            return;
+        }
+        try {
+            const data = JSON.parse(raw);
+            loadQuoteDataObject(data);
+            showToast("הטיוטה האחרונה נטענה בהצלחה");
+        } catch (e) {
+            showToast("שגיאה בטעינת הטיוטה");
+        }
     }
 
-    // --- הוספת מוצרים ---
-    function addItem() {
+    function openArchiveModal() {
+        let archive = [];
+        try {
+            archive = JSON.parse(safeGetStorage('myAlumQuotesArchive', '[]') || '[]');
+        } catch (e) { archive = []; }
+        const listEl = document.getElementById('archiveListContainer');
+        if (archive.length === 0) {
+            listEl.innerHTML = `<div style="text-align:center; padding:25px; color:var(--text-muted);">אין עדיין הצעות שמורות בארכיון.<br>לחץ על "💾 שמור הצעה" כדי לשמור הצעות כאן.</div>`;
+        } else {
+            listEl.innerHTML = archive.map((q, idx) => `
+                <div class="archive-item">
+                    <div class="archive-info">
+                        <div class="archive-title">הצעה #${q.qNum || 1} - ${q.client || 'לקוח ללא שם'}</div>
+                        <div class="archive-sub">${q.savedAt || ''} | ${(q.items ? q.items.length : 0)} מוצרים | ${q.totalText || ''}</div>
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                        <button type="button" class="btn-duplicate" onclick="loadFromArchive(${idx})">טען</button>
+                        <button type="button" class="btn-delete" onclick="deleteFromArchive(${idx})">מחק</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        document.getElementById('archiveModal').style.display = 'flex';
+    }
+
+    function loadFromArchive(idx) {
+        let archive = [];
+        try {
+            archive = JSON.parse(safeGetStorage('myAlumQuotesArchive', '[]') || '[]');
+        } catch (e) { archive = []; }
+        if (archive[idx]) {
+            loadQuoteDataObject(archive[idx]);
+            closeModal('archiveModal');
+            showToast(`נטענה הצעה #${archive[idx].qNum} (${archive[idx].client || 'לקוח'})`);
+        }
+    }
+
+    function deleteFromArchive(idx) {
+        let archive = [];
+        try {
+            archive = JSON.parse(safeGetStorage('myAlumQuotesArchive', '[]') || '[]');
+        } catch (e) { archive = []; }
+        archive.splice(idx, 1);
+        safeSetStorage('myAlumQuotesArchive', JSON.stringify(archive));
+        openArchiveModal();
+        showToast("ההצעה נמחקה מהארכיון");
+    }
+
+    // --- הוספה, שכפול ומחיקת מוצרים ---
+    function renumberItems() {
+        const cards = document.querySelectorAll('.item-card');
+        itemCount = cards.length;
+        cards.forEach((c, idx) => {
+            c.id = `item-${idx + 1}`;
+            const titleEl = c.querySelector('.card-title');
+            if (titleEl) titleEl.innerText = `מוצר #${idx + 1}`;
+        });
+    }
+
+    function removeItemCard(btn) {
+        const card = btn.closest('.card');
+        if (!card) return;
+        card.remove();
+        renumberItems();
+        calculateAll(false);
+    }
+
+    function duplicateItemCard(btn) {
+        const sourceCard = btn.closest('.card');
+        if (!sourceCard) return;
+        const data = extractCardData(sourceCard);
+        const newCard = addItem(true);
+        applyCardData(newCard, data);
+        renumberItems();
+        calculateAll(false);
+        showToast("המוצר שוכפל בהצלחה");
+    }
+
+    function addItem(skipScroll = false) {
         itemCount++;
         const container = document.getElementById('itemsContainer');
         const div = document.createElement('div');
-        div.className = 'card fade-in item-card';
+        div.className = 'card item-card';
         div.id = `item-${itemCount}`;
+        div.dataset.prgSketchMode = 'both';
         
         div.innerHTML = `
             <div class="card-header-row">
                 <div class="card-title">מוצר #${itemCount}</div>
-                <button class="btn-delete" onclick="this.closest('.card').remove()">מחק</button>
+                <div class="card-actions-inline">
+                    <button type="button" class="btn-duplicate" onclick="duplicateItemCard(this)">📋 שכפל</button>
+                    <button type="button" class="btn-delete" onclick="removeItemCard(this)">🗑️ מחק</button>
+                </div>
             </div>
 
             <label>בחר סוג מוצר:</label>
-            <select class="item-type" onchange="updateItemFields(this)">
+            <select class="item-type" onchange="updateItemFields(this); calculateAll(false);">
                 <option value="sliding">חלון הזזה</option>
                 <option value="pocket">חלון כיס (Pocket)</option>
                 <option value="hinge">חלון ציר (רגיל)</option>
@@ -337,25 +1189,25 @@
                 <option value="pergola">פרגולות</option>
                 <option value="fence">גדרות</option>
                 <option value="shower">מקלחונים</option>
-                <option value="joker">כללי</option>
+                <option value="joker">כללי (מותאם אישית)</option>
             </select>
 
             <div class="extra-panel"></div>
 
             <div class="standard-inputs">
-                <label>סוג פרופיל:</label>
+                <label>סוג פרופיל / דגם:</label>
                 <div style="display:flex; gap:8px; align-items:stretch;">
-                    <select class="profile-select" style="flex:1;"></select>
+                    <select class="profile-select" style="flex:1;" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"></select>
                     <button type="button" class="btn-add-profile" onclick="addNewProfilePrompt(this)">➕ הוסף</button>
                 </div>
                 
                 <div class="alum-color-section">
-                    <label style="margin-top:10px">גוון אלומיניום:</label>
-                    <input type="text" class="color-shade" placeholder="הקלד גוון ידנית (למשל: לבן 9016 / IRON 420)">
+                    <label>גוון אלומיניום:</label>
+                    <input type="text" class="color-shade" placeholder="למשל: לבן 9016 / שחור מגורען / IRON 420" oninput="refreshLiveSketchIfOpen(this.closest('.card'))">
                 </div>
 
                 <div class="glass-section">
-                    <label style="margin-top:10px">זכוכית:</label>
+                    <label>זכוכית:</label>
                     <div class="row">
                         <select class="glass-type"></select>
                         <select class="glass-finish"></select>
@@ -363,47 +1215,56 @@
                 </div>
 
                 <div class="dims-section">
-                    <div class="row" style="margin-top:15px">
-                        <div><label>רוחב (ס"מ)</label><input type="number" class="w-input" placeholder="100"></div>
-                        <div><label>גובה (ס"מ)</label><input type="number" class="h-input" placeholder="100"></div>
+                    <div class="row" style="margin-top:6px">
+                        <div><label class="w-label">רוחב (ס"מ)</label><input type="number" class="w-input" placeholder="100" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                        <div><label class="h-label">גובה (ס"מ)</label><input type="number" class="h-input" placeholder="100" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
                     </div>
                 </div>
                 
-                <div class="row" style="margin-top:10px;">
+                <div class="row" style="margin-top:4px;">
                      <div class="opening-dir-container" style="display:none; flex:1">
-                        <label>כיוון פתיחה:</label>
-                        <select class="open-dir">
+                        <label>כיוון פתיחה (צירים):</label>
+                        <select class="open-dir" onchange="refreshLiveSketchIfOpen(this.closest('.card'))">
                             <option value="right">ימין</option>
                             <option value="left">שמאל</option>
                         </select>
                      </div>
                 </div>
 
+                <label>הערה למוצר (אופציונלי):</label>
+                <input type="text" class="item-notes" placeholder="לדוגמה: ידית בהתקנה נמוכה / פירוק חלון קיים">
+
                 <div class="row">
-                    <div><label>כמות</label><input type="number" class="qty-input" value="1"></div>
-                    <div><label style="color:var(--primary)">מחיר יח' (₪)</label><input type="number" class="price-input" placeholder="מחיר פיקס"></div>
+                    <div><label>כמות</label><input type="number" class="qty-input" value="1" min="1" oninput="calculateAll(false)"></div>
+                    <div><label style="color:var(--primary)">מחיר יח' (₪)</label><input type="number" class="price-input" placeholder="מחיר פיקס" oninput="calculateAll(false)"></div>
                 </div>
                 
-                <button class="btn-download-sketch" onclick="generateSketch(this)">📸 צור שרטוט אדריכלי</button>
+                <div class="sketch-actions-row">
+                    <button type="button" class="btn-preview-sketch" onclick="toggleLiveSketch(this)">👁️ תצוגת שרטוט חיה</button>
+                    <button type="button" class="btn-download-sketch" onclick="generateSketch(this)">📸 הורד שרטוט (PNG)</button>
+                </div>
+                <div class="live-sketch-box">
+                    <img class="live-sketch-img" alt="תצוגה מקדימה של השרטוט">
+                </div>
             </div>
             
             <div class="joker-panel" style="display:none">
-                <label>כותרת העבודה:</label><input type="text" class="joker-title">
-                <label>תיאור מפורט:</label><textarea class="joker-desc" rows="3"></textarea>
-                <div class="row" style="margin-top:10px">
-                     <button class="btn-login" style="background:#4a5568" onclick="openDrawing(this)">🎨 צייר שרטוט</button>
+                <label>כותרת העבודה:</label><input type="text" class="joker-title" placeholder="לדוגמה: סגירת מרפסת / תיקון מנוע">
+                <label>תיאור מפורט:</label><textarea class="joker-desc" rows="3" placeholder="פרט כאן את תכולת העבודה..."></textarea>
+                <div class="row" style="margin-top:6px">
+                     <button type="button" class="btn-login" style="background:#4a5568; margin-top:0;" onclick="openDrawing(this)">🎨 צייר שרטוט ידני</button>
                      <div style="flex:1; position:relative; overflow:hidden;">
-                        <button class="btn-login" style="background:#2d3748; width:100%">📂 העלה תמונה</button>
-                        <input type="file" style="position:absolute; top:0; left:0; opacity:0; width:100%; height:100%" accept="image/*" onchange="previewImage(this)">
+                        <button type="button" class="btn-login" style="background:#2d3748; width:100%; margin-top:0;">📂 העלה תמונה</button>
+                        <input type="file" style="position:absolute; top:0; left:0; opacity:0; width:100%; height:100%; cursor:pointer;" accept="image/*" onchange="previewImage(this)">
                      </div>
                 </div>
                 <div class="img-container" style="position:relative; margin-top:10px; display:none">
                     <img class="img-display" style="width:100%; border-radius:10px; border:1px solid #ccc">
-                    <button class="btn-delete" style="position:absolute; top:5px; left:5px; background:rgba(255,255,255,0.9)" onclick="clearJokerImage(this)">🗑️ מחק שרטוט</button>
+                    <button type="button" class="btn-delete" style="position:absolute; top:8px; left:8px; background:rgba(255,255,255,0.95)" onclick="clearJokerImage(this)">🗑️ מחק שרטוט</button>
                 </div>
-                <div class="row" style="margin-top:15px">
-                    <div><label>כמות</label><input type="number" class="qty-input-joker" value="1"></div>
-                    <div><label style="color:var(--primary)">מחיר גלובלי (₪)</label><input type="number" class="price-input-joker"></div>
+                <div class="row" style="margin-top:14px">
+                    <div><label>כמות</label><input type="number" class="qty-input-joker" value="1" min="1" oninput="calculateAll(false)"></div>
+                    <div><label style="color:var(--primary)">מחיר יח' / גלובלי (₪)</label><input type="number" class="price-input-joker" placeholder="0" oninput="calculateAll(false)"></div>
                 </div>
             </div>
         `;
@@ -416,11 +1277,53 @@
 
         populateProfileSelect(div.querySelector('.profile-select'));
         updateItemFields(div.querySelector('.item-type'));
+        renumberItems();
+        if (!skipScroll && itemCount > 1) {
+            div.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return div;
     }
 
     function toggleMonoblock(cb) {
         const opts = cb.closest('.extra-panel').querySelector('.monoblock-options');
-        if(opts) opts.style.display = cb.checked ? 'block' : 'none';
+        if (opts) opts.style.display = cb.checked ? 'block' : 'none';
+        refreshLiveSketchIfOpen(cb.closest('.card'));
+    }
+
+    function setPergolaSketchMode(btn, mode) {
+        const card = btn.closest('.card');
+        if (!card) return;
+        card.dataset.prgSketchMode = mode;
+        card.querySelectorAll('.view-pill').forEach(p => {
+            p.classList.toggle('active', p.dataset.mode === mode);
+        });
+        // פתיחה אוטומטית של תצוגת השרטוט החיה כדי שהמשתמש יראה מיד את ההחלפה
+        const liveBox = card.querySelector('.live-sketch-box');
+        if (liveBox) {
+            liveBox.style.display = 'block';
+            refreshLiveSketchIfOpen(card);
+        }
+    }
+
+    function toggleLiveSketch(btn) {
+        const card = btn.closest('.card');
+        const liveBox = card.querySelector('.live-sketch-box');
+        if (liveBox.style.display === 'block') {
+            liveBox.style.display = 'none';
+        } else {
+            liveBox.style.display = 'block';
+            refreshLiveSketchIfOpen(card);
+        }
+    }
+
+    function refreshLiveSketchIfOpen(card) {
+        if (!card) return;
+        const liveBox = card.querySelector('.live-sketch-box');
+        if (liveBox && liveBox.style.display === 'block') {
+            const cnv = createSketchCanvas(card);
+            const img = liveBox.querySelector('.live-sketch-img');
+            if (img) img.src = cnv.toDataURL();
+        }
     }
 
     function updateItemFields(select) {
@@ -435,29 +1338,38 @@
         const dimsSection = card.querySelector('.dims-section');
         const alumSection = card.querySelector('.alum-color-section');
 
-        if(type === 'joker') {
-            stdInputs.style.display = 'none'; extraPanel.style.display = 'none'; jokerPanel.style.display = 'block'; return;
+        if (type === 'joker') {
+            stdInputs.style.display = 'none';
+            extraPanel.style.display = 'none';
+            jokerPanel.style.display = 'block';
+            return;
         }
-        stdInputs.style.display = 'block'; jokerPanel.style.display = 'none';
+        stdInputs.style.display = 'block';
+        jokerPanel.style.display = 'none';
         
         dirContainer.style.display = (type === 'hinge' || type === 'tilt_turn' || type === 'door') ? 'block' : 'none';
 
-        if(type === 'pergola' || type === 'fence' || type === 'shutter' || type === 'screen_roll') {
+        if (type === 'pergola' || type === 'fence' || type === 'shutter' || type === 'screen_roll') {
             glassSection.style.display = 'none';
         } else {
             glassSection.style.display = 'block';
             const glassTypeSelect = card.querySelector('.glass-type');
+            const prevGlass = glassTypeSelect.value;
             glassTypeSelect.innerHTML = "";
             const list = (type === 'shower') ? showerGlass : glassTypes.types;
-            list.forEach(t => glassTypeSelect.innerHTML += `<option value="${t}">${t}</option>`);
-            
+            list.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t; opt.innerText = t;
+                if (t === prevGlass) opt.selected = true;
+                glassTypeSelect.appendChild(opt);
+            });
             const glassFinishSelect = card.querySelector('.glass-finish');
             if (glassFinishSelect.options.length === 0) {
-                 glassTypes.finish.forEach(f => glassFinishSelect.innerHTML += `<option value="${f}">${f}</option>`);
+                glassTypes.finish.forEach(f => glassFinishSelect.innerHTML += `<option value="${f}">${f}</option>`);
             }
         }
         
-        if (type === 'shower') { alumSection.style.display = 'none'; } else { alumSection.style.display = 'block'; }
+        alumSection.style.display = (type === 'shower') ? 'none' : 'block';
 
         if (profSelect.options.length === 0) {
             populateProfileSelect(profSelect);
@@ -466,78 +1378,181 @@
         if (type === 'shower') {
             extraPanel.innerHTML = `
                 <div class="shower-options">
-                    <label>תצורה:</label>
-                    <select class="shower-config" onchange="updateShowerDims(this)">
+                    <label>תצורת מקלחון:</label>
+                    <select class="shower-config" onchange="updateShowerDims(this); refreshLiveSketchIfOpen(this.closest('.card'));">
                         <option value="front">חזית (בין קירות)</option>
                         <option value="corner">פינתי (90°)</option>
                     </select>
-                    <div class="shower-layout-ui" style="margin-top:10px;"></div>
-                    <label style="margin-top:10px;">פרזול ותוספות:</label>
+                    <div class="shower-layout-ui" style="margin-top:8px;"></div>
+                    <label style="margin-top:8px;">פרזול וגימור:</label>
                     <div class="row">
-                        <select class="handle-type"><option value="knob">ידית כפתור</option><option value="towel">ידית מגבת</option></select>
-                        <select class="hardware-color"><option>ניקל מבריק</option><option>ניקל מט</option><option>שחור מט</option><option>זהב</option></select>
+                        <select class="handle-type" onchange="refreshLiveSketchIfOpen(this.closest('.card'))">
+                            <option value="knob">ידית כפתור</option>
+                            <option value="towel">ידית מגבת</option>
+                        </select>
+                        <select class="hardware-color" onchange="refreshLiveSketchIfOpen(this.closest('.card'))">
+                            <option>ניקל מבריק</option>
+                            <option>ניקל מט</option>
+                            <option>שחור מט</option>
+                            <option>זהב</option>
+                        </select>
                     </div>
-                    <div class="checkbox-row"><input type="checkbox" class="cb-stab"> <span>מוט חיזוק (קבוע)</span></div>
-                    <div class="checkbox-row"><input type="checkbox" class="cb-seal"> <span>סף מים (ספוילר)</span></div>
+                    <label class="checkbox-row"><input type="checkbox" class="cb-stab" checked onchange="refreshLiveSketchIfOpen(this.closest('.card'))"> <span>מוט חיזוק עליון (קבוע)</span></label>
+                    <label class="checkbox-row"><input type="checkbox" class="cb-seal" checked onchange="refreshLiveSketchIfOpen(this.closest('.card'))"> <span>סף מים תחתון (ספוילר)</span></label>
                 </div>
             `;
             extraPanel.style.display = 'block';
             updateShowerDims(extraPanel.querySelector('.shower-config'));
+            refreshLiveSketchIfOpen(card);
             return;
         }
         
         if (type === 'fixed' || type === 'showcase') {
             dimsSection.innerHTML = `
-                <div class="row" style="margin-top:15px">
-                    <div><label>רוחב (ס"מ)</label><input type="number" class="w-input" placeholder="100"></div>
-                    <div><label>גובה ימין</label><input type="number" class="h-right-input" placeholder="100"></div>
-                    <div><label>גובה שמאל</label><input type="number" class="h-left-input" placeholder="100"></div>
+                <div class="row" style="margin-top:6px">
+                    <div><label>רוחב (ס"מ)</label><input type="number" class="w-input" placeholder="120" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                    <div><label>גובה ימין (ס"מ)</label><input type="number" class="h-right-input" placeholder="100" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                    <div><label>גובה שמאל (ס"מ)</label><input type="number" class="h-left-input" placeholder="100" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
                 </div>
             `;
-            extraPanel.innerHTML = `<div class="row"><div><label>חלוקות לאורך (עמודים)</label><input type="number" class="div-x" value="0"></div><div><label>חלוקות לרוחב (קושרות)</label><input type="number" class="div-y" value="0"></div></div>`;
+            extraPanel.innerHTML = `
+                <div class="row">
+                    <div><label>חלוקות לאורך (עמודים)</label><input type="number" class="div-x" value="0" min="0" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                    <div><label>חלוקות לרוחב (קושרות)</label><input type="number" class="div-y" value="0" min="0" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                </div>
+            `;
             extraPanel.style.display = 'block';
+            refreshLiveSketchIfOpen(card);
             return;
-        } 
+        }
         
-        dimsSection.innerHTML = `<div class="row" style="margin-top:15px"><div><label>רוחב (ס"מ)</label><input type="number" class="w-input" placeholder="100"></div><div><label>גובה (ס"מ)</label><input type="number" class="h-input" placeholder="100"></div></div>`;
+        const hLabelText = (type === 'pergola') ? 'עומק / יציאה (ס"מ)' : 'גובה (ס"מ)';
+        const wPlaceholder = (type === 'pergola') ? '400' : '100';
+        const hPlaceholder = (type === 'pergola') ? '300' : '100';
+        dimsSection.innerHTML = `
+            <div class="row" style="margin-top:6px">
+                <div><label class="w-label">רוחב (ס"מ)</label><input type="number" class="w-input" placeholder="${wPlaceholder}" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                <div><label class="h-label">${hLabelText}</label><input type="number" class="h-input" placeholder="${hPlaceholder}" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+            </div>
+        `;
 
         let html = '';
-        if(type === 'sliding') { 
+        if (type === 'sliding') {
             html = `
-            <div class="row"><div><label>מס' כנפיים</label><input type="number" class="sl-sashes" value="2"></div><div><label>סוג מפגש</label><select class="sl-meeting"><option value="side">צד לצד</option><option value="center">מפגש מרכזי</option></select></div></div><label>חלוקה:</label><select class="sl-div"><option value="none">ללא</option><option value="strips">פסים</option><option value="grid">קוביות</option></select>
-            <div style="margin-top:10px; border-top:1px solid #ccc; padding-top:10px;">
-                <div class="checkbox-row"><input type="checkbox" class="cb-slat-blind"> <span>תריס שלבים</span></div>
-                <div class="checkbox-row"><input type="checkbox" class="cb-net"> <span>רשת</span></div>
-                <div class="checkbox-row"><input type="checkbox" class="cb-monoblock" onchange="toggleMonoblock(this)"> <span style="font-weight:bold; color:var(--primary)">תריס מונובלוק</span></div>
-                <div class="monoblock-options" style="display:none; background:#e2e8f0; padding:10px; border-radius:8px; margin-top:5px;">
-                    <div class="row"><div><label>גובה ארגז (ס"מ)</label><input type="number" class="mono-h" value="28"></div><div><label>שלב</label><select class="mono-slat"><option>שלב אור</option><option>מוקצף</option></select></div></div>
-                    <div class="row" style="margin-top:10px"><div><label>מנוע</label><select class="mono-motor"><option>חשמלי</option><option>ידני</option><option>סומפי</option></select></div></div>
+            <div class="row">
+                <div><label>מס' כנפיים</label><input type="number" class="sl-sashes" value="2" min="2" max="6" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                <div><label>סוג מפגש</label><select class="sl-meeting" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"><option value="side">צד לצד</option><option value="center">מפגש מרכזי</option></select></div>
+            </div>
+            <label>חלוקה דקורטיבית בכנף:</label>
+            <select class="sl-div" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"><option value="none">ללא חלוקה (זכוכית חלקה)</option><option value="strips">פסים אופקיים</option><option value="grid">קוביות (בלגי)</option></select>
+            <div style="margin-top:8px; border-top:1px solid #cbd5e0; padding-top:8px;">
+                <label class="checkbox-row"><input type="checkbox" class="cb-slat-blind" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"> <span>תריס שלבים הזזה</span></label>
+                <label class="checkbox-row"><input type="checkbox" class="cb-net" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"> <span>רשת הזזה</span></label>
+                <label class="checkbox-row"><input type="checkbox" class="cb-monoblock" onchange="toggleMonoblock(this)"> <span style="font-weight:700; color:var(--primary)">תריס מונובלוק עליון</span></label>
+                <div class="monoblock-options" style="display:none; background:#e2e8f0; padding:10px; border-radius:8px; margin-top:6px;">
+                    <div class="row">
+                        <div><label>גובה ארגז (ס"מ)</label><input type="number" class="mono-h" value="28" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                        <div><label>סוג שלב</label><select class="mono-slat" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"><option>שלב אור</option><option>מוקצף</option><option>שלב משוך</option></select></div>
+                    </div>
+                    <div class="row" style="margin-top:4px">
+                        <div><label>הפעלה / מנוע</label><select class="mono-motor"><option>חשמלי</option><option>סומפי (Somfy)</option><option>ידני (רצועה)</option></select></div>
+                    </div>
                 </div>
-            </div>`; 
-        }
-        else if(type === 'hinge') { 
+            </div>`;
+        } else if (type === 'hinge') {
             html = `
-            <div style="margin-top:10px; border-top:1px solid #ccc; padding-top:10px;">
-                <div class="checkbox-row"><input type="checkbox" class="cb-monoblock" onchange="toggleMonoblock(this)"> <span style="font-weight:bold; color:var(--primary)">תריס מונובלוק</span></div>
-                <div class="monoblock-options" style="display:none; background:#e2e8f0; padding:10px; border-radius:8px; margin-top:5px;">
-                    <div class="row"><div><label>גובה ארגז (ס"מ)</label><input type="number" class="mono-h" value="28"></div><div><label>שלב</label><select class="mono-slat"><option>שלב אור</option><option>מוקצף</option></select></div></div>
-                    <div class="row" style="margin-top:10px"><div><label>מנוע</label><select class="mono-motor"><option>חשמלי</option><option>ידני</option><option>סומפי</option></select></div></div>
+            <div style="margin-top:4px;">
+                <label class="checkbox-row"><input type="checkbox" class="cb-net" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"> <span>רשת קבועה / נשלפת</span></label>
+                <label class="checkbox-row"><input type="checkbox" class="cb-monoblock" onchange="toggleMonoblock(this)"> <span style="font-weight:700; color:var(--primary)">תריס מונובלוק עליון</span></label>
+                <div class="monoblock-options" style="display:none; background:#e2e8f0; padding:10px; border-radius:8px; margin-top:6px;">
+                    <div class="row">
+                        <div><label>גובה ארגז (ס"מ)</label><input type="number" class="mono-h" value="28" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                        <div><label>סוג שלב</label><select class="mono-slat"><option>שלב אור</option><option>מוקצף</option></select></div>
+                    </div>
+                    <div class="row" style="margin-top:4px">
+                        <div><label>הפעלה / מנוע</label><select class="mono-motor"><option>חשמלי</option><option>סומפי (Somfy)</option><option>ידני</option></select></div>
+                    </div>
                 </div>
-            </div>`; 
+            </div>`;
+        } else if (type === 'kipp' || type === 'tilt_turn') {
+            html = `<div style="margin-top:4px;"><label class="checkbox-row"><input type="checkbox" class="cb-net-pull" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"> <span>רשת נשלפת</span></label></div>`;
+        } else if (type === 'pocket') {
+            html = `
+            <div class="row">
+                <div><label>הרכב כנף:</label><select class="pkt-comp" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"><option>זכוכית בלבד</option><option>זכוכית + תריס</option><option>זכוכית + תריס + רשת</option></select></div>
+                <div><label>כיוון כיס:</label><select class="pkt-dir" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"><option value="right">כיס לימין</option><option value="left">כיס לשמאל</option></select></div>
+            </div>`;
+        } else if (type === 'door') {
+            html = `
+            <label>תוספות קבועים (ס"מ - השאר ריק אם אין):</label>
+            <div class="row">
+                <div><input type="number" class="dr-top" placeholder="גובה קבוע עליון (למשל 40)" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                <div><input type="number" class="dr-side" placeholder="רוחב קבוע צד (למשל 35)" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+            </div>
+            <label>מחזיר שמן:</label>
+            <select class="dr-closer" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"><option value="none">ללא</option><option value="top">מחזיר שמן חיצוני עליון</option><option value="floor">משאבה רצפתית</option></select>`;
+        } else if (type === 'shutter') {
+            html = `
+            <div class="row">
+                <div><label>סוג ארגז</label><select class="sht-box" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"><option value="hidden">פנימי / נסתר</option><option value="external">חיצוני</option></select></div>
+                <div><label>סוג שלב</label><select class="sht-slat" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"><option value="light">שלב אור</option><option value="foam">מוקצף</option><option value="pulled">שלב משוך</option></select></div>
+            </div>
+            <div class="row">
+                <div><label>הפעלה / מנוע</label><select class="sht-motor"><option>חשמלי</option><option>סומפי (Somfy)</option><option>ידני</option></select></div>
+            </div>`;
+        } else if (type === 'pergola') {
+            const curMode = card.dataset.prgSketchMode || 'both';
+            html = `
+            <div class="row">
+                <div>
+                    <label>סוג התקנה</label>
+                    <select class="prg-type" onchange="togglePergolaPost(this); refreshLiveSketchIfOpen(this.closest('.card'))">
+                        <option value="wall">תלויה (ללא עמודים)</option>
+                        <option value="stand">עומדת (כולל עמודים)</option>
+                    </select>
+                </div>
+                <div class="prg-post-div" style="display:none">
+                    <label>גובה עמודים (ס"מ)</label>
+                    <input type="number" class="prg-post-h" value="250" placeholder="250" oninput="refreshLiveSketchIfOpen(this.closest('.card'))">
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label>כיוון הצללה (רפפות)</label>
+                    <select class="prg-dir" onchange="refreshLiveSketchIfOpen(this.closest('.card'))">
+                        <option value="width">לרוחב (מקביל לקיר)</option>
+                        <option value="length">לאורך (ניצב לקיר)</option>
+                        <option value="grid">שתי וערב (כוורת)</option>
+                    </select>
+                </div>
+                <div style="display:flex; align-items:center; padding-top:26px;">
+                    <label class="checkbox-row" style="margin:0;"><input type="checkbox" class="prg-gutter" checked onchange="refreshLiveSketchIfOpen(this.closest('.card'))"> <span>כולל מרזב ניקוז</span></label>
+                </div>
+            </div>
+            <label style="margin-top:6px; color:var(--primary);">בחר אופן תצוגת שרטוט פרגולה:</label>
+            <div class="view-mode-pills">
+                <button type="button" class="view-pill ${curMode==='plan'?'active':''}" data-mode="plan" onclick="setPergolaSketchMode(this, 'plan')">📐 מבט על (גג)</button>
+                <button type="button" class="view-pill ${curMode==='elevation'?'active':''}" data-mode="elevation" onclick="setPergolaSketchMode(this, 'elevation')">🏛️ מבט חזית</button>
+                <button type="button" class="view-pill ${curMode==='both'?'active':''}" data-mode="both" onclick="setPergolaSketchMode(this, 'both')">✨ משולב (שניהם)</button>
+            </div>`;
+        } else if (type === 'fence') {
+            html = `<label>מרווח בין שלבים (ס"מ):</label><input type="number" class="fence-space" value="2" min="0" step="0.5" placeholder="2" oninput="refreshLiveSketchIfOpen(this.closest('.card'))">`;
         }
-        else if(type === 'kipp' || type === 'tilt_turn') { 
-            html = `<div style="margin-top:10px; border-top:1px solid #ccc; padding-top:10px;"><div class="checkbox-row"><input type="checkbox" class="cb-net-pull"> <span>רשת נשלפת</span></div></div>`; 
-        }
-        else if(type === 'pocket') { html = `<label>הרכב כנף:</label><select class="pkt-comp"><option>זכוכית בלבד</option><option>זכוכית + תריס</option><option>זכוכית + תריס + רשת</option></select><label>כיוון כיס:</label><select class="pkt-dir"><option value="right">ימין</option><option value="left">שמאל</option></select>`; }
-        else if(type === 'door') { html = `<label>תוספות קבועים:</label><div class="row"><input type="number" class="dr-top" placeholder="גובה קבוע עליון"><input type="number" class="dr-side" placeholder="רוחב קבוע צד"></div><label style="margin-top:10px">מחזיר שמן:</label><select class="dr-closer"><option value="none">ללא</option><option value="top">חיצוני</option><option value="floor">רצפתי</option></select>`; }
-        else if(type === 'shutter') { html = `<div class="row"><div><label>ארגז</label><select class="sht-box"><option value="hidden">פנימי/נסתר</option><option value="external">חיצוני</option></select></div><div><label>שלב</label><select class="sht-slat"><option value="light">שלב אור</option><option value="foam">מוקצף</option></select></div></div><div class="row" style="margin-top:10px"><div><label>מנוע</label><select class="sht-motor"><option>חשמלי</option><option>ידני</option><option>סומפי</option></select></div></div>`; }
-        else if(type === 'pergola') { html = `<div class="row"><div><label>סוג</label><select class="prg-type" onchange="togglePergolaPost(this)"><option value="wall">תלויה</option><option value="stand">עומדת</option></select></div><div class="prg-post-div" style="display:none"><label>גובה עמוד (ס"מ)</label><input type="number" class="prg-post-h" placeholder="250"></div></div><div class="row" style="margin-top:10px"><div><label>כיוון הצללה</label><select class="prg-dir"><option value="width">לרוחב (פסים)</option><option value="length">לאורך (פסים)</option><option value="grid">שתי וערב (כוורת)</option></select></div><div style="display:flex; align-items:center;"><input type="checkbox" class="prg-gutter" style="width:20px; height:20px"> <span style="margin-right:10px">מרזב</span></div></div>`; }
-        else if(type === 'fence') { html = `<label>מרווח בין שלבים (ס"מ):</label><input type="number" class="fence-space" value="2" placeholder="לדוגמה: 2">`; }
         
-        if(html) { extraPanel.innerHTML = html; extraPanel.style.display = 'block'; } else { extraPanel.style.display = 'none'; }
+        if (html) {
+            extraPanel.innerHTML = html;
+            extraPanel.style.display = 'block';
+        } else {
+            extraPanel.innerHTML = '';
+            extraPanel.style.display = 'none';
+        }
+        refreshLiveSketchIfOpen(card);
     }
 
-    function togglePergolaPost(select) { select.closest('.extra-panel').querySelector('.prg-post-div').style.display = select.value === 'stand' ? 'block' : 'none'; }
+    function togglePergolaPost(select) {
+        const postDiv = select.closest('.extra-panel').querySelector('.prg-post-div');
+        if (postDiv) postDiv.style.display = (select.value === 'stand') ? 'block' : 'none';
+    }
 
     function updateShowerDims(select) {
         const card = select.closest('.card');
@@ -546,550 +1561,1271 @@
         const layoutUI = card.querySelector('.shower-layout-ui');
         
         if (config === 'front') {
-            dimsSection.innerHTML = `<div class="row" style="margin-top:15px"><div><label>רוחב פתח (ס"מ)</label><input type="number" class="w-input" placeholder="100"></div><div><label>גובה (ס"מ)</label><input type="number" class="h-input" placeholder="190"></div></div>`;
-            layoutUI.innerHTML = `<label>הרכב חזית:</label><select class="shower-layout-type"><option value="1wing">כנף אחת</option><option value="2wing">2 כנפיים (פרפר)</option><option value="fix_wing">קבוע + כנף</option><option value="sliding">חזית הזזה</option></select>`;
-        } else { // corner
-            dimsSection.innerHTML = `<div class="row" style="margin-top:15px"><div><label>רוחב ימין (ס"מ)</label><input type="number" class="w-right-input" placeholder="80"></div><div><label>רוחב שמאל (ס"מ)</label><input type="number" class="w-left-input" placeholder="80"></div><div><label>גובה (ס"מ)</label><input type="number" class="h-input" placeholder="190"></div></div>`;
-            layoutUI.innerHTML = `<div class="row"><div><label>צד ימין:</label><select class="shower-side-r"><option value="wing">דלת</option><option value="fix">קבוע</option><option value="fix_wing">קבוע+דלת</option></select></div><div><label>צד שמאל:</label><select class="shower-side-l"><option value="wing">דלת</option><option value="fix">קבוע</option><option value="fix_wing">קבוע+דלת</option></select></div></div>`;
+            dimsSection.innerHTML = `
+                <div class="row" style="margin-top:6px">
+                    <div><label>רוחב פתח (ס"מ)</label><input type="number" class="w-input" placeholder="120" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                    <div><label>גובה (ס"מ)</label><input type="number" class="h-input" placeholder="190" value="190" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                </div>`;
+            layoutUI.innerHTML = `
+                <label>הרכב חזית:</label>
+                <select class="shower-layout-type" onchange="refreshLiveSketchIfOpen(this.closest('.card'))">
+                    <option value="1wing">כנף אחת</option>
+                    <option value="2wing">2 כנפיים (פרפר)</option>
+                    <option value="fix_wing">קבוע + כנף</option>
+                    <option value="sliding">חזית הזזה</option>
+                </select>`;
+        } else {
+            dimsSection.innerHTML = `
+                <div class="row" style="margin-top:6px">
+                    <div><label>רוחב ימין (ס"מ)</label><input type="number" class="w-right-input" placeholder="80" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                    <div><label>רוחב שמאל (ס"מ)</label><input type="number" class="w-left-input" placeholder="80" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                    <div><label>גובה (ס"מ)</label><input type="number" class="h-input" placeholder="190" value="190" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                </div>`;
+            layoutUI.innerHTML = `
+                <div class="row">
+                    <div><label>צד ימין:</label><select class="shower-side-r" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"><option value="wing">דלת ציר</option><option value="fix">קבוע</option><option value="fix_wing">קבוע + דלת</option></select></div>
+                    <div><label>צד שמאל:</label><select class="shower-side-l" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"><option value="wing">דלת ציר</option><option value="fix">קבוע</option><option value="fix_wing">קבוע + דלת</option></select></div>
+                </div>`;
         }
     }
 
-    // --- ציור ידני ג'וקר ---
-    function openDrawing(btn) { activeDrawingBtn = btn; document.getElementById('drawingModal').style.display = 'flex'; initCanvas(); }
-    function closeDrawing() { document.getElementById('drawingModal').style.display = 'none'; }
+    // --- לוח ציור ידני מתוקן (יחס קואורדינטות מדויק במובייל ואירועים חד-פעמיים) ---
+    function initCanvasOnce() {
+        if (canvasInitialized) return;
+        canvas = document.getElementById('drawingPad');
+        if (!canvas) return;
+        ctx = canvas.getContext('2d');
+        clearCanvas();
+
+        canvas.addEventListener('touchstart', startDraw, { passive: false });
+        canvas.addEventListener('touchmove', draw, { passive: false });
+        canvas.addEventListener('touchend', stopDraw);
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDraw);
+        canvas.addEventListener('mouseleave', stopDraw);
+        canvasInitialized = true;
+    }
+
+    function getCanvasCoordinates(e) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : e.clientX;
+        const clientY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : e.clientY;
+        return {
+            x: (clientX - rect.left) * scaleX,
+            y: (clientY - rect.top) * scaleY
+        };
+    }
+
+    function startDraw(e) {
+        if (e.cancelable) e.preventDefault();
+        isDrawing = true;
+        const pos = getCanvasCoordinates(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        if (e.cancelable) e.preventDefault();
+        const pos = getCanvasCoordinates(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    }
+
+    function stopDraw() {
+        isDrawing = false;
+        if (ctx) ctx.beginPath();
+    }
+
+    function clearCanvas() {
+        if (!canvas || !ctx) return;
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "#1a202c";
+        ctx.lineWidth = 3.5;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.beginPath();
+    }
+
+    function openDrawing(btn) {
+        activeDrawingBtn = btn;
+        initCanvasOnce();
+        clearCanvas();
+        const existingImg = btn.closest('.joker-panel').querySelector('.img-display');
+        if (existingImg && existingImg.src && existingImg.src.startsWith('data:')) {
+            const tempImg = new Image();
+            tempImg.onload = () => {
+                ctx.drawImage(tempImg, 0, 0, canvas.width, canvas.height);
+            };
+            tempImg.src = existingImg.src;
+        }
+        document.getElementById('drawingModal').style.display = 'flex';
+    }
+
+    function closeDrawing() { closeModal('drawingModal'); }
+
+    function saveDrawing() {
+        if (!activeDrawingBtn) return;
+        const dataURL = canvas.toDataURL('image/png');
+        const container = activeDrawingBtn.closest('.joker-panel').querySelector('.img-container');
+        const img = container.querySelector('.img-display');
+        img.src = dataURL;
+        container.style.display = 'block';
+        closeDrawing();
+        showToast("השרטוט הידני נשמר בכרטיסיית המוצר");
+    }
+
     function previewImage(input) {
-        if(input.files && input.files[0]) {
+        if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const container = input.closest('.joker-panel').querySelector('.img-container');
                 const img = container.querySelector('.img-display');
                 img.src = e.target.result;
                 container.style.display = 'block';
-            }
+            };
             reader.readAsDataURL(input.files[0]);
         }
     }
+
     function clearJokerImage(btn) {
         const container = btn.closest('.img-container');
         container.querySelector('.img-display').src = "";
         container.style.display = "none";
-        btn.closest('.joker-panel').querySelector('input[type="file"]').value = "";
-    }
-    
-    let canvas, ctx, isDrawing = false;
-    function initCanvas() {
-        canvas = document.getElementById('drawingPad');
-        ctx = canvas.getContext('2d');
-        ctx.fillStyle = "white"; ctx.fillRect(0,0, canvas.width, canvas.height);
-        ctx.strokeStyle = "black"; ctx.lineWidth = 3; ctx.lineCap = "round";
-        canvas.addEventListener('touchstart', startDraw); canvas.addEventListener('touchmove', draw); canvas.addEventListener('touchend', stopDraw);
-        canvas.addEventListener('mousedown', startDraw); canvas.addEventListener('mousemove', draw); canvas.addEventListener('mouseup', stopDraw);
-    }
-    function startDraw(e) { isDrawing = true; draw(e); }
-    function stopDraw() { isDrawing = false; ctx.beginPath(); }
-    function draw(e) {
-        if (!isDrawing) return; e.preventDefault();
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX || e.touches[0].clientX) - rect.left;
-        const y = (e.clientY || e.touches[0].clientY) - rect.top;
-        ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y);
-    }
-    function clearCanvas() { ctx.fillStyle="white"; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.beginPath(); }
-    function saveDrawing() {
-        const dataURL = canvas.toDataURL();
-        const container = activeDrawingBtn.closest('.joker-panel').querySelector('.img-container');
-        const img = container.querySelector('.img-display');
-        img.src = dataURL;
-        container.style.display = 'block';
-        closeDrawing();
+        const fileInput = btn.closest('.joker-panel').querySelector('input[type="file"]');
+        if (fileInput) fileInput.value = "";
     }
 
-    // --- חישובים ותצוגה ---
-    function calculateAll() {
+    // --- חישובים חיים ומפורטים ---
+    function calculateAll(shouldScroll = false) {
         let itemsSum = 0;
+        let totalUnits = 0;
         document.querySelectorAll('.item-card').forEach(card => {
             const type = card.querySelector('.item-type').value;
             let q, p;
-            if(type === 'joker') {
+            if (type === 'joker') {
                 q = parseFloat(card.querySelector('.qty-input-joker').value) || 1;
                 p = parseFloat(card.querySelector('.price-input-joker').value) || 0;
             } else {
                 q = parseFloat(card.querySelector('.qty-input').value) || 1;
                 p = parseFloat(card.querySelector('.price-input').value) || 0;
             }
+            totalUnits += q;
             itemsSum += (q * p);
         });
         const install = parseFloat(document.getElementById('installationCost').value) || 0;
-        const totalSub = itemsSum + install;
-        const vat = totalSub * 0.18; 
+        const discount = parseFloat(document.getElementById('discountCost').value) || 0;
+        const totalSub = Math.max(0, itemsSum + install - discount);
+        const vat = Math.round(totalSub * 0.18 * 100) / 100;
         const final = totalSub + vat;
-        document.getElementById('itemsSubtotal').innerText = itemsSum.toLocaleString() + " ₪";
-        document.getElementById('installSubtotal').innerText = install.toLocaleString() + " ₪";
-        document.getElementById('totalSub').innerText = totalSub.toLocaleString() + " ₪";
-        document.getElementById('totalVat').innerText = vat.toLocaleString() + " ₪";
-        document.getElementById('totalFinal').innerText = final.toLocaleString() + " ₪";
+
+        document.getElementById('itemsCountLabel').innerText = totalUnits;
+        document.getElementById('itemsSubtotal').innerText = itemsSum.toLocaleString('he-IL') + " ₪";
+        document.getElementById('installSubtotal').innerText = install.toLocaleString('he-IL') + " ₪";
+        const discountLine = document.getElementById('discountLine');
+        if (discount > 0) {
+            discountLine.style.display = 'flex';
+            document.getElementById('discountSubtotal').innerText = "-" + discount.toLocaleString('he-IL') + " ₪";
+        } else {
+            discountLine.style.display = 'none';
+        }
+        document.getElementById('totalSub').innerText = totalSub.toLocaleString('he-IL') + " ₪";
+        document.getElementById('totalVat').innerText = vat.toLocaleString('he-IL') + " ₪";
+        document.getElementById('totalFinal').innerText = final.toLocaleString('he-IL') + " ₪";
         document.getElementById('resultBox').style.display = 'block';
-        setTimeout(() => document.getElementById('bottomNav').scrollIntoView({behavior:'smooth'}), 200);
+        if (shouldScroll) {
+            setTimeout(() => document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+        }
     }
 
-    function getExtrasText(c) {
-        let ex = "";
-        const cbMono = c.querySelector('.cb-monoblock');
-        if(cbMono && cbMono.checked) ex += `\nמונובלוק: ארגז ${c.querySelector('.mono-h').value} ס"מ, שלב ${c.querySelector('.mono-slat').value}, מנוע ${c.querySelector('.mono-motor').value}`;
-        const cbSlat = c.querySelector('.cb-slat-blind'); if(cbSlat && cbSlat.checked) ex += `\nתוספות: תריס שלבים`;
-        const cbNet = c.querySelector('.cb-net'); if(cbNet && cbNet.checked) ex += `\nתוספות: רשת`;
-        const cbNetPull = c.querySelector('.cb-net-pull'); if(cbNetPull && cbNetPull.checked) ex += `\nתוספות: רשת נשלפת`;
-        return ex;
-    }
+    // --- שליפת מפרט מלא ומדויק לכל אחד מ-14 סוגי המוצרים (עבור וואטסאפ ו-PDF) ---
+    function getItemFullDetails(card) {
+        const typeSelect = card.querySelector('.item-type');
+        const type = typeSelect.value;
+        const typeName = typeSelect.options[typeSelect.selectedIndex].text;
 
-    // --- וואטסאפ מורחב ---
-    function openPreview() {
-        let txt = `*הצעת מחיר - יהונתן אלומיניום*\nלקוח: ${document.getElementById('clientName').value}\nהצעה מס': ${document.getElementById('quoteNumber').value}\n\n`;
-        document.querySelectorAll('.item-card').forEach(c => {
-            const typeSelect = c.querySelector('.item-type');
-            const type = typeSelect.value;
-            const typeName = typeSelect.options[typeSelect.selectedIndex].text;
-            
-            if(type === 'joker') {
-                const title = c.querySelector('.joker-title').value;
-                const desc = c.querySelector('.joker-desc').value;
-                const qty = c.querySelector('.qty-input-joker').value;
-                const price = c.querySelector('.price-input-joker').value;
-                txt += `🔹 *${title}*\n${desc}\nכמות: ${qty} | מחיר: ${price} ₪\n\n`;
-            } else if (type === 'shower') {
-                const profile = c.querySelector('.profile-select').value;
-                const config = c.querySelector('.shower-config').value === 'front' ? 'חזית' : 'פינתי';
-                const qty = c.querySelector('.qty-input').value;
-                const price = c.querySelector('.price-input').value;
-                const glass = c.querySelector('.glass-type').value;
-                const finish = c.querySelector('.glass-finish').value;
-                const hwColor = c.querySelector('.hardware-color').value;
-                
-                let dims = "";
-                const h = c.querySelector('.h-input').value;
-                if (c.querySelector('.shower-config').value === 'front') dims = `${c.querySelector('.w-input').value} / ${h}`;
-                else dims = `${c.querySelector('.w-right-input').value}x${c.querySelector('.w-left-input').value} / ${h}`;
+        if (type === 'joker') {
+            const title = card.querySelector('.joker-title').value || 'עבודה כללית';
+            const desc = card.querySelector('.joker-desc').value || '';
+            const qty = parseFloat(card.querySelector('.qty-input-joker').value) || 1;
+            const price = parseFloat(card.querySelector('.price-input-joker').value) || 0;
+            return {
+                type,
+                title: title,
+                specsLines: desc ? [desc] : [],
+                dimsText: '-',
+                qty,
+                price,
+                total: qty * price
+            };
+        }
 
-                txt += `🔹 *מקלחון ${config}* (${profile})\nזכוכית: ${glass} ${finish}\nפרזול: ${hwColor}\nמידות: ${dims}\nכמות: ${qty} | מחיר: ${price} ₪\n\n`;
+        const profile = card.querySelector('.profile-select').value || '';
+        const color = card.querySelector('.color-shade').value || 'לפי בחירה';
+        const qty = parseFloat(card.querySelector('.qty-input').value) || 1;
+        const price = parseFloat(card.querySelector('.price-input').value) || 0;
+        const notes = (card.querySelector('.item-notes').value || '').trim();
+        const specsLines = [];
+
+        if (type === 'shower') {
+            const configVal = card.querySelector('.shower-config').value;
+            const configName = configVal === 'front' ? 'חזית (בין קירות)' : 'פינתי (90°)';
+            specsLines.push(`דגם: ${profile} | תצורה: ${configName}`);
+            if (configVal === 'front') {
+                const layoutEl = card.querySelector('.shower-layout-type');
+                if (layoutEl) specsLines.push(`הרכב: ${layoutEl.options[layoutEl.selectedIndex].text}`);
             } else {
-                const profile = c.querySelector('.profile-select').value;
-                const color = c.querySelector('.color-shade').value || "לפי בחירה";
-                const qty = c.querySelector('.qty-input').value;
-                const price = c.querySelector('.price-input').value;
-                
-                let specs = `דגם: ${profile}\nצבע: ${color}`;
-                if(type !== 'pergola' && type !== 'fence' && type !== 'shutter' && type !== 'screen_roll') {
-                    const glass = c.querySelector('.glass-type').value;
-                    const finish = c.querySelector('.glass-finish').value;
-                    specs += `\nזכוכית: ${glass} ${finish}`;
-                }
-                
-                specs += getExtrasText(c);
-
-                let dims = "";
-                if (type === 'fixed' || type === 'showcase') {
-                     const hR = c.querySelector('.h-right-input').value;
-                     const hL = c.querySelector('.h-left-input').value;
-                     dims = `${c.querySelector('.w-input').value} / ${hR}-${hL}`;
-                } else {
-                     dims = `${c.querySelector('.w-input').value} / ${c.querySelector('.h-input').value}`;
-                }
-                
-                txt += `🔹 *${typeName}*\n${specs}\nמידות: ${dims}\nכמות: ${qty} | מחיר: ${price} ₪\n\n`;
+                const rEl = card.querySelector('.shower-side-r');
+                const lEl = card.querySelector('.shower-side-l');
+                if (rEl && lEl) specsLines.push(`צד ימין: ${rEl.options[rEl.selectedIndex].text} | צד שמאל: ${lEl.options[lEl.selectedIndex].text}`);
             }
+            const glass = card.querySelector('.glass-type').value;
+            const finish = card.querySelector('.glass-finish').value;
+            specsLines.push(`זכוכית: ${glass}, ${finish}`);
+            const handleEl = card.querySelector('.handle-type');
+            const handleName = handleEl ? handleEl.options[handleEl.selectedIndex].text : '';
+            const hwColor = card.querySelector('.hardware-color').value;
+            specsLines.push(`פרזול: ${hwColor} (${handleName})`);
+            const showerAddons = [];
+            if (card.querySelector('.cb-stab') && card.querySelector('.cb-stab').checked) showerAddons.push('מוט חיזוק עליון');
+            if (card.querySelector('.cb-seal') && card.querySelector('.cb-seal').checked) showerAddons.push('סף מים (ספוילר)');
+            if (showerAddons.length) specsLines.push(`אביזרים: ${showerAddons.join(', ')}`);
+
+            const h = card.querySelector('.h-input').value || '190';
+            let dimsText = '';
+            if (configVal === 'front') {
+                const w = card.querySelector('.w-input').value || '120';
+                dimsText = `${w} × ${h}`;
+            } else {
+                const wR = card.querySelector('.w-right-input').value || '80';
+                const wL = card.querySelector('.w-left-input').value || '80';
+                dimsText = `ימין ${wR} / שמאל ${wL} × גובה ${h}`;
+            }
+            if (notes) specsLines.push(`הערה: ${notes}`);
+            return { type, title: typeName, specsLines, dimsText, qty, price, total: qty * price };
+        }
+
+        // מוצרי אלומיניום רגילים
+        specsLines.push(`פרופיל: ${profile} | גוון: ${color}`);
+
+        if (!['pergola', 'fence', 'shutter', 'screen_roll'].includes(type)) {
+            const glass = card.querySelector('.glass-type').value;
+            const finish = card.querySelector('.glass-finish').value;
+            specsLines.push(`זכוכית: ${glass}, ${finish}`);
+        }
+
+        if (['hinge', 'tilt_turn', 'door'].includes(type)) {
+            const dirEl = card.querySelector('.open-dir');
+            if (dirEl) specsLines.push(`כיוון פתיחה: ${dirEl.value === 'right' ? 'ימין' : 'שמאל'}`);
+        }
+
+        if (type === 'sliding') {
+            const sashes = card.querySelector('.sl-sashes').value || '2';
+            const meetingEl = card.querySelector('.sl-meeting');
+            const meetingText = meetingEl ? meetingEl.options[meetingEl.selectedIndex].text : '';
+            const divEl = card.querySelector('.sl-div');
+            const divVal = divEl ? divEl.value : 'none';
+            const divText = divEl ? divEl.options[divEl.selectedIndex].text : '';
+            specsLines.push(`מבנה: ${sashes} כנפיים, ${meetingText}${divVal !== 'none' ? `, חלוקה: ${divText}` : ''}`);
+        } else if (type === 'pocket') {
+            const comp = card.querySelector('.pkt-comp').value;
+            const dir = card.querySelector('.pkt-dir').value === 'right' ? 'לימין' : 'לשמאל';
+            specsLines.push(`הרכב כיס: ${comp} | כיוון כיס: ${dir}`);
+        } else if (type === 'fixed' || type === 'showcase') {
+            const dx = parseInt(card.querySelector('.div-x').value, 10) || 0;
+            const dy = parseInt(card.querySelector('.div-y').value, 10) || 0;
+            if (dx > 0 || dy > 0) {
+                specsLines.push(`חלוקות: ${dx} עמודים לאורך, ${dy} קושרות לרוחב`);
+            }
+        } else if (type === 'door') {
+            const topH = card.querySelector('.dr-top').value;
+            const sideW = card.querySelector('.dr-side').value;
+            const closerEl = card.querySelector('.dr-closer');
+            const closerVal = closerEl ? closerEl.value : 'none';
+            const doorParts = [];
+            if (topH) doorParts.push(`קבוע עליון (${topH} ס"מ)`);
+            if (sideW) doorParts.push(`קבוע צד (${sideW} ס"מ)`);
+            if (closerVal !== 'none') doorParts.push(closerEl.options[closerEl.selectedIndex].text);
+            if (doorParts.length) specsLines.push(`תוספות דלת: ${doorParts.join(', ')}`);
+        } else if (type === 'shutter') {
+            const boxEl = card.querySelector('.sht-box');
+            const slatEl = card.querySelector('.sht-slat');
+            const motorEl = card.querySelector('.sht-motor');
+            specsLines.push(`ארגז: ${boxEl.options[boxEl.selectedIndex].text} | שלב: ${slatEl.options[slatEl.selectedIndex].text} | מנוע: ${motorEl.value}`);
+        } else if (type === 'pergola') {
+            const prgTypeEl = card.querySelector('.prg-type');
+            const isStand = prgTypeEl.value === 'stand';
+            const postH = card.querySelector('.prg-post-h').value || '250';
+            const prgDirEl = card.querySelector('.prg-dir');
+            const hasGutter = card.querySelector('.prg-gutter').checked;
+            specsLines.push(`התקנה: ${isStand ? `עומדת (גובה עמודים ${postH} ס"מ)` : 'תלויה'} | הצללה: ${prgDirEl.options[prgDirEl.selectedIndex].text}${hasGutter ? ' | כולל מרזב' : ''}`);
+        } else if (type === 'fence') {
+            const space = card.querySelector('.fence-space').value || '2';
+            specsLines.push(`מרווח בין שלבים: ${space} ס"מ`);
+        }
+
+        // תוספות משותפות (מונובלוק, תריס שלבים, רשת)
+        const addons = [];
+        const cbSlat = card.querySelector('.cb-slat-blind');
+        if (cbSlat && cbSlat.checked) addons.push('תריס שלבים');
+        const cbNet = card.querySelector('.cb-net');
+        if (cbNet && cbNet.checked) addons.push('רשת');
+        const cbNetPull = card.querySelector('.cb-net-pull');
+        if (cbNetPull && cbNetPull.checked) addons.push('רשת נשלפת');
+        if (addons.length) specsLines.push(`תוספות: ${addons.join(', ')}`);
+
+        const cbMono = card.querySelector('.cb-monoblock');
+        if (cbMono && cbMono.checked) {
+            const mH = card.querySelector('.mono-h').value || '28';
+            const mSlat = card.querySelector('.mono-slat').value;
+            const mMotor = card.querySelector('.mono-motor').value;
+            specsLines.push(`תריס מונובלוק: ארגז ${mH} ס"מ, ${mSlat}, הפעלה: ${mMotor}`);
+        }
+
+        if (notes) specsLines.push(`הערה: ${notes}`);
+
+        let dimsText = '';
+        if (type === 'fixed' || type === 'showcase') {
+            const w = card.querySelector('.w-input').value || '100';
+            const hR = card.querySelector('.h-right-input').value || '100';
+            const hL = card.querySelector('.h-left-input').value || hR;
+            dimsText = (hR === hL) ? `${w} × ${hR}` : `${w} × (ימין ${hR} / שמאל ${hL})`;
+        } else if (type === 'pergola') {
+            const w = card.querySelector('.w-input').value || '400';
+            const d = card.querySelector('.h-input').value || '300';
+            dimsText = `רוחב ${w} × יציאה ${d}`;
+        } else {
+            const w = card.querySelector('.w-input').value || '100';
+            const h = card.querySelector('.h-input').value || '100';
+            dimsText = `${w} × ${h}`;
+        }
+
+        return { type, title: typeName, specsLines, dimsText, qty, price, total: qty * price };
+    }
+
+    // --- הודעת וואטסאפ מעודכנת ומלאה ---
+    function openPreview() {
+        calculateAll(false);
+        const client = document.getElementById('clientName').value || 'לקוח יקר';
+        const qNum = document.getElementById('quoteNumber').value || '1';
+        const qDateRaw = document.getElementById('quoteDate').value;
+        const qDate = qDateRaw ? new Date(qDateRaw).toLocaleDateString('he-IL') : new Date().toLocaleDateString('he-IL');
+
+        let txt = `*הצעת מחיר - יהונתן אלומיניום*\n`;
+        txt += `לקוח: ${client} | הצעה מס': ${qNum} | תאריך: ${qDate}\n`;
+        txt += `────────────────────\n\n`;
+
+        let idx = 1;
+        document.querySelectorAll('.item-card').forEach(c => {
+            const info = getItemFullDetails(c);
+            txt += `🔹 *${idx++}. ${info.title}*\n`;
+            info.specsLines.forEach(line => { txt += `   • ${line}\n`; });
+            if (info.dimsText !== '-') txt += `   • מידות (ס"מ): ${info.dimsText}\n`;
+            txt += `   • כמות: ${info.qty} | מחיר יח': ${info.price.toLocaleString('he-IL')} ₪ | *סה"כ: ${info.total.toLocaleString('he-IL')} ₪*\n\n`;
         });
-        const install = document.getElementById('installationCost').value;
-        if(install > 0) txt += `תוספות והתקנה: ${install} ₪\n`;
+
+        const install = parseFloat(document.getElementById('installationCost').value) || 0;
+        const discount = parseFloat(document.getElementById('discountCost').value) || 0;
+        const generalNotes = (document.getElementById('generalNotes').value || '').trim();
+
+        if (install > 0) txt += `🛠️ הובלה, התקנה ופירוק: ${install.toLocaleString('he-IL')} ₪\n`;
+        if (discount > 0) txt += `🎁 הנחה מיוחדת: -${discount.toLocaleString('he-IL')} ₪\n`;
+        if (generalNotes) txt += `📌 הערות: ${generalNotes}\n`;
+
+        txt += `\nסה"כ לפני מע"מ: ${document.getElementById('totalSub').innerText}\n`;
+        txt += `מע"מ (18%): ${document.getElementById('totalVat').innerText}\n`;
         txt += `*סה"כ לתשלום (כולל מע"מ): ${document.getElementById('totalFinal').innerText}*`;
+
         document.getElementById('previewText').value = txt;
         document.getElementById('previewModal').style.display = 'flex';
     }
 
-    function sendWhatsapp() { window.open(`https://wa.me/?text=${encodeURIComponent(document.getElementById('previewText').value)}`); }
+    function copyWhatsappText() {
+        const area = document.getElementById('previewText');
+        area.select();
+        try {
+            document.execCommand('copy');
+            showToast("הטקסט הועתק ללוח!");
+        } catch (e) {
+            showToast("לא ניתן להעתיק אוטומטית");
+        }
+    }
 
-    // --- הדפסה מובנית חכמה ל-PDF (הצעת מחיר) ---
+    function sendWhatsapp() {
+        const rawPhone = (document.getElementById('clientPhone').value || '').replace(/\D/g, '');
+        let intlPhone = '';
+        if (rawPhone.length >= 9) {
+            intlPhone = rawPhone.startsWith('0') ? ('972' + rawPhone.slice(1)) : rawPhone;
+        }
+        const encoded = encodeURIComponent(document.getElementById('previewText').value);
+        const url = intlPhone ? `https://wa.me/${intlPhone}?text=${encoded}` : `https://wa.me/?text=${encoded}`;
+        window.open(url, '_blank');
+    }
+
+    // --- הפקת הצעת מחיר A4 מפורטת (עם תצוגה מקדימה מובנית + הדפסה) ---
     function printInvoice() {
+        calculateAll(false);
         const clientName = document.getElementById('clientName').value || "ישראל ישראלי";
-        const quoteDate = new Date(document.getElementById('quoteDate').value).toLocaleDateString('he-IL');
+        const clientPhone = document.getElementById('clientPhone').value || "";
+        const qDateRaw = document.getElementById('quoteDate').value;
+        const quoteDate = qDateRaw ? new Date(qDateRaw).toLocaleDateString('he-IL') : new Date().toLocaleDateString('he-IL');
         const quoteNum = document.getElementById('quoteNumber').value || "1";
+        const generalNotes = (document.getElementById('generalNotes').value || '').trim();
         
         let htmlContent = `
-            <div style="text-align:center; margin-bottom:40px; border-bottom:3px solid #0d47a1; padding-bottom:20px;">
-                <h1 style="margin:0; color:#0d47a1; font-size:32px;">יהונתן אלומיניום</h1>
-                <p style="margin:5px 0; font-size:18px; color:#555;">הצעת מחיר מקצועית</p>
-                <div style="display:flex; justify-content:space-between; margin-top:30px; font-weight:bold; font-size:16px;">
-                    <span>לקוח: ${clientName}</span>
-                    <span>תאריך: ${quoteDate}</span>
-                    <span>מס' הצעה: ${quoteNum}</span>
+            <div style="font-family:'Rubik',sans-serif; direction:rtl; color:#1a202c;">
+                <div style="text-align:center; margin-bottom:24px; border-bottom:3px solid #0d47a1; padding-bottom:16px;">
+                    <h1 style="margin:0; color:#0d47a1; font-size:28px;">יהונתן אלומיניום</h1>
+                    <p style="margin:4px 0 0; font-size:16px; color:#555;">הצעת מחיר ומפרט טכני</p>
+                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:20px; font-weight:700; font-size:14.5px; background:#f8fafc; padding:10px 14px; border-radius:8px; border:1px solid #e2e8f0;">
+                        <span>לקוח: ${clientName}${clientPhone ? ` (${clientPhone})` : ''}</span>
+                        <span>תאריך: ${quoteDate}</span>
+                        <span>מס' הצעה: ${quoteNum}</span>
+                    </div>
                 </div>
-            </div>
-            <table style="width:100%; border-collapse:collapse; margin-bottom:20px; text-align:right;">
-                <thead>
-                    <tr>
-                        <th style="width:5%; background-color:#0d47a1 !important; color:white !important; padding:10px; border:1px solid #ddd; -webkit-print-color-adjust: exact; print-color-adjust: exact;">#</th>
-                        <th style="width:45%; background-color:#0d47a1 !important; color:white !important; padding:10px; border:1px solid #ddd; -webkit-print-color-adjust: exact; print-color-adjust: exact;">תיאור מוצר</th>
-                        <th style="width:15%; background-color:#0d47a1 !important; color:white !important; padding:10px; border:1px solid #ddd; text-align:center; -webkit-print-color-adjust: exact; print-color-adjust: exact;">מידות (ס"מ)</th>
-                        <th style="width:10%; background-color:#0d47a1 !important; color:white !important; padding:10px; border:1px solid #ddd; text-align:center; -webkit-print-color-adjust: exact; print-color-adjust: exact;">כמות</th>
-                        <th style="width:10%; background-color:#0d47a1 !important; color:white !important; padding:10px; border:1px solid #ddd; text-align:right; -webkit-print-color-adjust: exact; print-color-adjust: exact;">מחיר יח'</th>
-                        <th style="width:15%; background-color:#0d47a1 !important; color:white !important; padding:10px; border:1px solid #ddd; text-align:right; -webkit-print-color-adjust: exact; print-color-adjust: exact;">סה"כ</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <table style="width:100%; border-collapse:collapse; margin-bottom:20px; text-align:right; font-size:13.5px;">
+                    <thead>
+                        <tr>
+                            <th style="width:5%; background-color:#0d47a1 !important; color:white !important; padding:9px; border:1px solid #cbd5e0; -webkit-print-color-adjust: exact; print-color-adjust: exact;">#</th>
+                            <th style="width:45%; background-color:#0d47a1 !important; color:white !important; padding:9px; border:1px solid #cbd5e0; -webkit-print-color-adjust: exact; print-color-adjust: exact;">תיאור מוצר ומפרט מלא</th>
+                            <th style="width:18%; background-color:#0d47a1 !important; color:white !important; padding:9px; border:1px solid #cbd5e0; text-align:center; -webkit-print-color-adjust: exact; print-color-adjust: exact;">מידות (ס"מ)</th>
+                            <th style="width:8%; background-color:#0d47a1 !important; color:white !important; padding:9px; border:1px solid #cbd5e0; text-align:center; -webkit-print-color-adjust: exact; print-color-adjust: exact;">כמות</th>
+                            <th style="width:12%; background-color:#0d47a1 !important; color:white !important; padding:9px; border:1px solid #cbd5e0; text-align:right; -webkit-print-color-adjust: exact; print-color-adjust: exact;">מחיר יח'</th>
+                            <th style="width:12%; background-color:#0d47a1 !important; color:white !important; padding:9px; border:1px solid #cbd5e0; text-align:right; -webkit-print-color-adjust: exact; print-color-adjust: exact;">סה"כ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
         `;
 
-        let index = 1; let itemsSum = 0;
+        let index = 1;
+        let itemsSum = 0;
         document.querySelectorAll('.item-card').forEach(card => {
-            const typeSelect = card.querySelector('.item-type');
-            const type = typeSelect.value;
-            const typeName = typeSelect.options[typeSelect.selectedIndex].text;
-            let desc = `<b>${typeName}</b>`;
-            let dims = ""; let qty = 0, price = 0;
+            const info = getItemFullDetails(card);
+            itemsSum += info.total;
+            const bgColor = index % 2 === 0 ? 'background-color:#f8fafc !important;' : '';
+            const descHtml = `<div style="font-weight:700; color:#0d47a1; margin-bottom:3px;">${info.title}</div>` +
+                             info.specsLines.map(l => `<div style="line-height:1.45;">• ${l}</div>`).join('');
 
-            if(type === 'joker') {
-                desc += `<br>${card.querySelector('.joker-title').value} - ${card.querySelector('.joker-desc').value}`;
-                qty = parseFloat(card.querySelector('.qty-input-joker').value) || 1;
-                price = parseFloat(card.querySelector('.price-input-joker').value) || 0;
-                dims = "-";
-            } else {
-                const profile = card.querySelector('.profile-select').value;
-                
-                if (type !== 'shower') {
-                     const shade = card.querySelector('.color-shade').value || "לפי בחירה";
-                     desc += `<br>פרופיל: ${profile}<br>צבע: ${shade}`;
-                } else {
-                     const hwColor = card.querySelector('.hardware-color').value;
-                     desc += `<br>דגם: ${profile}<br>פרזול: ${hwColor}`;
-                }
-
-                if(type !== 'pergola' && type !== 'fence' && type !== 'shutter' && type !== 'screen_roll') {
-                    const glass = card.querySelector('.glass-type').value;
-                    const finish = card.querySelector('.glass-finish').value;
-                    desc += `<br>זכוכית: ${glass}, ${finish}`;
-                }
-                
-                desc += getExtrasText(card).replace(/\n/g, '<br>');
-                
-                if (type === 'fixed' || type === 'showcase') {
-                     const hR = card.querySelector('.h-right-input').value;
-                     const hL = card.querySelector('.h-left-input').value;
-                     dims = `${card.querySelector('.w-input').value} / ${hR}-${hL}`;
-                } else if (type === 'shower') {
-                     const config = card.querySelector('.shower-config').value;
-                     const h = card.querySelector('.h-input').value;
-                     if (config === 'front') dims = `${card.querySelector('.w-input').value} / ${h}`;
-                     else dims = `${card.querySelector('.w-right-input').value}x${card.querySelector('.w-left-input').value} / ${h}`;
-                } else {
-                     dims = `${card.querySelector('.w-input').value} / ${card.querySelector('.h-input').value}`;
-                }
-                
-                qty = parseFloat(card.querySelector('.qty-input').value) || 1;
-                price = parseFloat(card.querySelector('.price-input').value) || 0;
-            }
-            const total = qty * price; itemsSum += total;
-            
-            const bgColor = index % 2 === 0 ? 'background-color:#f9f9f9 !important;' : '';
             htmlContent += `<tr style="${bgColor} -webkit-print-color-adjust: exact; print-color-adjust: exact;">
-                <td style="padding:10px; border:1px solid #ddd;">${index++}</td>
-                <td style="padding:10px; border:1px solid #ddd;">${desc}</td>
-                <td style="padding:10px; border:1px solid #ddd; direction:ltr; text-align:center">${dims}</td>
-                <td style="padding:10px; border:1px solid #ddd; text-align:center">${qty}</td>
-                <td style="padding:10px; border:1px solid #ddd;">${price.toLocaleString()} ₪</td>
-                <td style="padding:10px; border:1px solid #ddd;">${total.toLocaleString()} ₪</td>
+                <td style="padding:9px; border:1px solid #cbd5e0; text-align:center; font-weight:700;">${index++}</td>
+                <td style="padding:9px; border:1px solid #cbd5e0;">${descHtml}</td>
+                <td style="padding:9px; border:1px solid #cbd5e0; text-align:center; font-weight:600;">${info.dimsText}</td>
+                <td style="padding:9px; border:1px solid #cbd5e0; text-align:center;">${info.qty}</td>
+                <td style="padding:9px; border:1px solid #cbd5e0;">${info.price.toLocaleString('he-IL')} ₪</td>
+                <td style="padding:9px; border:1px solid #cbd5e0; font-weight:700;">${info.total.toLocaleString('he-IL')} ₪</td>
             </tr>`;
         });
 
         const install = parseFloat(document.getElementById('installationCost').value) || 0;
-        const totalBeforeVat = itemsSum + install;
-        const vat = totalBeforeVat * 0.18;
+        const discount = parseFloat(document.getElementById('discountCost').value) || 0;
+        const totalBeforeVat = Math.max(0, itemsSum + install - discount);
+        const vat = Math.round(totalBeforeVat * 0.18 * 100) / 100;
         const finalTotal = totalBeforeVat + vat;
 
         htmlContent += `
-                </tbody>
-            </table>
-            <div style="float:left; width:350px; margin-top:30px; background:#f8f9fa !important; padding:15px; border:1px solid #ddd; border-radius:8px; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
-                <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee; font-size:15px;"><span>סה"כ מוצרים + התקנה:</span><span>${totalBeforeVat.toLocaleString()} ₪</span></div>
-                <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee; font-size:15px;"><span>מע"מ (18%):</span><span>${vat.toLocaleString()} ₪</span></div>
-                <div style="display:flex; justify-content:space-between; padding:10px 0 0 0; margin-top:10px; border-top:2px solid #0d47a1; font-size:18px; font-weight:bold; color:#0d47a1;"><span>סה"כ לתשלום:</span><span>${finalTotal.toLocaleString()} ₪</span></div>
-            </div>
-            <div style="clear:both"></div>
-            <div style="margin-top:60px; font-size:12px; color:#555; border-top:1px solid #ccc; padding-top:15px; line-height: 1.8;">
-                * המחיר כולל הובלה והתקנה.<br>* הצעת מחיר זאת משמשת כחוזה עבודה.<br>* הסחורה בבעלות יהונתן אלומיניום עד התשלום המלא.<br>* הצעת מחיר תקפה ל-5 ימי עסקים.<br><strong>בכבוד רב, יהונתן אלומיניום</strong>
+                    </tbody>
+                </table>
+                ${generalNotes ? `<div style="background:#fffaf0; border:1px solid #fbd38d; padding:10px 14px; border-radius:8px; margin-bottom:16px; font-size:13.5px;"><strong>הערות להצעה:</strong> ${generalNotes}</div>` : ''}
+                <div style="float:left; width:320px; max-width:100%; margin-top:10px; background:#f8fafc !important; padding:14px; border:1px solid #cbd5e0; border-radius:10px; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #e2e8f0; font-size:14px;"><span>סה"כ מוצרים:</span><span>${itemsSum.toLocaleString('he-IL')} ₪</span></div>
+                    ${install > 0 ? `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #e2e8f0; font-size:14px;"><span>הובלה והתקנה:</span><span>${install.toLocaleString('he-IL')} ₪</span></div>` : ''}
+                    ${discount > 0 ? `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #e2e8f0; font-size:14px; color:#2f855a;"><span>הנחה:</span><span>-${discount.toLocaleString('he-IL')} ₪</span></div>` : ''}
+                    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #e2e8f0; font-size:14px; font-weight:600;"><span>סה"כ לפני מע"מ:</span><span>${totalBeforeVat.toLocaleString('he-IL')} ₪</span></div>
+                    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #e2e8f0; font-size:14px;"><span>מע"מ (18%):</span><span>${vat.toLocaleString('he-IL')} ₪</span></div>
+                    <div style="display:flex; justify-content:space-between; padding:10px 0 0 0; margin-top:6px; border-top:2px solid #0d47a1; font-size:17px; font-weight:800; color:#0d47a1;"><span>סה"כ לתשלום:</span><span>${finalTotal.toLocaleString('he-IL')} ₪</span></div>
+                </div>
+                <div style="clear:both"></div>
+                <div style="margin-top:40px; font-size:12px; color:#4a5568; border-top:1px solid #cbd5e0; padding-top:12px; line-height: 1.7; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;">
+                    <div>
+                        * המחיר כולל הובלה והתקנה (אלא אם צוין אחרת).<br>
+                        * הצעת מחיר זאת משמשת כחוזה עבודה עם אישורה.<br>
+                        * הסחורה בבעלות יהונתן אלומיניום עד התשלום המלא.<br>
+                        * הצעת מחיר תקפה ל-14 ימי עסקים.<br>
+                        <strong>בכבוד רב, יהונתן אלומיניום</strong>
+                    </div>
+                    <div style="text-align:center; min-width:180px;">
+                        <div style="border-bottom:1px solid #333; height:30px; margin-bottom:4px;"></div>
+                        <div>חתימת הלקוח לאישור ההזמנה</div>
+                    </div>
+                </div>
             </div>
         `;
 
         document.getElementById('printArea').innerHTML = htmlContent;
-        window.print();
+        document.getElementById('printModalTitle').innerText = "תצוגת הצעת מחיר (מוכן להדפסה / PDF)";
+        document.getElementById('printPreviewBody').innerHTML = htmlContent;
+        document.getElementById('printPreviewModal').style.display = 'flex';
     }
 
-    // --- יצירת קנבס שרטוט לפי כרטיסיית מוצר (משמש גם להורדה בודדת וגם לדף שרטוטים מרוכז) ---
+    // --- עזרי ציור לקווי מידה אדריכליים תקניים ---
+    function drawHorizDim(ctx, x1, x2, y, labelText, color = "#0d47a1") {
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x1, y - 12); ctx.lineTo(x1, y + 12);
+        ctx.moveTo(x2, y - 12); ctx.lineTo(x2, y + 12);
+        ctx.moveTo(x1, y); ctx.lineTo(x2, y);
+        ctx.moveTo(x1 + 10, y - 5); ctx.lineTo(x1, y); ctx.lineTo(x1 + 10, y + 5);
+        ctx.moveTo(x2 - 10, y - 5); ctx.lineTo(x2, y); ctx.lineTo(x2 - 10, y + 5);
+        ctx.stroke();
+
+        ctx.font = "bold 24px Rubik, Arial";
+        ctx.textAlign = "center";
+        const midX = (x1 + x2) / 2;
+        const textW = ctx.measureText(labelText).width + 16;
+        ctx.fillStyle = "white";
+        ctx.fillRect(midX - textW / 2, y - 16, textW, 30);
+        ctx.fillStyle = color;
+        ctx.fillText(labelText, midX, y + 8);
+        ctx.restore();
+    }
+
+    function drawVertDim(ctx, x, y1, y2, labelText, side = 'right', color = "#0d47a1") {
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x - 12, y1); ctx.lineTo(x + 12, y1);
+        ctx.moveTo(x - 12, y2); ctx.lineTo(x + 12, y2);
+        ctx.moveTo(x, y1); ctx.lineTo(x, y2);
+        ctx.moveTo(x - 5, y1 + 10); ctx.lineTo(x, y1); ctx.lineTo(x + 5, y1 + 10);
+        ctx.moveTo(x - 5, y2 - 10); ctx.lineTo(x, y2); ctx.lineTo(x + 5, y2 - 10);
+        ctx.stroke();
+
+        const midY = (y1 + y2) / 2;
+        ctx.translate(x, midY);
+        ctx.rotate(side === 'right' ? -Math.PI / 2 : Math.PI / 2);
+        ctx.font = "bold 24px Rubik, Arial";
+        ctx.textAlign = "center";
+        const textW = ctx.measureText(labelText).width + 16;
+        ctx.fillStyle = "white";
+        ctx.fillRect(-textW / 2, -16, textW, 30);
+        ctx.fillStyle = color;
+        ctx.fillText(labelText, 0, 8);
+        ctx.restore();
+    }
+
+    // --- מנוע השרטוטים האדריכליים המשודרג ---
     function createSketchCanvas(card) {
         const typeSelect = card.querySelector('.item-type');
         const type = typeSelect.value;
-        const typeName = typeSelect.options[typeSelect.selectedIndex].text; 
+        const typeName = typeSelect.options[typeSelect.selectedIndex].text;
         const profile = card.querySelector('.profile-select') ? card.querySelector('.profile-select').value : '';
         
-        const canvas = document.createElement('canvas');
-        canvas.width = 1200; canvas.height = 900;
-        const ctx = canvas.getContext('2d');
+        const cnv = document.createElement('canvas');
+        cnv.width = 1200;
+        cnv.height = 900;
+        const c = cnv.getContext('2d');
         
-        ctx.fillStyle = "white"; ctx.fillRect(0,0,1200,900);
-        ctx.fillStyle = "#0d47a1"; ctx.font = "bold 40px Arial"; ctx.textAlign = "center";
-        ctx.fillText("יהונתן אלומיניום", 600, 60);
-        ctx.fillStyle = "#333"; ctx.font = "24px Arial";
+        c.fillStyle = "white";
+        c.fillRect(0, 0, 1200, 900);
+        c.fillStyle = "#0d47a1";
+        c.font = "bold 36px Rubik, Arial";
+        c.textAlign = "center";
+        c.fillText("יהונתן אלומיניום - שרטוט אדריכלי", 600, 52);
+
         const client = document.getElementById('clientName').value || "לקוח";
-        ctx.fillText(`לקוח: ${client} | תאריך: ${new Date().toLocaleDateString('he-IL')}`, 600, 100);
+        c.fillStyle = "#333";
+        c.font = "22px Rubik, Arial";
+        c.fillText(`לקוח: ${client} | תאריך: ${new Date().toLocaleDateString('he-IL')}`, 600, 88);
         
-        let title = `${typeName} - ${profile}`;
-        if(type === 'pergola' && card.querySelector('.prg-type').value === 'stand') title += ` | גובה עמוד: ${card.querySelector('.prg-post-h').value} ס"מ`;
-        
+        let subtitle = `${typeName} | דגם: ${profile}`;
         const cbMono = card.querySelector('.cb-monoblock');
-        let hasMonoblock = (cbMono && cbMono.checked);
-        let monoH = 0; if(hasMonoblock) { monoH = parseFloat(card.querySelector('.mono-h').value) || 28; title += ` | מונובלוק`; }
+        const hasMonoblock = !!(cbMono && cbMono.checked);
+        let monoH = 0;
+        if (hasMonoblock) {
+            monoH = parseFloat(card.querySelector('.mono-h').value) || 28;
+            subtitle += ` | מונובלוק (${monoH} ס"מ)`;
+        }
+        c.font = "20px Rubik, Arial";
+        c.fillStyle = "#4a5568";
+        c.fillText(subtitle, 600, 122);
 
-        ctx.font = "20px Arial"; ctx.fillStyle = "#555";
-        ctx.fillText(title, 600, 140);
-        
-        let w, h, hRight, hLeft;
-        const maxDrawW = 700; const maxDrawH = 500;
-        let dw, dh, startX, startY;
+        c.strokeStyle = "#e2e8f0";
+        c.lineWidth = 2;
+        c.beginPath(); c.moveTo(80, 140); c.lineTo(1120, 140); c.stroke();
 
-        if (type === 'fixed' || type === 'showcase') {
-             w = parseFloat(card.querySelector('.w-input').value) || 100;
-             hRight = parseFloat(card.querySelector('.h-right-input').value) || 100;
-             hLeft = parseFloat(card.querySelector('.h-left-input').value) || 100;
-             h = Math.max(hRight, hLeft);
-        } else if (type === 'shower') {
-             h = parseFloat(card.querySelector('.h-input').value) || 190;
-             if (card.querySelector('.shower-config').value === 'front') w = parseFloat(card.querySelector('.w-input').value) || 100;
-             else w = (parseFloat(card.querySelector('.w-right-input').value)||80) + (parseFloat(card.querySelector('.w-left-input').value)||80) + 20; 
-        } else {
-             w = parseFloat(card.querySelector('.w-input').value) || 100;
-             h = parseFloat(card.querySelector('.h-input').value) || 100;
+        // --- פרגולה: תומכת ב-3 מצבי תצוגה (מבט על / מבט חזית / משולב) ---
+        if (type === 'pergola') {
+            const w = parseFloat(card.querySelector('.w-input').value) || 400;
+            const depth = parseFloat(card.querySelector('.h-input').value) || 300;
+            const isStand = card.querySelector('.prg-type').value === 'stand';
+            const postH = parseFloat(card.querySelector('.prg-post-h').value) || 250;
+            const prgDir = card.querySelector('.prg-dir').value;
+            const hasGutter = card.querySelector('.prg-gutter').checked;
+            const mode = card.dataset.prgSketchMode || 'both';
+
+            if (mode === 'plan') {
+                drawPergolaPlanView(c, 220, 200, 760, 540, w, depth, isStand, prgDir, hasGutter);
+            } else if (mode === 'elevation') {
+                drawPergolaElevationView(c, 220, 200, 760, 540, w, depth, isStand, postH, prgDir, hasGutter);
+            } else {
+                drawPergolaPlanView(c, 630, 210, 470, 520, w, depth, isStand, prgDir, hasGutter);
+                drawPergolaElevationView(c, 100, 210, 470, 520, w, depth, isStand, postH, prgDir, hasGutter);
+                c.save();
+                c.setLineDash([8, 8]);
+                c.strokeStyle = "#cbd5e0";
+                c.beginPath(); c.moveTo(600, 175); c.lineTo(600, 820); c.stroke();
+                c.restore();
+            }
+            return cnv;
         }
 
-        const ratio = w / h;
-        if (ratio > 1) { dw = maxDrawW; dh = maxDrawW / ratio; if(dh > maxDrawH){ dh = maxDrawH; dw = dh * ratio; } }
-        else { dh = maxDrawH; dw = maxDrawH * ratio; if(dw > maxDrawW){ dw = maxDrawW; dh = dw / ratio; } }
-        
-        startX = (1200 - dw) / 2;
-        startY = 250;
-        const origStartY = startY; const origDh = dh; 
-        
-        ctx.strokeStyle = "#333"; ctx.lineWidth = 3;
+        // --- חישוב מידות ופרופורציות מתוחמות לשאר המוצרים ---
+        let w = 100, h = 100, hRight = 100, hLeft = 100, wRight = 80, wLeft = 80;
+        if (type === 'fixed' || type === 'showcase') {
+            w = parseFloat(card.querySelector('.w-input').value) || 120;
+            hRight = parseFloat(card.querySelector('.h-right-input').value) || 100;
+            hLeft = parseFloat(card.querySelector('.h-left-input').value) || hRight;
+            h = Math.max(hRight, hLeft, 20);
+        } else if (type === 'shower') {
+            h = parseFloat(card.querySelector('.h-input').value) || 190;
+            if (card.querySelector('.shower-config').value === 'front') {
+                w = parseFloat(card.querySelector('.w-input').value) || 120;
+            } else {
+                wRight = parseFloat(card.querySelector('.w-right-input').value) || 80;
+                wLeft = parseFloat(card.querySelector('.w-left-input').value) || 80;
+                w = wRight + wLeft;
+            }
+        } else {
+            w = parseFloat(card.querySelector('.w-input').value) || 100;
+            h = parseFloat(card.querySelector('.h-input').value) || 100;
+        }
 
-        if(hasMonoblock) {
-            const boxPxH = (monoH / h) * dh;
-            ctx.fillStyle = "#f0f0f0"; ctx.fillRect(startX, startY, dw, boxPxH);
-            ctx.strokeRect(startX, startY, dw, boxPxH);
-            ctx.beginPath(); ctx.lineWidth = 1;
-            for(let y=10; y<boxPxH; y+=10) { ctx.moveTo(startX, startY+y); ctx.lineTo(startX+dw, startY+y); }
-            ctx.stroke(); ctx.lineWidth = 3;
-            startY += boxPxH; dh -= boxPxH; 
+        const rawRatio = Math.max(0.1, w / Math.max(1, h));
+        const visualRatio = Math.max(0.38, Math.min(2.4, rawRatio));
+        const maxDrawW = (type === 'pocket') ? 520 : 660;
+        const maxDrawH = 470;
+
+        let dw, dh;
+        if (visualRatio > (maxDrawW / maxDrawH)) {
+            dw = maxDrawW;
+            dh = maxDrawW / visualRatio;
+        } else {
+            dh = maxDrawH;
+            dw = maxDrawH * visualRatio;
+        }
+
+        let startX = (1200 - dw) / 2;
+        let startY = 195 + (maxDrawH - dh) / 2;
+
+        let pktW = 0;
+        let pktDir = 'right';
+        if (type === 'pocket') {
+            pktDir = card.querySelector('.pkt-dir').value;
+            pktW = Math.min(130, Math.max(80, dw * 0.32));
+            startX = (pktDir === 'right') ? ((1200 - (dw + pktW)) / 2) : ((1200 - (dw + pktW)) / 2 + pktW);
+        }
+
+        const origStartY = startY;
+        const origDh = dh;
+
+        c.strokeStyle = "#1a202c";
+        c.lineWidth = 3;
+
+        if (hasMonoblock) {
+            const boxRatio = Math.min(0.28, Math.max(0.14, monoH / Math.max(h, 60)));
+            const boxPxH = dh * boxRatio;
+            c.fillStyle = "#edf2f7";
+            c.fillRect(startX, startY, dw, boxPxH);
+            c.strokeRect(startX, startY, dw, boxPxH);
+            c.save();
+            c.strokeStyle = "#a0aec0";
+            c.lineWidth = 1;
+            for (let y = 8; y < boxPxH; y += 8) {
+                c.beginPath(); c.moveTo(startX, startY + y); c.lineTo(startX + dw, startY + y); c.stroke();
+            }
+            c.fillStyle = "#2d3748";
+            c.font = "bold 16px Rubik, Arial";
+            c.fillText(`ארגז מונובלוק (${monoH} ס"מ)`, startX + dw / 2, startY + boxPxH / 2 + 6);
+            c.restore();
+            startY += boxPxH;
+            dh -= boxPxH;
         }
 
         if (type === 'shower') {
-             const conf = card.querySelector('.shower-config').value;
-             const hwColor = card.querySelector('.hardware-color').value;
-             ctx.strokeStyle = (hwColor === 'שחור מט') ? 'black' : '#888'; 
-             
-             if (conf === 'front') {
-                 ctx.strokeRect(startX, startY, dw, dh);
-                 const layout = card.querySelector('.shower-layout-type').value;
-                 if (layout === '2wing') {
-                     ctx.beginPath(); ctx.moveTo(startX+dw/2, startY); ctx.lineTo(startX+dw/2, startY+dh); ctx.stroke();
-                     drawTriangle(ctx, startX, startY, dw/2, dh, 'left'); drawTriangle(ctx, startX+dw/2, startY, dw/2, dh, 'right');
-                 } else if (layout === 'fix_wing') {
-                     ctx.beginPath(); ctx.moveTo(startX+dw*0.4, startY); ctx.lineTo(startX+dw*0.4, startY+dh); ctx.stroke();
-                     ctx.beginPath(); ctx.moveTo(startX+dw*0.4, startY+50); ctx.lineTo(startX, startY); ctx.stroke(); 
-                     drawTriangle(ctx, startX+dw*0.4, startY, dw*0.6, dh, 'right');
-                 }
-             } else {
-                 const wR = parseFloat(card.querySelector('.w-right-input').value)||80;
-                 const wL = parseFloat(card.querySelector('.w-left-input').value)||80;
-                 const pxR = (wR / (wR+wL)) * dw; const pxL = (wL / (wR+wL)) * dw;
-                 ctx.strokeRect(startX + pxL + 10, startY, pxR, dh); ctx.strokeRect(startX, startY, pxL, dh);
-                 ctx.lineWidth = 5; ctx.strokeStyle = "#0d47a1"; 
-                 ctx.beginPath(); ctx.moveTo(startX+pxL+5, startY); ctx.lineTo(startX+pxL+5, startY+dh); ctx.stroke();
-                 ctx.lineWidth = 3; ctx.strokeStyle = (hwColor === 'שחור מט') ? 'black' : '#888';
-                 const typeR = card.querySelector('.shower-side-r').value; const typeL = card.querySelector('.shower-side-l').value;
-                 if(typeL === 'wing') drawTriangle(ctx, startX, startY, pxL, dh, 'left');
-                 if(typeR === 'wing') drawTriangle(ctx, startX+pxL+10, startY, pxR, dh, 'right');
-             }
-             ctx.fillStyle = "#0d47a1"; ctx.font = "bold 24px Arial"; 
-             if (conf === 'front') ctx.fillText(w, startX+dw/2, startY-10);
-             else { 
-                 const wR = parseFloat(card.querySelector('.w-right-input').value)||80; const wL = parseFloat(card.querySelector('.w-left-input').value)||80;
-                 ctx.fillText(wL, startX + (dw*(wL/(wL+wR))/2), startY-10); ctx.fillText(wR, startX + dw - (dw*(wR/(wL+wR))/2), startY-10);
-             }
-        }
-        else if (type === 'fixed' || type === 'showcase') {
-             const pixHRight = (hRight / h) * dh; const pixHLeft = (hLeft / h) * dh;
-             ctx.beginPath(); ctx.moveTo(startX, startY + dh); ctx.lineTo(startX + dw, startY + dh); ctx.lineTo(startX + dw, startY + dh - pixHRight); ctx.lineTo(startX, startY + dh - pixHLeft); ctx.closePath();
-             ctx.save(); ctx.clip(); ctx.stroke();
-             const cols = parseInt(card.querySelector('.div-x').value) || 0; const rows = parseInt(card.querySelector('.div-y').value) || 0;
-             if (cols > 0) { const colW = dw / (cols + 1); for (let i = 1; i <= cols; i++) { ctx.beginPath(); ctx.moveTo(startX + i * colW, startY); ctx.lineTo(startX + i * colW, startY + dh + 100); ctx.stroke(); } }
-             if (rows > 0) { const rowH = dh / (rows + 1); for (let j = 1; j <= rows; j++) { ctx.beginPath(); ctx.moveTo(startX, startY + dh - j * rowH); ctx.lineTo(startX + dw, startY + dh - j * rowH); ctx.stroke(); } }
-             ctx.restore();
-             ctx.beginPath(); ctx.moveTo(startX, startY + dh); ctx.lineTo(startX + dw, startY + dh); ctx.lineTo(startX + dw, startY + dh - pixHRight); ctx.lineTo(startX, startY + dh - pixHLeft); ctx.closePath(); ctx.stroke();
-        }
-        else if (type === 'sliding') {
-            ctx.strokeRect(startX, startY, dw, dh);
-            const sashes = parseInt(card.querySelector('.sl-sashes').value) || 2; const sashW = dw / sashes;
-            for(let i=0; i<sashes; i++) {
-                const offset = (i % 2 === 0) ? 0 : 15;
-                ctx.strokeRect(startX+(i*sashW)+offset, startY+10, sashW-10, dh-20);
-                drawArrow(ctx, startX+(i*sashW)+sashW/2, startY+dh/2, (i%2===0)?'right':'left');
-            }
-        }
-        else if (type === 'pocket') {
-            const dir = card.querySelector('.pkt-dir').value; ctx.setLineDash([10, 10]); 
-            if (dir === 'right') { ctx.strokeRect(startX + dw, startY, 150, dh); drawArrow(ctx, startX + dw - 50, startY + dh/2, 'right'); } 
-            else { ctx.strokeRect(startX - 150, startY, 150, dh); drawArrow(ctx, startX + 50, startY + dh/2, 'left'); }
-            ctx.setLineDash([]); ctx.strokeRect(startX, startY, dw, dh); 
-        }
-        else if (['hinge', 'tilt_turn', 'door'].includes(type)) {
-            ctx.strokeRect(startX, startY, dw, dh); 
-            if(type !== 'door') ctx.strokeRect(startX+10, startY+10, dw-20, dh-20);
-            const dir = card.querySelector('.open-dir').value;
-            drawTriangle(ctx, startX, startY, dw, dh, dir);
-            if(type === 'tilt_turn') drawTriangle(ctx, startX, startY, dw, dh, 'top');
-            if(type === 'door') { 
-                ctx.beginPath(); ctx.lineWidth=5;
-                if(dir === 'right') { ctx.moveTo(startX+20, startY+dh/2); ctx.lineTo(startX+50, startY+dh/2); }
-                else { ctx.moveTo(startX+dw-20, startY+dh/2); ctx.lineTo(startX+dw-50, startY+dh/2); }
-                ctx.stroke(); ctx.lineWidth=3;
-            }
-        }
-        else if (type === 'kipp') {
-            ctx.strokeRect(startX, startY, dw, dh); ctx.strokeRect(startX+10, startY+10, dw-20, dh-20);
-            drawTriangle(ctx, startX, startY, dw, dh, 'top'); 
-        }
-        else if (type === 'shutter') {
-             const isHidden = card.querySelector('.sht-box').value === 'hidden'; const boxH = dh * 0.15;
-             if(isHidden) { ctx.setLineDash([5,5]); ctx.strokeRect(startX, startY-boxH, dw, boxH); ctx.setLineDash([]); }
-             else { ctx.fillStyle = "#ddd"; ctx.fillRect(startX, startY-boxH, dw, boxH); ctx.strokeRect(startX, startY-boxH, dw, boxH); }
-             ctx.strokeRect(startX, startY, dw, dh);
-             for(let y=0; y<dh; y+=25) { ctx.strokeRect(startX, startY+y, dw, 23); }
-        }
-        else if (type === 'pergola') {
-            const roofH = dh * 0.15; 
-            ctx.fillStyle = "#eee"; ctx.fillRect(startX - 15, startY, dw + 30, roofH); 
-            ctx.lineWidth = 4; ctx.strokeStyle = "#333"; ctx.strokeRect(startX - 15, startY, dw + 30, roofH);
-            const dir = card.querySelector('.prg-dir').value;
-            ctx.strokeStyle = "#777"; ctx.lineWidth = 2; 
-            if(dir === 'width' || dir === 'grid') { for(let y=startY; y<startY+roofH; y+=15) { ctx.beginPath(); ctx.moveTo(startX-15, y); ctx.lineTo(startX+dw+15, y); ctx.stroke(); } }
-            if(dir === 'length' || dir === 'grid') { for(let x=startX; x<startX+dw; x+=15) { ctx.beginPath(); ctx.moveTo(x, startY); ctx.lineTo(x, startY+roofH); ctx.stroke(); } }
-            ctx.strokeRect(startX, startY + 5, dw, roofH - 10);
-        }
-        else if(type === 'fence') {
-             ctx.strokeRect(startX, startY, dw, dh);
-             const spaceCm = parseInt(card.querySelector('.fence-space').value) || 2; const spacePx = spaceCm * 5; 
-             for(let y=10; y<dh; y += (10 + spacePx)) { ctx.fillRect(startX, startY+y, dw, 10); }
-        }
-        else if (type !== 'shower') { ctx.strokeRect(startX, startY, dw, dh); }
+            const conf = card.querySelector('.shower-config').value;
+            const hwColor = card.querySelector('.hardware-color').value;
+            const frameColor = (hwColor === 'שחור מט') ? '#111' : (hwColor === 'זהב' ? '#b7791f' : '#718096');
+            const hasStab = card.querySelector('.cb-stab') && card.querySelector('.cb-stab').checked;
+            const hasSeal = card.querySelector('.cb-seal') && card.querySelector('.cb-seal').checked;
+            const handleType = card.querySelector('.handle-type') ? card.querySelector('.handle-type').value : 'knob';
 
-        if (type !== 'shower') {
-            ctx.strokeStyle = "#0000aa"; ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(startX, origStartY+origDh+20); ctx.lineTo(startX, origStartY+origDh+50); ctx.moveTo(startX+dw, origStartY+origDh+20); ctx.lineTo(startX+dw, origStartY+origDh+50); ctx.moveTo(startX, origStartY+origDh+35); ctx.lineTo(startX+dw, origStartY+origDh+35); ctx.stroke();
-            ctx.fillStyle = "#0000aa"; ctx.font = "bold 30px Arial"; ctx.textAlign = "center"; ctx.fillText(`${w}`, startX+dw/2, origStartY+origDh+65);
-            
-            if (type === 'fixed' || type === 'showcase') {
-                 ctx.save(); ctx.translate(startX+dw+65, origStartY+origDh/2); ctx.rotate(-Math.PI/2); ctx.fillText(`${hRight}`, 0, 0); ctx.restore();
-                 ctx.save(); ctx.translate(startX-65, origStartY+origDh/2); ctx.rotate(Math.PI/2); ctx.fillText(`${hLeft}`, 0, 0); ctx.restore();
+            c.fillStyle = "rgba(227, 242, 253, 0.35)";
+            c.fillRect(startX, startY, dw, dh);
+
+            c.strokeStyle = frameColor;
+            c.lineWidth = 3.5;
+
+            if (conf === 'front') {
+                c.strokeRect(startX, startY, dw, dh);
+                const layout = card.querySelector('.shower-layout-type').value;
+                if (layout === '1wing') {
+                    drawTriangle(c, startX, startY, dw, dh, 'right');
+                    drawShowerHandle(c, startX + 28, startY + dh / 2, handleType, frameColor);
+                } else if (layout === '2wing') {
+                    c.beginPath(); c.moveTo(startX + dw / 2, startY); c.lineTo(startX + dw / 2, startY + dh); c.stroke();
+                    drawTriangle(c, startX, startY, dw / 2, dh, 'left');
+                    drawTriangle(c, startX + dw / 2, startY, dw / 2, dh, 'right');
+                    drawShowerHandle(c, startX + dw / 2 - 22, startY + dh / 2, handleType, frameColor);
+                    drawShowerHandle(c, startX + dw / 2 + 22, startY + dh / 2, handleType, frameColor);
+                } else if (layout === 'fix_wing') {
+                    const fixW = dw * 0.38;
+                    c.beginPath(); c.moveTo(startX + fixW, startY); c.lineTo(startX + fixW, startY + dh); c.stroke();
+                    c.fillStyle = "#4a5568"; c.font = "bold 18px Rubik, Arial";
+                    c.fillText("קבוע", startX + fixW / 2, startY + 35);
+                    drawTriangle(c, startX + fixW, startY, dw - fixW, dh, 'right');
+                    drawShowerHandle(c, startX + fixW + 25, startY + dh / 2, handleType, frameColor);
+                } else if (layout === 'sliding') {
+                    c.beginPath(); c.moveTo(startX + dw / 2, startY); c.lineTo(startX + dw / 2, startY + dh); c.stroke();
+                    drawArrow(c, startX + dw * 0.75, startY + dh / 2, 'left');
+                    c.fillStyle = "#4a5568"; c.font = "bold 18px Rubik, Arial";
+                    c.fillText("קבוע", startX + dw * 0.25, startY + 35);
+                }
+                if (hasStab) {
+                    c.save(); c.lineWidth = 5; c.strokeStyle = frameColor;
+                    c.beginPath(); c.moveTo(startX, startY + 18); c.lineTo(startX + dw, startY + 18); c.stroke();
+                    c.restore();
+                }
+                if (hasSeal) {
+                    c.save(); c.lineWidth = 5; c.strokeStyle = "#3182ce";
+                    c.beginPath(); c.moveTo(startX, startY + dh); c.lineTo(startX + dw, startY + dh); c.stroke();
+                    c.restore();
+                }
+                drawHorizDim(c, startX, startX + dw, origStartY + origDh + 45, `${w} ס"מ`);
+                drawVertDim(c, startX + dw + 50, origStartY, origStartY + origDh, `${h} ס"מ`, 'right');
             } else {
-                 ctx.save(); ctx.translate(startX+dw+65, origStartY+origDh/2); ctx.rotate(-Math.PI/2); ctx.fillText(`${h}`, 0, 0); ctx.restore();
+                const totalW = wRight + wLeft;
+                const pxL = (wLeft / totalW) * (dw - 12);
+                const pxR = (wRight / totalW) * (dw - 12);
+                const rightX = startX + pxL + 12;
+
+                c.strokeRect(startX, startY, pxL, dh);
+                c.strokeRect(rightX, startY, pxR, dh);
+
+                c.fillStyle = "#0d47a1";
+                c.fillRect(startX + pxL, startY - 4, 12, dh + 8);
+
+                const typeL = card.querySelector('.shower-side-l').value;
+                const typeR = card.querySelector('.shower-side-r').value;
+                drawCornerShowerSide(c, startX, startY, pxL, dh, typeL, 'left', handleType, frameColor);
+                drawCornerShowerSide(c, rightX, startY, pxR, dh, typeR, 'right', handleType, frameColor);
+
+                if (hasStab) {
+                    c.save(); c.lineWidth = 4; c.strokeStyle = frameColor;
+                    c.beginPath(); c.moveTo(startX, startY + 16); c.lineTo(startX + dw, startY + 16); c.stroke();
+                    c.restore();
+                }
+                drawHorizDim(c, startX, startX + pxL, origStartY + origDh + 45, `שמאל: ${wLeft}`);
+                drawHorizDim(c, rightX, rightX + pxR, origStartY + origDh + 45, `ימין: ${wRight}`);
+                drawVertDim(c, startX + dw + 50, origStartY, origStartY + origDh, `${h} ס"מ`, 'right');
+            }
+            return cnv;
+        }
+
+        if (type === 'fixed' || type === 'showcase') {
+            const pixHRight = (hRight / h) * dh;
+            const pixHLeft = (hLeft / h) * dh;
+            c.fillStyle = "rgba(227, 242, 253, 0.35)";
+            c.beginPath();
+            c.moveTo(startX, startY + dh);
+            c.lineTo(startX + dw, startY + dh);
+            c.lineTo(startX + dw, startY + dh - pixHRight);
+            c.lineTo(startX, startY + dh - pixHLeft);
+            c.closePath();
+            c.fill();
+
+            c.save();
+            c.clip();
+            const cols = parseInt(card.querySelector('.div-x').value, 10) || 0;
+            const rows = parseInt(card.querySelector('.div-y').value, 10) || 0;
+            c.lineWidth = 3;
+            c.strokeStyle = "#2d3748";
+            if (cols > 0) {
+                const colW = dw / (cols + 1);
+                for (let i = 1; i <= cols; i++) {
+                    c.beginPath(); c.moveTo(startX + i * colW, startY); c.lineTo(startX + i * colW, startY + dh); c.stroke();
+                }
+            }
+            if (rows > 0) {
+                const rowH = dh / (rows + 1);
+                for (let j = 1; j <= rows; j++) {
+                    c.beginPath(); c.moveTo(startX, startY + dh - j * rowH); c.lineTo(startX + dw, startY + dh - j * rowH); c.stroke();
+                }
+            }
+            c.restore();
+
+            c.lineWidth = 4;
+            c.strokeStyle = "#1a202c";
+            c.beginPath();
+            c.moveTo(startX, startY + dh);
+            c.lineTo(startX + dw, startY + dh);
+            c.lineTo(startX + dw, startY + dh - pixHRight);
+            c.lineTo(startX, startY + dh - pixHLeft);
+            c.closePath();
+            c.stroke();
+
+            drawHorizDim(c, startX, startX + dw, origStartY + origDh + 45, `${w} ס"מ`);
+            drawVertDim(c, startX + dw + 50, startY + dh - pixHRight, startY + dh, `${hRight} ס"מ`, 'right');
+            if (hLeft !== hRight) {
+                drawVertDim(c, startX - 50, startY + dh - pixHLeft, startY + dh, `${hLeft} ס"מ`, 'left');
+            }
+            return cnv;
+        }
+
+        if (type === 'sliding') {
+            c.fillStyle = "rgba(227, 242, 253, 0.35)";
+            c.fillRect(startX, startY, dw, dh);
+            c.strokeRect(startX, startY, dw, dh);
+            const sashes = Math.max(2, Math.min(6, parseInt(card.querySelector('.sl-sashes').value, 10) || 2));
+            const slDiv = card.querySelector('.sl-div').value;
+            const sashW = dw / sashes;
+            for (let i = 0; i < sashes; i++) {
+                const sx = startX + i * sashW + 6;
+                const sy = startY + 6;
+                const sw = sashW - 12;
+                const sh = dh - 12;
+                c.strokeRect(sx, sy, sw, sh);
+
+                if (slDiv === 'strips' || slDiv === 'grid') {
+                    c.save();
+                    c.strokeStyle = "#4a5568";
+                    c.lineWidth = 1.8;
+                    for (let r = 1; r <= 2; r++) {
+                        c.beginPath(); c.moveTo(sx, sy + (sh / 3) * r); c.lineTo(sx + sw, sy + (sh / 3) * r); c.stroke();
+                    }
+                    if (slDiv === 'grid') {
+                        c.beginPath(); c.moveTo(sx + sw / 2, sy); c.lineTo(sx + sw / 2, sy + sh); c.stroke();
+                    }
+                    c.restore();
+                }
+                drawArrow(c, sx + sw / 2, sy + sh / 2, (i % 2 === 0) ? 'right' : 'left');
+            }
+        } else if (type === 'pocket') {
+            c.fillStyle = "rgba(227, 242, 253, 0.35)";
+            c.fillRect(startX, startY, dw, dh);
+            c.save();
+            c.setLineDash([8, 8]);
+            c.fillStyle = "#f7fafc";
+            if (pktDir === 'right') {
+                c.fillRect(startX + dw, startY, pktW, dh);
+                c.strokeRect(startX + dw, startY, pktW, dh);
+                drawArrow(c, startX + dw / 2, startY + dh / 2, 'right');
+                c.fillStyle = "#4a5568"; c.font = "bold 16px Rubik, Arial";
+                c.fillText("כיס", startX + dw + pktW / 2, startY + dh / 2);
+            } else {
+                c.fillRect(startX - pktW, startY, pktW, dh);
+                c.strokeRect(startX - pktW, startY, pktW, dh);
+                drawArrow(c, startX + dw / 2, startY + dh / 2, 'left');
+                c.fillStyle = "#4a5568"; c.font = "bold 16px Rubik, Arial";
+                c.fillText("כיס", startX - pktW / 2, startY + dh / 2);
+            }
+            c.restore();
+            c.strokeRect(startX, startY, dw, dh);
+            c.strokeRect(startX + 8, startY + 8, dw - 16, dh - 16);
+        } else if (['hinge', 'tilt_turn', 'door'].includes(type)) {
+            c.fillStyle = "rgba(227, 242, 253, 0.35)";
+            c.fillRect(startX, startY, dw, dh);
+            c.strokeRect(startX, startY, dw, dh);
+
+            let leafX = startX, leafY = startY, leafW = dw, leafH = dh;
+            if (type === 'door') {
+                const topCm = parseFloat(card.querySelector('.dr-top').value) || 0;
+                const sideCm = parseFloat(card.querySelector('.dr-side').value) || 0;
+                if (topCm > 0) {
+                    const topPx = Math.min(dh * 0.3, (topCm / Math.max(h, 180)) * dh);
+                    c.strokeRect(startX, startY, dw, topPx);
+                    c.fillStyle = "#4a5568"; c.font = "16px Rubik, Arial";
+                    c.fillText(`קבוע עליון (${topCm})`, startX + dw / 2, startY + topPx / 2 + 5);
+                    leafY += topPx; leafH -= topPx;
+                }
+                if (sideCm > 0) {
+                    const sidePx = Math.min(dw * 0.35, (sideCm / Math.max(w, 100)) * dw);
+                    c.strokeRect(startX + dw - sidePx, leafY, sidePx, leafH);
+                    leafW -= sidePx;
+                }
+            } else {
+                c.strokeRect(startX + 8, startY + 8, dw - 16, dh - 16);
+            }
+
+            const dir = card.querySelector('.open-dir').value;
+            drawTriangle(c, leafX, leafY, leafW, leafH, dir);
+            if (type === 'tilt_turn') drawTriangle(c, leafX, leafY, leafW, leafH, 'top');
+            if (type === 'door') {
+                c.save();
+                c.beginPath(); c.lineWidth = 5; c.strokeStyle = "#0d47a1";
+                if (dir === 'right') {
+                    c.moveTo(leafX + 18, leafY + leafH / 2); c.lineTo(leafX + 46, leafY + leafH / 2);
+                } else {
+                    c.moveTo(leafX + leafW - 18, leafY + leafH / 2); c.lineTo(leafX + leafW - 46, leafY + leafH / 2);
+                }
+                c.stroke();
+                c.restore();
+            }
+        } else if (type === 'kipp') {
+            c.fillStyle = "rgba(227, 242, 253, 0.35)";
+            c.fillRect(startX, startY, dw, dh);
+            c.strokeRect(startX, startY, dw, dh);
+            c.strokeRect(startX + 8, startY + 8, dw - 16, dh - 16);
+            drawTriangle(c, startX, startY, dw, dh, 'top');
+        } else if (type === 'shutter') {
+            const isHidden = card.querySelector('.sht-box').value === 'hidden';
+            const boxH = dh * 0.16;
+            const bodyY = startY + boxH;
+            const bodyH = dh - boxH;
+
+            c.save();
+            if (isHidden) {
+                c.setLineDash([6, 6]);
+                c.fillStyle = "#f7fafc";
+                c.fillRect(startX, startY, dw, boxH);
+                c.strokeRect(startX, startY, dw, boxH);
+            } else {
+                c.fillStyle = "#cbd5e0";
+                c.fillRect(startX, startY, dw, boxH);
+                c.strokeRect(startX, startY, dw, boxH);
+            }
+            c.restore();
+
+            c.strokeRect(startX, bodyY, dw, bodyH);
+            c.save();
+            c.beginPath(); c.rect(startX, bodyY, dw, bodyH); c.clip();
+            const slatStep = Math.max(14, Math.min(24, bodyH / 14));
+            for (let y = 0; y < bodyH; y += slatStep) {
+                c.fillStyle = (Math.floor(y / slatStep) % 2 === 0) ? "#edf2f7" : "#e2e8f0";
+                c.fillRect(startX, bodyY + y, dw, slatStep - 2);
+                c.strokeRect(startX, bodyY + y, dw, slatStep - 2);
+            }
+            c.restore();
+        } else if (type === 'fence') {
+            c.strokeRect(startX, startY, dw, dh);
+            c.fillStyle = "#2d3748";
+            c.fillRect(startX - 8, startY - 6, 12, dh + 12);
+            c.fillRect(startX + dw - 4, startY - 6, 12, dh + 12);
+
+            const spaceCm = Math.max(0.5, parseFloat(card.querySelector('.fence-space').value) || 2);
+            const slatCm = 10;
+            const pxPerCm = dh / Math.max(h, 40);
+            const slatPx = Math.max(8, slatCm * pxPerCm);
+            const spacePx = Math.max(3, spaceCm * pxPerCm);
+
+            c.save();
+            c.beginPath(); c.rect(startX + 4, startY + 4, dw - 8, dh - 8); c.clip();
+            c.fillStyle = "#4a5568";
+            for (let y = spacePx; y < dh - 4; y += (slatPx + spacePx)) {
+                c.fillRect(startX + 4, startY + y, dw - 8, slatPx);
+            }
+            c.restore();
+        } else {
+            c.fillStyle = "rgba(226, 232, 240, 0.35)";
+            c.fillRect(startX, startY, dw, dh);
+            c.strokeRect(startX, startY, dw, dh);
+            c.strokeRect(startX + 8, startY + 8, dw - 16, dh - 16);
+        }
+
+        const rightEdgeForDim = (type === 'pocket' && pktDir === 'right') ? (startX + dw + pktW) : (startX + dw);
+        drawHorizDim(c, startX, startX + dw, origStartY + origDh + 48, `${w} ס"מ`);
+        drawVertDim(c, rightEdgeForDim + 52, origStartY, origStartY + origDh, `${h} ס"מ`, 'right');
+
+        return cnv;
+    }
+
+    function drawPergolaPlanView(ctx, boxX, boxY, boxW, boxH, wCm, depthCm, isStand, prgDir, hasGutter) {
+        ctx.save();
+        ctx.fillStyle = "#0d47a1";
+        ctx.font = "bold 22px Rubik, Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("מבט על - תוכנית גג והצללה", boxX + boxW / 2, boxY - 16);
+
+        const rawRatio = Math.max(0.2, wCm / Math.max(1, depthCm));
+        const visRatio = Math.max(0.55, Math.min(1.85, rawRatio));
+        const maxW = boxW - 110;
+        const maxH = boxH - 110;
+        let dw, dh;
+        if (visRatio > (maxW / maxH)) {
+            dw = maxW; dh = maxW / visRatio;
+        } else {
+            dh = maxH; dw = maxH * visRatio;
+        }
+        const sx = boxX + (boxW - dw) / 2;
+        const sy = boxY + 25 + (maxH - dh) / 2;
+
+        ctx.fillStyle = "#cbd5e0";
+        ctx.fillRect(sx - 20, sy - 16, dw + 40, 14);
+        ctx.fillStyle = "#2d3748";
+        ctx.font = "bold 15px Rubik, Arial";
+        ctx.fillText("קיר המבנה", sx + dw / 2, sy - 4);
+
+        ctx.fillStyle = "#f8fafc";
+        ctx.fillRect(sx, sy, dw, dh);
+
+        ctx.save();
+        ctx.beginPath(); ctx.rect(sx + 8, sy + 8, dw - 16, dh - 16); ctx.clip();
+        ctx.strokeStyle = "#4a5568";
+        ctx.lineWidth = 3;
+        const step = 18;
+        if (prgDir === 'width' || prgDir === 'grid') {
+            for (let y = sy + 14; y < sy + dh - 8; y += step) {
+                ctx.beginPath(); ctx.moveTo(sx + 8, y); ctx.lineTo(sx + dw - 8, y); ctx.stroke();
             }
         }
-        return canvas;
+        if (prgDir === 'length' || prgDir === 'grid') {
+            for (let x = sx + 14; x < sx + dw - 8; x += step) {
+                ctx.beginPath(); ctx.moveTo(x, sy + 8); ctx.lineTo(x, sy + dh - 8); ctx.stroke();
+            }
+        }
+        ctx.restore();
+
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "#1a202c";
+        ctx.strokeRect(sx, sy, dw, dh);
+        ctx.lineWidth = 2;
+        ctx.strokeRect(sx + 8, sy + 8, dw - 16, dh - 16);
+
+        if (isStand) {
+            ctx.fillStyle = "#0d47a1";
+            ctx.fillRect(sx - 4, sy + dh - 18, 22, 22);
+            ctx.fillRect(sx + dw - 18, sy + dh - 18, 22, 22);
+            if (wCm >= 450) {
+                ctx.fillRect(sx + dw / 2 - 11, sy + dh - 18, 22, 22);
+            }
+        }
+
+        if (hasGutter) {
+            ctx.save();
+            ctx.strokeStyle = "#1e88e5";
+            ctx.lineWidth = 4;
+            ctx.setLineDash([10, 6]);
+            ctx.beginPath();
+            ctx.moveTo(sx + 4, sy + dh + 8);
+            ctx.lineTo(sx + dw - 4, sy + dh + 8);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        drawHorizDim(ctx, sx, sx + dw, sy + dh + 42, `רוחב: ${wCm} ס"מ`);
+        drawVertDim(ctx, sx + dw + 42, sy, sy + dh, `יציאה: ${depthCm} ס"מ`, 'right');
+        ctx.restore();
+    }
+
+    function drawPergolaElevationView(ctx, boxX, boxY, boxW, boxH, wCm, depthCm, isStand, postHCm, prgDir, hasGutter) {
+        ctx.save();
+        ctx.fillStyle = "#0d47a1";
+        ctx.font = "bold 22px Rubik, Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(isStand ? "מבט חזית ועמודים" : "מבט חזית / צד (פרגולה תלויה)", boxX + boxW / 2, boxY - 16);
+
+        const maxW = boxW - 110;
+        const maxH = boxH - 120;
+        const rawRatio = Math.max(0.5, wCm / Math.max(150, postHCm));
+        const visRatio = Math.max(0.75, Math.min(1.75, rawRatio));
+
+        let dw, dh;
+        if (visRatio > (maxW / maxH)) {
+            dw = maxW; dh = maxW / visRatio;
+        } else {
+            dh = maxH; dw = maxH * visRatio;
+        }
+        const sx = boxX + (boxW - dw) / 2;
+        const sy = boxY + 30 + (maxH - dh) / 2;
+        const beamH = Math.max(28, dh * 0.14);
+
+        ctx.strokeStyle = "#718096";
+        ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(sx - 25, sy + dh); ctx.lineTo(sx + dw + 25, sy + dh); ctx.stroke();
+
+        ctx.fillStyle = "#e2e8f0";
+        ctx.fillRect(sx, sy, dw, beamH);
+        ctx.strokeStyle = "#1a202c";
+        ctx.lineWidth = 4;
+        ctx.strokeRect(sx, sy, dw, beamH);
+
+        ctx.strokeStyle = "#4a5568";
+        ctx.lineWidth = 2;
+        for (let x = sx + 14; x < sx + dw - 10; x += 16) {
+            ctx.beginPath(); ctx.moveTo(x, sy + 5); ctx.lineTo(x - 4, sy + beamH - 5); ctx.stroke();
+        }
+
+        if (isStand) {
+            const postW = Math.max(14, dw * 0.045);
+            ctx.fillStyle = "#2d3748";
+            ctx.fillRect(sx + 6, sy + beamH, postW, dh - beamH);
+            ctx.fillRect(sx + dw - postW - 6, sy + beamH, postW, dh - beamH);
+            if (wCm >= 450) {
+                ctx.fillRect(sx + dw / 2 - postW / 2, sy + beamH, postW, dh - beamH);
+            }
+            drawVertDim(ctx, sx + dw + 42, sy, sy + dh, `גובה: ${postHCm} ס"מ`, 'right');
+        } else {
+            ctx.fillStyle = "#cbd5e0";
+            ctx.fillRect(sx - 18, sy - 35, 18, dh + 35);
+            ctx.strokeStyle = "#0d47a1";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(sx, sy - 30);
+            ctx.lineTo(sx + dw * 0.78, sy);
+            ctx.stroke();
+            ctx.fillStyle = "#4a5568";
+            ctx.font = "bold 17px Rubik, Arial";
+            ctx.fillText("תלויה ללא עמודים (מוטות מתיחה)", sx + dw / 2, sy + dh / 2);
+        }
+
+        if (hasGutter) {
+            ctx.fillStyle = "#1e88e5";
+            ctx.font = "bold 15px Rubik, Arial";
+            ctx.fillText("כולל מרזב ניקוז מובנה", sx + dw / 2, sy - 8);
+        }
+
+        drawHorizDim(ctx, sx, sx + dw, sy + dh + 42, `רוחב חזית: ${wCm} ס"מ`);
+        ctx.restore();
+    }
+
+    function drawShowerHandle(ctx, x, y, handleType, color) {
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = 4;
+        if (handleType === 'towel') {
+            ctx.beginPath(); ctx.moveTo(x - 15, y); ctx.lineTo(x + 35, y); ctx.stroke();
+        } else {
+            ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.restore();
+    }
+
+    function drawCornerShowerSide(ctx, x, y, w, h, sideType, sideDir, handleType, color) {
+        if (sideType === 'wing') {
+            drawTriangle(ctx, x, y, w, h, sideDir);
+            const hx = (sideDir === 'left') ? (x + w - 22) : (x + 22);
+            drawShowerHandle(ctx, hx, y + h / 2, handleType, color);
+        } else if (sideType === 'fix') {
+            ctx.save();
+            ctx.fillStyle = "#4a5568";
+            ctx.font = "bold 17px Rubik, Arial";
+            ctx.fillText("קבוע", x + w / 2, y + 32);
+            ctx.restore();
+        } else if (sideType === 'fix_wing') {
+            const fixW = w * 0.42;
+            ctx.beginPath();
+            if (sideDir === 'left') {
+                ctx.moveTo(x + fixW, y); ctx.lineTo(x + fixW, y + h); ctx.stroke();
+                drawTriangle(ctx, x + fixW, y, w - fixW, h, 'left');
+            } else {
+                ctx.moveTo(x + w - fixW, y); ctx.lineTo(x + w - fixW, y + h); ctx.stroke();
+                drawTriangle(ctx, x, y, w - fixW, h, 'right');
+            }
+        }
     }
 
     function generateSketch(btn) {
         const card = btn.closest('.card');
         const type = card.querySelector('.item-type').value;
         const client = document.getElementById('clientName').value || "לקוח";
-        const canvas = createSketchCanvas(card);
+        const cnv = createSketchCanvas(card);
         const link = document.createElement('a');
         link.download = `Sketch_${client}_${type}.png`;
-        link.href = canvas.toDataURL();
+        link.href = cnv.toDataURL('image/png');
         link.click();
+        showToast("השרטוט הורד למכשיר");
     }
 
     // --- הפקת דף שרטוטים מרוכז לכל המוצרים יחד ---
     function printAllSketches() {
         const cards = document.querySelectorAll('.item-card');
         if (cards.length === 0) {
-            alert("לא הוזנו מוצרים להפקת שרטוטים.");
+            showToast("לא הוזנו מוצרים להפקת שרטוטים");
             return;
         }
         const clientName = document.getElementById('clientName').value || "ישראל ישראלי";
-        const quoteDate = new Date(document.getElementById('quoteDate').value).toLocaleDateString('he-IL');
+        const qDateRaw = document.getElementById('quoteDate').value;
+        const quoteDate = qDateRaw ? new Date(qDateRaw).toLocaleDateString('he-IL') : new Date().toLocaleDateString('he-IL');
         const quoteNum = document.getElementById('quoteNumber').value || "1";
 
         let htmlContent = `
-            <div style="text-align:center; margin-bottom:30px; border-bottom:3px solid #0d47a1; padding-bottom:15px;">
-                <h1 style="margin:0; color:#0d47a1; font-size:28px;">יהונתן אלומיניום - נספח שרטוטים</h1>
-                <div style="display:flex; justify-content:space-between; margin-top:20px; font-weight:bold; font-size:15px;">
-                    <span>לקוח: ${clientName}</span>
-                    <span>תאריך: ${quoteDate}</span>
-                    <span>מס' הצעה: ${quoteNum}</span>
+            <div style="font-family:'Rubik',sans-serif; direction:rtl; color:#1a202c;">
+                <div style="text-align:center; margin-bottom:24px; border-bottom:3px solid #0d47a1; padding-bottom:14px;">
+                    <h1 style="margin:0; color:#0d47a1; font-size:26px;">יהונתן אלומיניום - נספח שרטוטים אדריכליים</h1>
+                    <div style="display:flex; justify-content:space-between; margin-top:16px; font-weight:700; font-size:14.5px; background:#f8fafc; padding:8px 14px; border-radius:8px; border:1px solid #e2e8f0;">
+                        <span>לקוח: ${clientName}</span>
+                        <span>תאריך: ${quoteDate}</span>
+                        <span>מס' הצעה: ${quoteNum}</span>
+                    </div>
                 </div>
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:18px;">
         `;
 
         let index = 1;
         cards.forEach(card => {
-            const typeSelect = card.querySelector('.item-type');
-            const type = typeSelect.value;
-            const typeName = typeSelect.options[typeSelect.selectedIndex].text;
-
-            if (type === 'joker') {
-                const title = card.querySelector('.joker-title').value || 'כללי';
-                const desc = card.querySelector('.joker-desc').value || '';
+            const info = getItemFullDetails(card);
+            if (info.type === 'joker') {
                 const imgEl = card.querySelector('.img-display');
                 const imgSrc = (imgEl && imgEl.src && imgEl.src.startsWith('data:')) ? imgEl.src : '';
                 htmlContent += `
                     <div style="border:1px solid #cbd5e0; border-radius:10px; padding:12px; text-align:center; page-break-inside:avoid; background:#fff;">
-                        <div style="font-weight:bold; color:#0d47a1; margin-bottom:8px; font-size:16px;">מוצר #${index++}: ${title}</div>
-                        <div style="font-size:13px; color:#444; margin-bottom:8px;">${desc}</div>
+                        <div style="font-weight:700; color:#0d47a1; margin-bottom:6px; font-size:15px;">מוצר #${index++}: ${info.title} (כמות: ${info.qty})</div>
+                        <div style="font-size:12.5px; color:#444; margin-bottom:8px;">${info.specsLines.join(' | ')}</div>
                         ${imgSrc ? `<img src="${imgSrc}" style="max-width:100%; max-height:240px; object-fit:contain;">` : `<div style="padding:40px 0; color:#999;">ללא שרטוט</div>`}
                     </div>
                 `;
             } else {
-                const canvas = createSketchCanvas(card);
-                const dataUrl = canvas.toDataURL();
-                const profile = card.querySelector('.profile-select').value;
-                const color = (type !== 'shower') ? (card.querySelector('.color-shade').value || "לפי בחירה") : card.querySelector('.hardware-color').value;
-                const qty = card.querySelector('.qty-input').value || 1;
+                const cnv = createSketchCanvas(card);
+                const dataUrl = cnv.toDataURL('image/png');
                 htmlContent += `
                     <div style="border:1px solid #cbd5e0; border-radius:10px; padding:10px; text-align:center; page-break-inside:avoid; background:#fff;">
-                        <div style="font-weight:bold; color:#0d47a1; margin-bottom:4px; font-size:15px;">מוצר #${index++}: ${typeName} (כמות: ${qty})</div>
-                        <div style="font-size:12px; color:#333; margin-bottom:6px;">פרופיל: ${profile} | גוון: ${color}</div>
-                        <img src="${dataUrl}" style="width:100%; height:auto; display:block; margin:0 auto;">
+                        <div style="font-weight:700; color:#0d47a1; margin-bottom:4px; font-size:15px;">מוצר #${index++}: ${info.title} (כמות: ${info.qty})</div>
+                        <div style="font-size:12px; color:#333; margin-bottom:6px;">${info.specsLines.join(' • ')}</div>
+                        <img src="${dataUrl}" style="width:100%; height:auto; display:block; margin:0 auto; border-radius:6px;">
                     </div>
                 `;
             }
         });
 
-        htmlContent += `</div>`;
+        htmlContent += `</div></div>`;
         document.getElementById('printArea').innerHTML = htmlContent;
-        setTimeout(() => window.print(), 150);
+        document.getElementById('printModalTitle').innerText = "תצוגת דף שרטוטים מרוכז (מוכן להדפסה / PDF)";
+        document.getElementById('printPreviewBody').innerHTML = htmlContent;
+        document.getElementById('printPreviewModal').style.display = 'flex';
     }
 
     function drawArrow(ctx, x, y, dir) {
-        ctx.beginPath(); ctx.lineWidth = 2;
-        if (dir === 'right') { ctx.moveTo(x-20, y); ctx.lineTo(x+20, y); ctx.lineTo(x+10, y-10); ctx.moveTo(x+20, y); ctx.lineTo(x+10, y+10); }
-        else { ctx.moveTo(x+20, y); ctx.lineTo(x-20, y); ctx.lineTo(x-10, y-10); ctx.moveTo(x-20, y); ctx.lineTo(x-10, y+10); }
-        ctx.stroke(); ctx.lineWidth = 3;
+        ctx.save();
+        ctx.beginPath();
+        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = "#0d47a1";
+        if (dir === 'right') {
+            ctx.moveTo(x - 22, y); ctx.lineTo(x + 22, y);
+            ctx.lineTo(x + 10, y - 9); ctx.moveTo(x + 22, y); ctx.lineTo(x + 10, y + 9);
+        } else {
+            ctx.moveTo(x + 22, y); ctx.lineTo(x - 22, y);
+            ctx.lineTo(x - 10, y - 9); ctx.moveTo(x - 22, y); ctx.lineTo(x - 10, y + 9);
+        }
+        ctx.stroke();
+        ctx.restore();
     }
 
     function drawTriangle(ctx, x, y, w, h, dir) {
-        ctx.setLineDash([15, 15]); ctx.lineWidth = 2; ctx.beginPath();
-        if (dir === 'right') { ctx.moveTo(x, y); ctx.lineTo(x+w, y+h/2); ctx.lineTo(x, y+h); }
-        else if (dir === 'left') { ctx.moveTo(x+w, y); ctx.lineTo(x, y+h/2); ctx.lineTo(x+w, y+h); }
-        else if (dir === 'top') { ctx.moveTo(x, y+h); ctx.lineTo(x+w/2, y); ctx.lineTo(x+w, y+h); }
-        ctx.stroke(); ctx.setLineDash([]); ctx.lineWidth = 3;
+        ctx.save();
+        ctx.setLineDash([12, 10]);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#4a5568";
+        ctx.beginPath();
+        if (dir === 'right') {
+            ctx.moveTo(x, y); ctx.lineTo(x + w, y + h / 2); ctx.lineTo(x, y + h);
+        } else if (dir === 'left') {
+            ctx.moveTo(x + w, y); ctx.lineTo(x, y + h / 2); ctx.lineTo(x + w, y + h);
+        } else if (dir === 'top') {
+            ctx.moveTo(x, y + h); ctx.lineTo(x + w / 2, y); ctx.lineTo(x + w, y + h);
+        }
+        ctx.stroke();
+        ctx.restore();
     }
 </script>
 </body>
 </html>
+```
