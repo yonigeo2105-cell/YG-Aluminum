@@ -477,6 +477,121 @@
         .archive-title { font-weight: 700; color: var(--primary); font-size: 14.5px; }
         .archive-sub { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
 
+
+        /* --- תוספות שלב 2: יומן עבודה, הוצאות והכנסות, וחתימה דיגיטלית --- */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .status-measure { background: #feebc8; color: #9c4221; border: 1px solid #fbd38d; }
+        .status-prod { background: #e3f2fd; color: #0d47a1; border: 1px solid #90caf9; }
+        .status-ready { background: #e9d8fd; color: #553c9a; border: 1px solid #d6bcfa; }
+        .status-installed { background: #c6f6d5; color: #22543d; border: 1px solid #9ae6b4; }
+        .status-done { background: #edf2f7; color: #2d3748; border: 1px solid #cbd5e0; }
+
+        .worklog-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .worklog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #edf2f7;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .quick-actions-bar {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+            margin-bottom: 10px;
+        }
+        .btn-mini-action {
+            padding: 7px 11px;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 700;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            color: var(--text-dark);
+            cursor: pointer;
+            font-family: 'Rubik', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+        }
+        .btn-mini-action:hover { filter: brightness(0.96); }
+
+        .fin-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .fin-kpi-card {
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 11px;
+            text-align: center;
+        }
+        .fin-kpi-title { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
+        .fin-kpi-val { font-size: 18px; font-weight: 800; }
+
+        .tab-pills {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .tab-pill {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--primary-light);
+            background: #fff;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            text-align: center;
+            font-family: 'Rubik', sans-serif;
+        }
+        .tab-pill.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        canvas.sign-pad-canvas {
+            border: 2px dashed var(--primary-light);
+            border-radius: 12px;
+            touch-action: none;
+            background: #ffffff;
+            cursor: crosshair;
+            width: 100%;
+            height: 190px;
+            display: block;
+        }
+
+        #clientPortalScreen {
+            display: none;
+            max-width: 760px;
+            margin: 20px auto 60px;
+            padding: 0 14px;
+        }
+
         /* אזור ההדפסה */
         #printArea { display: none; }
 
@@ -506,13 +621,13 @@
     <div class="login-box">
         <div style="font-size: 38px; margin-bottom: 8px;">🛡️</div>
         <h2>יהונתן אלומיניום PRO</h2>
-        <p>הקש קוד גישה לכניסה למערכת (1234)</p>
+        <p>נא להקיש סיסמה</p>
         <input type="password" id="passwordInput" placeholder="****" inputmode="numeric" onkeydown="if(event.key==='Enter') checkLogin(false)">
         <button type="button" class="btn-login" onclick="checkLogin(false)">היכנס למערכת</button>
         <div id="draftBtnContainer" style="display:none; margin-top:14px;">
             <button type="button" class="btn-login" style="background:#2b6cb0; margin-top:0;" onclick="checkLogin(true)">📂 היכנס וטען טיוטה אחרונה</button>
         </div>
-        <p id="loginError" style="color:var(--danger); font-size:13px; font-weight:600; margin-top:10px; display:none;">סיסמה שגויה, נסה שנית (קוד ברירת מחדל: 1234)</p>
+        <p id="loginError" style="color:var(--danger); font-size:13px; font-weight:600; margin-top:10px; display:none;">סיסמה שגויה</p>
     </div>
 </div>
 
@@ -520,6 +635,8 @@
     <h1>יהונתן אלומיניום</h1>
     <p>מערכת הצעות מחיר ושרטוטים אדריכליים</p>
     <div class="header-toolbar" id="topToolbar" style="display:none;">
+        <button type="button" class="btn-top-tool" style="background:rgba(47,133,90,0.88); border-color:#9ae6b4;" onclick="openWorkLogModal()">📅 יומן עבודה <span id="workLogCountBadge" style="background:white; color:#22543d; border-radius:10px; padding:1px 7px; font-size:11.5px; font-weight:800; display:none;">0</span></button>
+        <button type="button" class="btn-top-tool" style="background:rgba(183,121,31,0.88); border-color:#fbd38d;" onclick="openFinanceModal()">💰 הוצאות והכנסות</button>
         <button type="button" class="btn-top-tool" onclick="openArchiveModal()">📂 ארכיון הצעות</button>
         <button type="button" class="btn-top-tool" onclick="loadDraft()">🔄 טען טיוטה אחרונה</button>
         <button type="button" class="btn-top-tool" onclick="startNewQuote()">📄 הצעה חדשה</button>
@@ -532,7 +649,7 @@
         <div class="row">
             <div style="flex:1.3">
                 <label>שם הלקוח:</label>
-                <input type="text" id="clientName" placeholder="ישראל ישראלי" oninput="calculateAll(false)">
+                <input type="text" id="clientName" placeholder="הזן שם לקוח" oninput="calculateAll(false)">
             </div>
             <div style="flex:1">
                 <label>טלפון לקוח (לוואטסאפ):</label>
@@ -565,7 +682,7 @@
             </div>
         </div>
         <label>הערות כלליות להצעה (יופיעו ב-PDF ובוואטסאפ):</label>
-        <input type="text" id="generalNotes" placeholder="לדוגמה: אספקה תוך 21 ימי עסקים, לא כולל עבודות טיח וצבע">
+        <input type="text" id="generalNotes" placeholder="הזן הערות כלליות להצעה">
     </div>
     
     <div class="result-box" id="resultBox">
@@ -578,7 +695,12 @@
             <div class="price-line"><span>מע"מ (18%):</span><span id="totalVat">0 ₪</span></div>
             <div class="total-line"><span>סה"כ לתשלום:</span><span id="totalFinal">0 ₪</span></div>
             
+            <div id="quoteSignedIndicator" style="display:none; margin-top:12px; background:#f0fff4; border:1px solid #9ae6b4; color:#22543d; padding:10px; border-radius:10px; font-size:13.5px; font-weight:700; text-align:center;"></div>
             <button type="button" class="btn-action" style="margin-top:16px; width:100%; background:var(--whatsapp); color:white;" onclick="openPreview()">💬 שלח הצעה מפורטת בוואטסאפ</button>
+            <div class="row" style="margin-top:10px;">
+                <button type="button" class="btn-action" style="background:var(--primary); color:white; flex:1;" onclick="openSignatureHubModal()">✍️ חתימת לקוח (מרחוק / במקום)</button>
+                <button type="button" class="btn-action" style="background:var(--success); color:white; flex:1;" onclick="convertCurrentQuoteToWorkLog()">✅ הצעה נסגרה - העבר ליומן עבודה</button>
+            </div>
         </div>
     </div>
 </div>
@@ -621,7 +743,7 @@
     <div class="modal-content" style="max-width:380px">
         <h3 style="text-align:center;margin:0 0 12px 0;color:var(--primary)">הוספת סוג פרופיל חדש</h3>
         <label>שם הפרופיל / הדגם:</label>
-        <input type="text" id="newProfileNameInput" placeholder="לדוגמה: קליל 7300 בלגי" onkeydown="if(event.key==='Enter') confirmAddProfile()">
+        <input type="text" id="newProfileNameInput" placeholder="הזן שם פרופיל / דגם" onkeydown="if(event.key==='Enter') confirmAddProfile()">
         <div class="row" style="margin-top:8px">
             <button type="button" class="btn-login" style="background:#e2e8f0; color:#1a202c; flex:1" onclick="closeModal('addProfileModal')">ביטול</button>
             <button type="button" class="btn-login" style="background:var(--primary); flex:1" onclick="confirmAddProfile()">➕ הוסף ושמור</button>
@@ -649,6 +771,274 @@
             </div>
         </div>
         <div id="printPreviewBody" style="background:white; border:1px solid #e2e8f0; border-radius:10px; padding:16px; overflow-x:auto;"></div>
+    </div>
+</div>
+
+
+<!-- מודאל יומן עבודה ופרויקטים פעילים -->
+<div class="modal-overlay" id="workLogModal">
+    <div class="modal-content wide-modal">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:12px; gap:8px; flex-wrap:wrap;">
+            <h3 style="margin:0; color:var(--primary)">📅 יומן עבודה ופרויקטים</h3>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn-mini-action" style="background:var(--primary-soft); color:var(--primary); border-color:#90caf9;" onclick="toggleManualJobBox()">➕ הוסף עבודה ידנית</button>
+                <button type="button" class="btn-mini-action" onclick="printWorkLogReport()">🖨️ הדפס יומן עבודה</button>
+                <button type="button" class="btn-mini-action" style="background:#e2e8f0;" onclick="closeModal('workLogModal')">סגור ✖</button>
+            </div>
+        </div>
+
+        <div class="fin-kpi-grid" id="workLogKpiBar">
+            <div class="fin-kpi-card">
+                <div class="fin-kpi-title">עבודות פעילות</div>
+                <div class="fin-kpi-val" id="wlActiveCount" style="color:var(--primary);">0</div>
+            </div>
+            <div class="fin-kpi-card">
+                <div class="fin-kpi-title">בייצור / מוכן להתקנה</div>
+                <div class="fin-kpi-val" id="wlProdCount" style="color:#b7791f;">0</div>
+            </div>
+            <div class="fin-kpi-card">
+                <div class="fin-kpi-title">סה"כ יתרות לגבייה</div>
+                <div class="fin-kpi-val" id="wlTotalBalance" style="color:var(--danger);">0 ₪</div>
+            </div>
+        </div>
+
+        <!-- טופס הוספת עבודה ידנית (נסתר כברירת מחדל) -->
+        <div id="manualJobBox" style="display:none; background:#f8fafc; border:1px solid #cbd5e0; border-radius:12px; padding:14px; margin-bottom:14px;">
+            <div style="font-weight:700; color:var(--primary); margin-bottom:10px;">➕ פתיחת כרטיס עבודה ידני ביומן</div>
+            <div class="row">
+                <div><label>שם הלקוח:</label><input type="text" id="mjClient" placeholder="שם הלקוח"></div>
+                <div><label>טלפון:</label><input type="tel" id="mjPhone" placeholder="050-0000000" dir="ltr" style="text-align:right"></div>
+            </div>
+            <div class="row">
+                <div><label>כתובת התקנה (לניווט Waze):</label><input type="text" id="mjAddress" placeholder="עיר, רחוב ומספר בית"></div>
+                <div><label>תאריך יעד להתקנה:</label><input type="date" id="mjTargetDate"></div>
+            </div>
+            <div class="row">
+                <div><label>סכום עסקה כולל מע"מ (₪):</label><input type="number" id="mjTotal" placeholder="0"></div>
+                <div><label>תיאור העבודה / מפרט קצר:</label><input type="text" id="mjSummary" placeholder="פירוט העבודה"></div>
+            </div>
+            <div class="row" style="margin-top:4px;">
+                <button type="button" class="btn-login" style="background:var(--success); margin:0; flex:1.5;" onclick="saveManualJob()">שמור והוסף ליומן העבודה</button>
+                <button type="button" class="btn-login" style="background:#e2e8f0; color:#1a202c; margin:0; flex:1;" onclick="toggleManualJobBox()">ביטול</button>
+            </div>
+        </div>
+
+        <!-- סינון וחיפוש ביומן העבודה -->
+        <div class="row" style="margin-bottom:12px;">
+            <div style="flex:1.2;">
+                <select id="wlStatusFilter" onchange="renderWorkLogList()" style="margin-bottom:0;">
+                    <option value="all">כל הסטטוסים</option>
+                    <option value="active_only">עבודות פעילות בלבד (ללא הושלם)</option>
+                    <option value="measure">ממתין למידות סופיות</option>
+                    <option value="prod">בייצור (הוזמן חומר/זכוכית)</option>
+                    <option value="ready">מוכן להתקנה</option>
+                    <option value="installed">הותקן (ממתין לגמר חשבון)</option>
+                    <option value="done">הושלם ושולם</option>
+                </select>
+            </div>
+            <div style="flex:1.5;">
+                <input type="text" id="wlSearchInput" placeholder="חיפוש לפי שם לקוח, כתובת או מס' הצעה..." oninput="renderWorkLogList()" style="margin-bottom:0;">
+            </div>
+        </div>
+
+        <div id="workLogListContainer" style="max-height:55vh; overflow-y:auto; padding-left:2px;"></div>
+    </div>
+</div>
+
+<!-- מודאל ניהול עבודה פרטני: מידות סופיות, כרטיס מתקין ותשלומים -->
+<div class="modal-overlay" id="workJobDetailModal">
+    <div class="modal-content wide-modal">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:12px; gap:8px; flex-wrap:wrap;">
+            <h3 style="margin:0; color:var(--primary)" id="wjdTitle">ניהול כרטיס עבודה</h3>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn-mini-action" style="background:#2d3748; color:white;" onclick="printInstallerWorkCard(false)">🖨️ כרטיס ייצור/מתקין (ללא מחירים)</button>
+                <button type="button" class="btn-mini-action" onclick="printInstallerWorkCard(true)">🖨️ כרטיס עבודה מלא</button>
+                <button type="button" class="btn-mini-action" style="background:#e2e8f0;" onclick="closeModal('workJobDetailModal')">חזרה ליומן ✖</button>
+            </div>
+        </div>
+        <div id="wjdBody" style="overflow-y:auto; max-height:74vh;"></div>
+    </div>
+</div>
+
+<!-- מודאל יומן הוצאות והכנסות -->
+<div class="modal-overlay" id="financeModal">
+    <div class="modal-content wide-modal">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:12px; gap:8px; flex-wrap:wrap;">
+            <h3 style="margin:0; color:var(--primary)">💰 יומן הוצאות והכנסות</h3>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn-mini-action" style="background:#f0fff4; color:#22543d; border-color:#9ae6b4;" onclick="exportFinanceCSV()">📊 ייצוא לאקסל (CSV)</button>
+                <button type="button" class="btn-mini-action" onclick="printFinanceReport()">🖨️ הדפס דוח כספי (PDF)</button>
+                <button type="button" class="btn-mini-action" style="background:#e2e8f0;" onclick="closeModal('financeModal')">סגור ✖</button>
+            </div>
+        </div>
+
+        <!-- סינון חודש ופרויקט -->
+        <div class="row" style="margin-bottom:12px;">
+            <div>
+                <label>תקופה / חודש:</label>
+                <input type="month" id="finMonthFilter" onchange="renderFinanceView()" style="margin-bottom:0;">
+            </div>
+            <div>
+                <label>תצוגת תקופה:</label>
+                <select id="finPeriodMode" onchange="renderFinanceView()" style="margin-bottom:0;">
+                    <option value="all">כל התקופות</option>
+                    <option value="month">לפי החודש שנבחר</option>
+                </select>
+            </div>
+            <div>
+                <label>סינון לפי פרויקט:</label>
+                <select id="finProjectFilter" onchange="renderFinanceView()" style="margin-bottom:0;">
+                    <option value="all">כל הפרויקטים והעסק</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- כרטיסי סיכום כספי -->
+        <div class="fin-kpi-grid">
+            <div class="fin-kpi-card" style="background:#f0fff4; border-color:#9ae6b4;">
+                <div class="fin-kpi-title">סה"כ הכנסות בפועל</div>
+                <div class="fin-kpi-val" id="finTotalIncome" style="color:#22543d;">0 ₪</div>
+            </div>
+            <div class="fin-kpi-card" style="background:#fff5f5; border-color:#fed7d7;">
+                <div class="fin-kpi-title">סה"כ הוצאות</div>
+                <div class="fin-kpi-val" id="finTotalExpense" style="color:#c53030;">0 ₪</div>
+            </div>
+            <div class="fin-kpi-card" style="background:#ebf8ff; border-color:#90caf9;">
+                <div class="fin-kpi-title">רווח נקי (הכנסות פחות הוצאות)</div>
+                <div class="fin-kpi-val" id="finNetProfit" style="color:var(--primary);">0 ₪</div>
+            </div>
+            <div class="fin-kpi-card">
+                <div class="fin-kpi-title">מע"מ משוער לתשלום (18%)</div>
+                <div class="fin-kpi-val" id="finVatBalance" style="color:#4a5568;">0 ₪</div>
+            </div>
+        </div>
+
+        <!-- טופס הוספת הוצאה / הכנסה -->
+        <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:14px;">
+            <div style="font-weight:700; color:var(--primary); margin-bottom:8px; font-size:14.5px;">➕ רישום תנועה חדשה (הוצאה או הכנסה)</div>
+            <div class="row">
+                <div style="flex:0.9;">
+                    <label>סוג תנועה:</label>
+                    <select id="finEntryType" style="margin-bottom:8px;">
+                        <option value="expense">📤 הוצאה</option>
+                        <option value="income">📥 הכנסה</option>
+                    </select>
+                </div>
+                <div style="flex:1.2;">
+                    <label>קטגוריה:</label>
+                    <select id="finEntryCategory" style="margin-bottom:8px;">
+                        <option value="פרופילים ואלומיניום">פרופילים ואלומיניום</option>
+                        <option value="זכוכית">זכוכית</option>
+                        <option value="פרזול ואביזרים">פרזול ואביזרים</option>
+                        <option value="תריסים ומנועים">תריסים ומנועים</option>
+                        <option value="קבלני משנה / מתקינים">קבלני משנה / מתקינים</option>
+                        <option value="דלק ורכב">דלק ורכב</option>
+                        <option value="כלי עבודה וציוד">כלי עבודה וציוד</option>
+                        <option value="שכירות וחשבונות">שכירות וחשבונות</option>
+                        <option value="תקבול מלקוח">תקבול מלקוח</option>
+                        <option value="אחר">אחר</option>
+                    </select>
+                </div>
+                <div style="flex:1.3;">
+                    <label>שיוך לפרויקט / עבודה:</label>
+                    <select id="finEntryJobId" style="margin-bottom:8px;">
+                        <option value="">הוצאה / הכנסה כללית בעסק</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div style="flex:0.9;">
+                    <label>סכום כולל מע"מ (₪):</label>
+                    <input type="number" id="finEntryAmount" placeholder="0" style="margin-bottom:8px;">
+                </div>
+                <div style="flex:1;">
+                    <label>תאריך:</label>
+                    <input type="date" id="finEntryDate" style="margin-bottom:8px;">
+                </div>
+                <div style="flex:1.4;">
+                    <label>ספק / פירוט והערה:</label>
+                    <input type="text" id="finEntryDesc" placeholder="שם ספק / פירוט עסקה" style="margin-bottom:8px;">
+                </div>
+            </div>
+            <button type="button" class="btn-login" style="margin-top:2px; padding:10px;" onclick="addFinanceEntry()">💾 הוסף תנועה ליומן</button>
+        </div>
+
+        <!-- לשוניות תצוגה: תנועות מול רווחיות פרויקטים -->
+        <div class="tab-pills">
+            <button type="button" class="tab-pill active" id="finTabTransBtn" onclick="switchFinanceTab('transactions')">📋 רשימת תנועות (הכנסות והוצאות)</button>
+            <button type="button" class="tab-pill" id="finTabProjBtn" onclick="switchFinanceTab('projects')">🏗️ רווחיות לפי פרויקט ביומן העבודה</button>
+        </div>
+
+        <div id="financeTransactionsContainer" style="max-height:38vh; overflow-y:auto;"></div>
+        <div id="financeProjectsContainer" style="max-height:38vh; overflow-y:auto; display:none;"></div>
+    </div>
+</div>
+
+<!-- מודאל חתימת לקוח: שליחת קישור מרחוק או חתימה במקום -->
+<div class="modal-overlay" id="signatureHubModal">
+    <div class="modal-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:12px;">
+            <h3 style="margin:0; color:var(--primary)">✍️ חתימה דיגיטלית לאישור ההצעה</h3>
+            <button type="button" class="btn-mini-action" style="background:#e2e8f0;" onclick="closeModal('signatureHubModal')">סגור ✖</button>
+        </div>
+
+        <div style="background:#f0fff4; border:1px solid #9ae6b4; border-radius:12px; padding:14px; margin-bottom:16px;">
+            <div style="font-weight:700; color:#22543d; margin-bottom:6px; font-size:15px;">📲 אפשרות 1: שליחת קישור ללקוח לחתימה מרחוק</div>
+            <p style="margin:0 0 10px 0; font-size:13px; color:#2d3748; line-height:1.45;">
+                שלח ללקוח קישור ייעודי בוואטסאפ. כשהלקוח יפתח את הקישור בנייד שלו, תוצג לו <strong>רק הצעת המחיר</strong> (ללא גישה למערכת הניהול שלך), הוא יוכל לחתום באצבע על המסך, לשמור PDF חתום ולהחזיר לך אישור חתום בוואטסאפ.
+            </p>
+            <input type="text" id="remoteSignUrlInput" readonly dir="ltr" style="font-size:12px; background:#fff; margin-bottom:8px; color:#4a5568;">
+            <div class="row">
+                <button type="button" class="btn-login" style="background:var(--whatsapp); margin:0; flex:1.4;" onclick="sendRemoteSignWhatsapp()">💬 שלח ללקוח לחתימה בוואטסאפ</button>
+                <button type="button" class="btn-login" style="background:#2d3748; margin:0; flex:1;" onclick="copyRemoteSignLink()">📋 העתק קישור</button>
+            </div>
+        </div>
+
+        <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:14px;">
+            <div style="font-weight:700; color:var(--primary); margin-bottom:8px; font-size:15px;">✍️ אפשרות 2: החתמת הלקוח כעת על המכשיר</div>
+            <div class="row">
+                <div><label>שם המאשר/ת:</label><input type="text" id="localSignerName" placeholder="שם הלקוח"></div>
+                <div><label>ת.ז. / ח.פ. (אופציונלי):</label><input type="text" id="localSignerId" placeholder="מספר זיהוי"></div>
+            </div>
+            <label>חתימה באצבע או בעכבר:</label>
+            <canvas id="localSignPad" class="sign-pad-canvas" width="600" height="220"></canvas>
+            <div class="row" style="margin-top:10px;">
+                <button type="button" class="btn-login" style="background:var(--danger); margin:0; flex:1;" onclick="clearSignPad('localSignPad')">נקה חתימה</button>
+                <button type="button" class="btn-login" style="background:var(--primary); margin:0; flex:1.8;" onclick="saveLocalSignature()">✅ הטמע חתימה בהצעה והצג PDF</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- מסך פורטל לקוח לחתימה מרחוק (מוצג אך ורק כשלקוח פותח קישור חתימה) -->
+<div id="clientPortalScreen">
+    <div class="card" style="border-top: 4px solid var(--primary);">
+        <div id="clientPortalQuoteView"></div>
+
+        <div id="clientPortalSignSection" style="margin-top:20px; background:#f8fafc; border:2px solid var(--primary-light); border-radius:14px; padding:16px;">
+            <h3 style="margin:0 0 8px 0; color:var(--primary); font-size:18px;">✍️ אישור הזמנה וחתימה דיגיטלית</h3>
+            <p style="margin:0 0 12px 0; font-size:13.5px; color:var(--text-muted);">קראתי את פירוט הצעת המחיר והמפרט הטכני ואני מאשר/ת את ההזמנה:</p>
+            <div class="row">
+                <div><label>שם מלא של החותם/ת:</label><input type="text" id="remoteSignerName" placeholder="שם מלא"></div>
+                <div><label>ת.ז. / ח.פ. (אופציונלי):</label><input type="text" id="remoteSignerId" placeholder="מספר זיהוי"></div>
+            </div>
+            <label>חתום כאן באצבע או בעכבר:</label>
+            <canvas id="remoteSignPad" class="sign-pad-canvas" width="600" height="220"></canvas>
+            <div class="row" style="margin-top:12px;">
+                <button type="button" class="btn-login" style="background:#e2e8f0; color:#1a202c; margin:0; flex:1;" onclick="clearSignPad('remoteSignPad')">נקה חתימה</button>
+                <button type="button" class="btn-login" style="background:var(--success); margin:0; flex:2;" onclick="confirmRemoteClientSignature()">✅ אני מאשר/ת את ההצעה - חתום ואשר</button>
+            </div>
+        </div>
+
+        <div id="remoteSignedSuccessBox" style="display:none; margin-top:20px; background:#f0fff4; border:2px solid #68d391; border-radius:14px; padding:18px; text-align:center;">
+            <div style="font-size:32px; margin-bottom:6px;">✅</div>
+            <h3 style="margin:0 0 6px 0; color:#22543d;">הצעת המחיר נחתמה בהצלחה!</h3>
+            <p style="margin:0 0 14px 0; font-size:14px; color:#2d3748;">החתימה שלך הוטמעה במסמך ההצעה למעלה. כעת ניתן לשמור עותק PDF חתום ולשלוח את האישור חזרה ליהונתן אלומיניום בוואטסאפ:</p>
+            <div class="row">
+                <button type="button" class="btn-login" style="background:var(--primary); margin:0; flex:1;" onclick="window.print()">🖨️ שמור / הדפס PDF חתום</button>
+                <button type="button" class="btn-login" style="background:var(--whatsapp); margin:0; flex:1.3;" onclick="sendSignedConfirmationBackToYehonatan()">💬 שלח אישור חתימה בוואטסאפ</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -822,6 +1212,8 @@
         document.getElementById('installationCost').value = '';
         document.getElementById('discountCost').value = '';
         document.getElementById('generalNotes').value = '';
+        window.currentQuoteSignatureData = null;
+        updateSignedIndicatorUI();
         document.getElementById('itemsContainer').innerHTML = '';
         itemCount = 0;
         addItem();
@@ -1003,6 +1395,7 @@
             discount: document.getElementById('discountCost').value,
             notes: document.getElementById('generalNotes').value,
             totalText: document.getElementById('totalFinal').innerText,
+            signatureData: window.currentQuoteSignatureData || null,
             items: items
         };
     }
@@ -1044,6 +1437,8 @@
         document.getElementById('installationCost').value = data.install || '';
         document.getElementById('discountCost').value = data.discount || '';
         document.getElementById('generalNotes').value = data.notes || '';
+        window.currentQuoteSignatureData = data.signatureData || null;
+        updateSignedIndicatorUI();
 
         const container = document.getElementById('itemsContainer');
         container.innerHTML = '';
@@ -1094,7 +1489,8 @@
                         <div class="archive-title">הצעה #${q.qNum || 1} - ${q.client || 'לקוח ללא שם'}</div>
                         <div class="archive-sub">${q.savedAt || ''} | ${(q.items ? q.items.length : 0)} מוצרים | ${q.totalText || ''}</div>
                     </div>
-                    <div style="display:flex; gap:6px;">
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <button type="button" class="btn-duplicate" style="background:#f0fff4; color:#22543d; border-color:#9ae6b4;" onclick="convertArchiveQuoteToWorkLog(${idx})">📅 ליומן עבודה</button>
                         <button type="button" class="btn-duplicate" onclick="loadFromArchive(${idx})">טען</button>
                         <button type="button" class="btn-delete" onclick="deleteFromArchive(${idx})">מחק</button>
                     </div>
@@ -1203,7 +1599,7 @@
                 
                 <div class="alum-color-section">
                     <label>גוון אלומיניום:</label>
-                    <input type="text" class="color-shade" placeholder="למשל: לבן 9016 / שחור מגורען / IRON 420" oninput="refreshLiveSketchIfOpen(this.closest('.card'))">
+                    <input type="text" class="color-shade" placeholder="הזן גוון אלומיניום" oninput="refreshLiveSketchIfOpen(this.closest('.card'))">
                 </div>
 
                 <div class="glass-section">
@@ -1232,7 +1628,7 @@
                 </div>
 
                 <label>הערה למוצר (אופציונלי):</label>
-                <input type="text" class="item-notes" placeholder="לדוגמה: ידית בהתקנה נמוכה / פירוק חלון קיים">
+                <input type="text" class="item-notes" placeholder="הזן הערה למוצר">
 
                 <div class="row">
                     <div><label>כמות</label><input type="number" class="qty-input" value="1" min="1" oninput="calculateAll(false)"></div>
@@ -1249,7 +1645,7 @@
             </div>
             
             <div class="joker-panel" style="display:none">
-                <label>כותרת העבודה:</label><input type="text" class="joker-title" placeholder="לדוגמה: סגירת מרפסת / תיקון מנוע">
+                <label>כותרת העבודה:</label><input type="text" class="joker-title" placeholder="הזן כותרת עבודה">
                 <label>תיאור מפורט:</label><textarea class="joker-desc" rows="3" placeholder="פרט כאן את תכולת העבודה..."></textarea>
                 <div class="row" style="margin-top:6px">
                      <button type="button" class="btn-login" style="background:#4a5568; margin-top:0;" onclick="openDrawing(this)">🎨 צייר שרטוט ידני</button>
@@ -1486,8 +1882,8 @@
             html = `
             <label>תוספות קבועים (ס"מ - השאר ריק אם אין):</label>
             <div class="row">
-                <div><input type="number" class="dr-top" placeholder="גובה קבוע עליון (למשל 40)" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
-                <div><input type="number" class="dr-side" placeholder="רוחב קבוע צד (למשל 35)" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                <div><input type="number" class="dr-top" placeholder="גובה קבוע עליון (ס״מ)" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
+                <div><input type="number" class="dr-side" placeholder="רוחב קבוע צד (ס״מ)" oninput="refreshLiveSketchIfOpen(this.closest('.card'))"></div>
             </div>
             <label>מחזיר שמן:</label>
             <select class="dr-closer" onchange="refreshLiveSketchIfOpen(this.closest('.card'))"><option value="none">ללא</option><option value="top">מחזיר שמן חיצוני עליון</option><option value="floor">משאבה רצפתית</option></select>`;
@@ -1969,7 +2365,7 @@
     // --- הפקת הצעת מחיר A4 מפורטת (עם תצוגה מקדימה מובנית + הדפסה) ---
     function printInvoice() {
         calculateAll(false);
-        const clientName = document.getElementById('clientName').value || "ישראל ישראלי";
+        const clientName = document.getElementById('clientName').value || "לקוח";
         const clientPhone = document.getElementById('clientPhone').value || "";
         const qDateRaw = document.getElementById('quoteDate').value;
         const quoteDate = qDateRaw ? new Date(qDateRaw).toLocaleDateString('he-IL') : new Date().toLocaleDateString('he-IL');
@@ -2047,9 +2443,17 @@
                         * הצעת מחיר תקפה ל-14 ימי עסקים.<br>
                         <strong>בכבוד רב, יהונתן אלומיניום</strong>
                     </div>
-                    <div style="text-align:center; min-width:180px;">
-                        <div style="border-bottom:1px solid #333; height:30px; margin-bottom:4px;"></div>
-                        <div>חתימת הלקוח לאישור ההזמנה</div>
+                    <div style="text-align:center; min-width:200px;">
+                        ${window.currentQuoteSignatureData ? `
+                            <div style="border-bottom:1px solid #333; padding-bottom:4px; margin-bottom:4px;">
+                                ${window.currentQuoteSignatureData.img ? `<img src="${window.currentQuoteSignatureData.img}" style="max-height:58px; max-width:190px; display:block; margin:0 auto;" alt="חתימת לקוח">` : `<div style="font-weight:800; color:#22543d;">✓ אושר ונחתם דיגיטלית</div>`}
+                            </div>
+                            <div style="font-weight:700; color:#1a202c;">חתימת הלקוח: ${window.currentQuoteSignatureData.name || clientName}${window.currentQuoteSignatureData.idNum ? ` (ת.ז. ${window.currentQuoteSignatureData.idNum})` : ''}</div>
+                            <div style="font-size:11px; color:#4a5568;">נחתם דיגיטלית: ${window.currentQuoteSignatureData.signedAt || ''}</div>
+                        ` : `
+                            <div style="border-bottom:1px solid #333; height:30px; margin-bottom:4px;"></div>
+                            <div>חתימת הלקוח לאישור ההזמנה</div>
+                        `}
                     </div>
                 </div>
             </div>
@@ -2742,7 +3146,7 @@
             showToast("לא הוזנו מוצרים להפקת שרטוטים");
             return;
         }
-        const clientName = document.getElementById('clientName').value || "ישראל ישראלי";
+        const clientName = document.getElementById('clientName').value || "לקוח";
         const qDateRaw = document.getElementById('quoteDate').value;
         const quoteDate = qDateRaw ? new Date(qDateRaw).toLocaleDateString('he-IL') : new Date().toLocaleDateString('he-IL');
         const quoteNum = document.getElementById('quoteNumber').value || "1";
@@ -2825,6 +3229,1252 @@
         ctx.stroke();
         ctx.restore();
     }
+
+    // =========================================================================
+    // שלב 2: יומן עבודה, יומן הוצאות והכנסות, וחתימה דיגיטלית (במקום ומרחוק)
+    // =========================================================================
+
+    window.currentQuoteSignatureData = null;
+    let activeWorkJobId = null;
+    let currentFinanceTab = 'transactions';
+    const signPadsState = {};
+
+    const STATUS_LABELS = {
+        measure: { text: 'ממתין למידות סופיות', cls: 'status-measure' },
+        prod:    { text: 'בייצור (הוזמן חומר/זכוכית)', cls: 'status-prod' },
+        ready:   { text: 'מוכן להתקנה', cls: 'status-ready' },
+        installed: { text: 'הותקן (ממתין לגמר חשבון)', cls: 'status-installed' },
+        done:    { text: 'הושלם ושולם', cls: 'status-done' }
+    };
+
+    function parseNumericTotal(str) {
+        if (typeof str === 'number') return str;
+        const cleaned = String(str || '').replace(/[^0-9.-]/g, '');
+        return parseFloat(cleaned) || 0;
+    }
+
+    function updateSignedIndicatorUI() {
+        const box = document.getElementById('quoteSignedIndicator');
+        if (!box) return;
+        if (window.currentQuoteSignatureData) {
+            const s = window.currentQuoteSignatureData;
+            box.style.display = 'block';
+            box.innerHTML = `✅ הצעה זו חתומה דיגיטלית ע"י <strong>${s.name || 'הלקוח'}</strong> (${s.signedAt || ''})`;
+        } else {
+            box.style.display = 'none';
+            box.innerHTML = '';
+        }
+    }
+
+    // --- ניהול נתוני יומן עבודה ב-localStorage (ללא נתוני דמו) ---
+    function getWorkLogJobs() {
+        try {
+            return JSON.parse(safeGetStorage('myAlumWorkLog', '[]') || '[]');
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveWorkLogJobs(jobs) {
+        safeSetStorage('myAlumWorkLog', JSON.stringify(jobs));
+        updateWorkLogBadge();
+    }
+
+    function updateWorkLogBadge() {
+        const badge = document.getElementById('workLogCountBadge');
+        if (!badge) return;
+        const jobs = getWorkLogJobs();
+        const activeCount = jobs.filter(j => j.status !== 'done').length;
+        if (activeCount > 0) {
+            badge.innerText = activeCount;
+            badge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    // --- המרת הצעת מחיר פעילה או מארכיון לכרטיס עבודה ביומן העבודה ---
+    function buildWorkJobFromCurrentDOM() {
+        calculateAll(false);
+        const qData = serializeCurrentQuote();
+        const detailedItems = [];
+        document.querySelectorAll('.item-card').forEach(card => {
+            const info = getItemFullDetails(card);
+            detailedItems.push({
+                title: info.title,
+                specs: info.specsLines.join(' | '),
+                quoteDims: info.dimsText,
+                finalDims: info.dimsText !== '-' ? info.dimsText : '',
+                qty: info.qty,
+                price: info.price,
+                total: info.total,
+                prodNote: ''
+            });
+        });
+        const totalIncVat = parseNumericTotal(document.getElementById('totalFinal').innerText);
+        return {
+            id: 'job_' + Date.now(),
+            qNum: qData.qNum || '1',
+            client: qData.client || 'לקוח',
+            phone: qData.phone || '',
+            address: '',
+            createdAt: new Date().toLocaleDateString('he-IL'),
+            targetDate: '',
+            status: 'measure',
+            totalAmount: totalIncVat,
+            notes: qData.notes || '',
+            fieldNotes: '',
+            signatureData: window.currentQuoteSignatureData || null,
+            items: detailedItems,
+            payments: []
+        };
+    }
+
+    function convertCurrentQuoteToWorkLog() {
+        saveDraft();
+        const newJob = buildWorkJobFromCurrentDOM();
+        const jobs = getWorkLogJobs();
+        const existingIdx = jobs.findIndex(j => String(j.qNum) === String(newJob.qNum) && j.client === newJob.client);
+        if (existingIdx >= 0) {
+            newJob.id = jobs[existingIdx].id;
+            newJob.payments = jobs[existingIdx].payments || [];
+            newJob.address = jobs[existingIdx].address || '';
+            newJob.targetDate = jobs[existingIdx].targetDate || '';
+            newJob.status = jobs[existingIdx].status || 'measure';
+            newJob.fieldNotes = jobs[existingIdx].fieldNotes || '';
+            jobs[existingIdx] = newJob;
+            saveWorkLogJobs(jobs);
+            showToast(`יומן העבודה עודכן עבור הצעה #${newJob.qNum}`);
+        } else {
+            jobs.unshift(newJob);
+            saveWorkLogJobs(jobs);
+            showToast(`הצעה #${newJob.qNum} הועברה ליומן העבודה בהצלחה!`);
+        }
+        openWorkLogModal();
+    }
+
+    function convertArchiveQuoteToWorkLog(idx) {
+        let archive = [];
+        try {
+            archive = JSON.parse(safeGetStorage('myAlumQuotesArchive', '[]') || '[]');
+        } catch (e) { archive = []; }
+        const q = archive[idx];
+        if (!q) return;
+        loadQuoteDataObject(q);
+        closeModal('archiveModal');
+        convertCurrentQuoteToWorkLog();
+    }
+
+    function openWorkLogModal() {
+        updateWorkLogBadge();
+        renderWorkLogList();
+        document.getElementById('workLogModal').style.display = 'flex';
+    }
+
+    function toggleManualJobBox() {
+        const box = document.getElementById('manualJobBox');
+        if (!box) return;
+        box.style.display = (box.style.display === 'none' || !box.style.display) ? 'block' : 'none';
+    }
+
+    function saveManualJob() {
+        const client = (document.getElementById('mjClient').value || '').trim();
+        const phone = (document.getElementById('mjPhone').value || '').trim();
+        const address = (document.getElementById('mjAddress').value || '').trim();
+        const targetDate = document.getElementById('mjTargetDate').value || '';
+        const total = parseFloat(document.getElementById('mjTotal').value) || 0;
+        const summary = (document.getElementById('mjSummary').value || '').trim();
+
+        if (!client) {
+            showToast("נא להזין שם לקוח");
+            return;
+        }
+        const jobs = getWorkLogJobs();
+        const newJob = {
+            id: 'job_' + Date.now(),
+            qNum: 'ידני',
+            client,
+            phone,
+            address,
+            createdAt: new Date().toLocaleDateString('he-IL'),
+            targetDate,
+            status: 'measure',
+            totalAmount: total,
+            notes: summary,
+            fieldNotes: '',
+            signatureData: null,
+            items: summary ? [{
+                title: summary,
+                specs: '',
+                quoteDims: '-',
+                finalDims: '',
+                qty: 1,
+                price: total,
+                total: total,
+                prodNote: ''
+            }] : [],
+            payments: []
+        };
+        jobs.unshift(newJob);
+        saveWorkLogJobs(jobs);
+
+        document.getElementById('mjClient').value = '';
+        document.getElementById('mjPhone').value = '';
+        document.getElementById('mjAddress').value = '';
+        document.getElementById('mjTargetDate').value = '';
+        document.getElementById('mjTotal').value = '';
+        document.getElementById('mjSummary').value = '';
+        document.getElementById('manualJobBox').style.display = 'none';
+
+        renderWorkLogList();
+        showToast("העבודה נוספה ליומן העבודה בהצלחה");
+    }
+
+    function getJobPaidSum(job) {
+        if (!job || !Array.isArray(job.payments)) return 0;
+        return job.payments.reduce((acc, p) => acc + (parseFloat(p.amount) || 0), 0);
+    }
+
+    function getDaysLeftBadge(targetDateStr, status) {
+        if (!targetDateStr || status === 'done') return '';
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const target = new Date(targetDateStr);
+        target.setHours(0,0,0,0);
+        const diffDays = Math.round((target - today) / (1000 * 60 * 60 * 24));
+        const formatted = target.toLocaleDateString('he-IL');
+        if (diffDays < 0) {
+            return `<span class="status-badge" style="background:#fff5f5; color:#c53030; border:1px solid #feb2b2;">⚠️ באיחור (${Math.abs(diffDays)} ימים) | יעד: ${formatted}</span>`;
+        } else if (diffDays <= 3) {
+            return `<span class="status-badge" style="background:#fffaf0; color:#c05621; border:1px solid #fbd38d;">⏰ יעד קרוב: ${formatted} (בעוד ${diffDays} ימים)</span>`;
+        }
+        return `<span class="status-badge" style="background:#edf2f7; color:#2d3748;">📅 יעד התקנה: ${formatted}</span>`;
+    }
+
+    function renderWorkLogList() {
+        const jobs = getWorkLogJobs();
+        const statusFilter = document.getElementById('wlStatusFilter') ? document.getElementById('wlStatusFilter').value : 'all';
+        const searchQ = (document.getElementById('wlSearchInput') ? document.getElementById('wlSearchInput').value : '').trim().toLowerCase();
+
+        let activeCount = 0;
+        let prodCount = 0;
+        let totalBalance = 0;
+        jobs.forEach(j => {
+            if (j.status !== 'done') activeCount++;
+            if (j.status === 'prod' || j.status === 'ready') prodCount++;
+            const paid = getJobPaidSum(j);
+            const bal = Math.max(0, (parseFloat(j.totalAmount) || 0) - paid);
+            if (j.status !== 'done') totalBalance += bal;
+        });
+
+        const elActive = document.getElementById('wlActiveCount');
+        const elProd = document.getElementById('wlProdCount');
+        const elBal = document.getElementById('wlTotalBalance');
+        if (elActive) elActive.innerText = activeCount;
+        if (elProd) elProd.innerText = prodCount;
+        if (elBal) elBal.innerText = totalBalance.toLocaleString('he-IL') + ' ₪';
+
+        const filtered = jobs.filter(j => {
+            if (statusFilter === 'active_only' && j.status === 'done') return false;
+            if (statusFilter !== 'all' && statusFilter !== 'active_only' && j.status !== statusFilter) return false;
+            if (searchQ) {
+                const hay = `${j.client || ''} ${j.phone || ''} ${j.address || ''} ${j.qNum || ''} ${j.notes || ''}`.toLowerCase();
+                if (!hay.includes(searchQ)) return false;
+            }
+            return true;
+        });
+
+        const container = document.getElementById('workLogListContainer');
+        if (!container) return;
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div style="text-align:center; padding:32px 16px; color:var(--text-muted); background:#f8fafc; border-radius:12px; border:1px dashed var(--border);">
+                    <div style="font-size:28px; margin-bottom:8px;">📋</div>
+                    <div style="font-weight:700; color:var(--text-dark); margin-bottom:4px;">יומן העבודה ריק כרגע</div>
+                    <div style="font-size:13px;">ניתן להעביר כל הצעת מחיר שנסגרה בלחיצה על הכפתור הירוק <strong>"✅ הצעה נסגרה - העבר ליומן עבודה"</strong> או להוסיף עבודה חדשה ידנית.</div>
+                </div>`;
+            return;
+        }
+
+        container.innerHTML = filtered.map(j => {
+            const stInfo = STATUS_LABELS[j.status] || STATUS_LABELS.measure;
+            const total = parseFloat(j.totalAmount) || 0;
+            const paid = getJobPaidSum(j);
+            const balance = Math.max(0, total - paid);
+            const cleanPhone = (j.phone || '').replace(/\D/g, '');
+            const intlPhone = cleanPhone.startsWith('0') ? ('972' + cleanPhone.slice(1)) : cleanPhone;
+            const wazeUrl = j.address ? `https://waze.com/ul?q=${encodeURIComponent(j.address)}&navigate=yes` : '';
+
+            return `
+                <div class="worklog-card">
+                    <div class="worklog-header">
+                        <div>
+                            <div style="font-size:16.5px; font-weight:800; color:var(--primary);">
+                                ${j.client || 'לקוח'} <span style="font-size:13px; font-weight:600; color:var(--text-muted);">(הצעה #${j.qNum})</span>
+                                ${j.signatureData ? `<span class="status-badge" style="background:#f0fff4; color:#22543d; border:1px solid #9ae6b4; margin-right:4px;">✍️ חתום</span>` : ''}
+                            </div>
+                            <div style="font-size:12.5px; color:var(--text-muted); margin-top:3px;">
+                                נפתח: ${j.createdAt || ''} | ${(j.items ? j.items.length : 0)} פריטים ${j.address ? `| 📍 ${j.address}` : ''}
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                            ${getDaysLeftBadge(j.targetDate, j.status)}
+                            <span class="status-badge ${stInfo.cls}">${stInfo.text}</span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom:8px;">
+                        <div style="flex:1.1;">
+                            <label style="font-size:12px;">סטטוס ביצוע:</label>
+                            <select onchange="updateJobQuickField('${j.id}', 'status', this.value)" style="padding:8px; font-size:13.5px; margin-bottom:0;">
+                                <option value="measure" ${j.status==='measure'?'selected':''}>ממתין למידות סופיות</option>
+                                <option value="prod" ${j.status==='prod'?'selected':''}>בייצור (הוזמן חומר/זכוכית)</option>
+                                <option value="ready" ${j.status==='ready'?'selected':''}>מוכן להתקנה</option>
+                                <option value="installed" ${j.status==='installed'?'selected':''}>הותקן (ממתין לגמר חשבון)</option>
+                                <option value="done" ${j.status==='done'?'selected':''}>הושלם ושולם</option>
+                            </select>
+                        </div>
+                        <div style="flex:1;">
+                            <label style="font-size:12px;">תאריך יעד להתקנה:</label>
+                            <input type="date" value="${j.targetDate || ''}" onchange="updateJobQuickField('${j.id}', 'targetDate', this.value)" style="padding:8px; font-size:13.5px; margin-bottom:0;">
+                        </div>
+                        <div style="flex:1.3;">
+                            <label style="font-size:12px;">כתובת התקנה (ל-Waze):</label>
+                            <input type="text" value="${(j.address || '').replace(/"/g, '&quot;')}" placeholder="הזן עיר ורחוב..." onchange="updateJobQuickField('${j.id}', 'address', this.value)" style="padding:8px; font-size:13.5px; margin-bottom:0;">
+                        </div>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:9px 12px; border-radius:10px; border:1px solid #e2e8f0; font-size:13.5px; flex-wrap:wrap; gap:8px;">
+                        <span><strong>סה"כ עסקה:</strong> ${total.toLocaleString('he-IL')} ₪</span>
+                        <span style="color:#22543d;"><strong>שולם:</strong> ${paid.toLocaleString('he-IL')} ₪</span>
+                        <span style="color:${balance > 0 ? 'var(--danger)' : '#22543d'}; font-weight:700;">יתרה לגבייה: ${balance.toLocaleString('he-IL')} ₪</span>
+                    </div>
+
+                    <div class="quick-actions-bar" style="justify-content:space-between; margin-bottom:0; margin-top:10px;">
+                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                            <button type="button" class="btn-mini-action" style="background:var(--primary); color:white; border-color:var(--primary);" onclick="openJobDetailModal('${j.id}')">📐 מידות ייצור, כרטיס מתקין ותשלומים</button>
+                            ${j.phone ? `<a href="tel:${cleanPhone}" class="btn-mini-action">📞 חיוג</a>` : ''}
+                            ${intlPhone ? `<a href="https://wa.me/${intlPhone}" target="_blank" class="btn-mini-action" style="background:#f0fff4; color:#22543d; border-color:#9ae6b4;">💬 וואטסאפ</a>` : ''}
+                            ${wazeUrl ? `<a href="${wazeUrl}" target="_blank" class="btn-mini-action" style="background:#ebf8ff; color:#0d47a1; border-color:#90caf9;">🚗 ניווט Waze</a>` : ''}
+                        </div>
+                        <button type="button" class="btn-delete" onclick="deleteWorkJob('${j.id}')">🗑️ מחק</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function updateJobQuickField(jobId, field, value) {
+        const jobs = getWorkLogJobs();
+        const job = jobs.find(j => j.id === jobId);
+        if (!job) return;
+        job[field] = value;
+        saveWorkLogJobs(jobs);
+        renderWorkLogList();
+        showToast("כרטיס העבודה עודכן");
+    }
+
+    function deleteWorkJob(jobId) {
+        let jobs = getWorkLogJobs();
+        jobs = jobs.filter(j => j.id !== jobId);
+        saveWorkLogJobs(jobs);
+        let fin = getFinanceEntries();
+        fin = fin.filter(e => e.autoJobId !== jobId);
+        saveFinanceEntries(fin);
+        renderWorkLogList();
+        showToast("העבודה נמחקה מיומן העבודה");
+    }
+
+    // --- ניהול כרטיס עבודה פרטני: מידות סופיות לייצור ותשלומים ---
+    function openJobDetailModal(jobId) {
+        activeWorkJobId = jobId;
+        renderJobDetailModal();
+        document.getElementById('workJobDetailModal').style.display = 'flex';
+    }
+
+    function renderJobDetailModal() {
+        const jobs = getWorkLogJobs();
+        const job = jobs.find(j => j.id === activeWorkJobId);
+        if (!job) return;
+
+        document.getElementById('wjdTitle').innerText = `ניהול עבודה: ${job.client} (הצעה #${job.qNum})`;
+        const total = parseFloat(job.totalAmount) || 0;
+        const paid = getJobPaidSum(job);
+        const balance = Math.max(0, total - paid);
+        const todayIso = new Date().toISOString().split('T')[0];
+
+        const itemsHtml = (job.items && job.items.length > 0) ? job.items.map((it, idx) => `
+            <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px;">
+                <div style="font-weight:700; color:var(--primary); font-size:14px; margin-bottom:4px;">
+                    #${idx + 1} ${it.title} (כמות: ${it.qty}) — מידת הצעה: ${it.quoteDims}
+                </div>
+                <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:8px;">${it.specs || ''}</div>
+                <div class="row">
+                    <div>
+                        <label style="font-size:12px;">מידה סופית לייצור (ס"מ):</label>
+                        <input type="text" value="${(it.finalDims || '').replace(/"/g, '&quot;')}" placeholder="רוחב × גובה סופי לייצור" onchange="updateJobItemField(${idx}, 'finalDims', this.value)" style="padding:8px; font-size:13.5px; margin-bottom:0;">
+                    </div>
+                    <div>
+                        <label style="font-size:12px;">הערת ייצור / התקנה לפריט:</label>
+                        <input type="text" value="${(it.prodNote || '').replace(/"/g, '&quot;')}" placeholder="הערה למפעל או למתקין" onchange="updateJobItemField(${idx}, 'prodNote', this.value)" style="padding:8px; font-size:13.5px; margin-bottom:0;">
+                    </div>
+                </div>
+            </div>
+        `).join('') : `<div style="color:var(--text-muted); font-size:13px;">אין פריטים מפורטים בכרטיס זה.</div>`;
+
+        const paymentsHtml = (job.payments && job.payments.length > 0) ? job.payments.map((p, pIdx) => `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; background:#fff; border:1px solid #cbd5e0; border-radius:8px; margin-bottom:6px; font-size:13.5px;">
+                <div>
+                    <strong style="color:#22543d;">${(parseFloat(p.amount)||0).toLocaleString('he-IL')} ₪</strong>
+                    <span style="color:var(--text-muted);"> | ${p.date || ''} | ${p.method || ''} ${p.note ? `(${p.note})` : ''}</span>
+                </div>
+                <button type="button" class="btn-delete" style="padding:4px 8px; font-size:12px;" onclick="removeJobPayment(${pIdx})">מחק</button>
+            </div>
+        `).join('') : `<div style="color:var(--text-muted); font-size:13px; margin-bottom:8px;">טרם נרשמו תשלומים שהתקבלו עבור עבודה זו.</div>`;
+
+        document.getElementById('wjdBody').innerHTML = `
+            <div style="background:#ebf8ff; border:1px solid #90caf9; border-radius:12px; padding:12px; margin-bottom:14px;">
+                <div style="font-weight:700; color:var(--primary); margin-bottom:8px;">💳 מעקב גבייה ותשלומים מהלקוח (מסונכרן אוטומטית ליומן הכנסות)</div>
+                <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:10px; font-size:14.5px; background:#fff; padding:10px; border-radius:8px;">
+                    <span><strong>סכום עסקה:</strong> ${total.toLocaleString('he-IL')} ₪</span>
+                    <span style="color:#22543d;"><strong>שולם עד כה:</strong> ${paid.toLocaleString('he-IL')} ₪</span>
+                    <span style="color:${balance > 0 ? 'var(--danger)' : '#22543d'}; font-weight:800;">יתרה לתשלום: ${balance.toLocaleString('he-IL')} ₪</span>
+                </div>
+                ${paymentsHtml}
+                <div class="row" style="margin-top:10px;">
+                    <div style="flex:0.9;"><label style="font-size:12px;">סכום שהתקבל (₪):</label><input type="number" id="newJobPayAmount" placeholder="${balance > 0 ? balance : 0}" style="padding:9px; margin-bottom:0;"></div>
+                    <div style="flex:1;"><label style="font-size:12px;">תאריך תשלום:</label><input type="date" id="newJobPayDate" value="${todayIso}" style="padding:9px; margin-bottom:0;"></div>
+                    <div style="flex:1;"><label style="font-size:12px;">אמצעי תשלום:</label>
+                        <select id="newJobPayMethod" style="padding:9px; margin-bottom:0;">
+                            <option value="העברה בנקאית">העברה בנקאית</option>
+                            <option value="מזומן">מזומן</option>
+                            <option value="צ'ק">צ'ק</option>
+                            <option value="אשראי">אשראי</option>
+                            <option value="ביט / פייבוקס">ביט / פייבוקס</option>
+                        </select>
+                    </div>
+                    <div style="flex:1.1;"><label style="font-size:12px;">הערה / אסמכתא:</label><input type="text" id="newJobPayNote" placeholder="מקדמה / גמר חשבון" style="padding:9px; margin-bottom:0;"></div>
+                </div>
+                <button type="button" class="btn-login" style="background:var(--success); padding:9px; margin-top:8px;" onclick="addJobPayment()">➕ הוסף תשלום ועדכן יתרה + יומן הכנסות</button>
+            </div>
+
+            <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:12px;">
+                <div style="font-weight:700; color:var(--primary); margin-bottom:8px;">📐 מידות סופיות לייצור והערות שטח למתקין</div>
+                <label style="font-size:12.5px;">הערות כלליות לשטח / קוד כניסה / קומה / דגשים למתקין:</label>
+                <input type="text" value="${(job.fieldNotes || '').replace(/"/g, '&quot;')}" placeholder="הזן דגשים להתקנה או לייצור..." onchange="updateJobQuickField('${job.id}', 'fieldNotes', this.value)" style="padding:9px; margin-bottom:10px;">
+                ${itemsHtml}
+            </div>
+        `;
+    }
+
+    function updateJobItemField(itemIdx, field, val) {
+        const jobs = getWorkLogJobs();
+        const job = jobs.find(j => j.id === activeWorkJobId);
+        if (!job || !job.items || !job.items[itemIdx]) return;
+        job.items[itemIdx][field] = val;
+        saveWorkLogJobs(jobs);
+        showToast("מידת הייצור נשמרה בכרטיס העבודה");
+    }
+
+    function addJobPayment() {
+        const jobs = getWorkLogJobs();
+        const job = jobs.find(j => j.id === activeWorkJobId);
+        if (!job) return;
+
+        const amt = parseFloat(document.getElementById('newJobPayAmount').value) || 0;
+        if (amt <= 0) {
+            showToast("נא להזין סכום תשלום חיובי");
+            return;
+        }
+        const date = document.getElementById('newJobPayDate').value || new Date().toISOString().split('T')[0];
+        const method = document.getElementById('newJobPayMethod').value || 'העברה בנקאית';
+        const note = (document.getElementById('newJobPayNote').value || '').trim();
+        const payId = 'pay_' + Date.now();
+
+        if (!Array.isArray(job.payments)) job.payments = [];
+        job.payments.push({ id: payId, amount: amt, date, method, note });
+
+        saveWorkLogJobs(jobs);
+
+        const finEntries = getFinanceEntries();
+        finEntries.unshift({
+            id: 'fin_' + payId,
+            autoJobId: job.id,
+            autoPayId: payId,
+            type: 'income',
+            category: 'תקבול מלקוח',
+            jobId: job.id,
+            jobLabel: `${job.client} (הצעה #${job.qNum})`,
+            amount: amt,
+            date: date,
+            desc: `תשלום מלקוח (${method})${note ? ' - ' + note : ''}`
+        });
+        saveFinanceEntries(finEntries);
+
+        renderJobDetailModal();
+        renderWorkLogList();
+        showToast("התשלום נרשם וסונכרן אוטומטית ליומן ההכנסות!");
+    }
+
+    function removeJobPayment(pIdx) {
+        const jobs = getWorkLogJobs();
+        const job = jobs.find(j => j.id === activeWorkJobId);
+        if (!job || !Array.isArray(job.payments) || !job.payments[pIdx]) return;
+        const removed = job.payments.splice(pIdx, 1)[0];
+        saveWorkLogJobs(jobs);
+
+        if (removed && removed.id) {
+            let finEntries = getFinanceEntries();
+            finEntries = finEntries.filter(e => e.autoPayId !== removed.id);
+            saveFinanceEntries(finEntries);
+        }
+        renderJobDetailModal();
+        renderWorkLogList();
+        showToast("התשלום הוסר");
+    }
+
+    function printInstallerWorkCard(includePrices) {
+        const jobs = getWorkLogJobs();
+        const job = jobs.find(j => j.id === activeWorkJobId);
+        if (!job) return;
+        const stInfo = STATUS_LABELS[job.status] || STATUS_LABELS.measure;
+        const rowsHtml = (job.items || []).map((it, i) => `
+            <tr>
+                <td style="padding:8px; border:1px solid #cbd5e0; text-align:center; font-weight:700;">${i + 1}</td>
+                <td style="padding:8px; border:1px solid #cbd5e0;">
+                    <div style="font-weight:700; color:#0d47a1;">${it.title}</div>
+                    <div style="font-size:12.5px;">${it.specs || ''}</div>
+                    ${it.prodNote ? `<div style="font-size:12.5px; color:#c05621; font-weight:700; margin-top:3px;">דגש ייצור/התקנה: ${it.prodNote}</div>` : ''}
+                </td>
+                <td style="padding:8px; border:1px solid #cbd5e0; text-align:center; font-weight:700;">${it.finalDims || it.quoteDims || '-'}</td>
+                <td style="padding:8px; border:1px solid #cbd5e0; text-align:center; font-weight:700;">${it.qty}</td>
+                ${includePrices ? `<td style="padding:8px; border:1px solid #cbd5e0;">${(parseFloat(it.total)||0).toLocaleString('he-IL')} ₪</td>` : ''}
+            </tr>
+        `).join('');
+
+        const htmlContent = `
+            <div style="font-family:'Rubik',sans-serif; direction:rtl; color:#1a202c;">
+                <div style="text-align:center; margin-bottom:20px; border-bottom:3px solid #0d47a1; padding-bottom:14px;">
+                    <h1 style="margin:0; color:#0d47a1; font-size:26px;">יהונתן אלומיניום - ${includePrices ? 'כרטיס עבודה מלא' : 'כרטיס עבודה לייצור והתקנה'}</h1>
+                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:14px; font-weight:700; font-size:14px; background:#f8fafc; padding:10px 14px; border-radius:8px; border:1px solid #cbd5e0;">
+                        <span>לקוח: ${job.client} ${job.phone ? `(${job.phone})` : ''}</span>
+                        <span>כתובת: ${job.address || 'לא הוזנה'}</span>
+                        <span>תאריך יעד: ${job.targetDate ? new Date(job.targetDate).toLocaleDateString('he-IL') : 'טרם נקבע'}</span>
+                        <span>סטטוס: ${stInfo.text}</span>
+                    </div>
+                </div>
+                ${job.fieldNotes ? `<div style="background:#fffaf0; border:1px solid #fbd38d; padding:10px; border-radius:8px; margin-bottom:14px; font-size:13.5px;"><strong>דגשים לשטח / מתקין:</strong> ${job.fieldNotes}</div>` : ''}
+                ${job.notes ? `<div style="background:#f8fafc; border:1px solid #cbd5e0; padding:10px; border-radius:8px; margin-bottom:14px; font-size:13.5px;"><strong>הערות הזמנה:</strong> ${job.notes}</div>` : ''}
+                <table style="width:100%; border-collapse:collapse; font-size:13.5px; text-align:right;">
+                    <thead>
+                        <tr style="background:#0d47a1; color:white;">
+                            <th style="padding:8px; border:1px solid #cbd5e0; width:6%;">#</th>
+                            <th style="padding:8px; border:1px solid #cbd5e0;">מוצר ומפרט ביצוע</th>
+                            <th style="padding:8px; border:1px solid #cbd5e0; width:22%; text-align:center;">מידות סופיות לייצור (ס"מ)</th>
+                            <th style="padding:8px; border:1px solid #cbd5e0; width:10%; text-align:center;">כמות</th>
+                            ${includePrices ? `<th style="padding:8px; border:1px solid #cbd5e0; width:14%;">סה"כ</th>` : ''}
+                        </tr>
+                    </thead>
+                    <tbody>${rowsHtml}</tbody>
+                </table>
+            </div>
+        `;
+        document.getElementById('printArea').innerHTML = htmlContent;
+        document.getElementById('printModalTitle').innerText = includePrices ? "כרטיס עבודה מלא" : "כרטיס עבודה לייצור / מתקין";
+        document.getElementById('printPreviewBody').innerHTML = htmlContent;
+        document.getElementById('printPreviewModal').style.display = 'flex';
+    }
+
+    function printWorkLogReport() {
+        const jobs = getWorkLogJobs();
+        if (jobs.length === 0) {
+            showToast("אין עבודות ביומן להדפסה");
+            return;
+        }
+        const rows = jobs.map((j, i) => {
+            const st = (STATUS_LABELS[j.status] || STATUS_LABELS.measure).text;
+            const total = parseFloat(j.totalAmount) || 0;
+            const paid = getJobPaidSum(j);
+            const bal = Math.max(0, total - paid);
+            return `
+                <tr>
+                    <td style="padding:8px; border:1px solid #cbd5e0; text-align:center;">${i + 1}</td>
+                    <td style="padding:8px; border:1px solid #cbd5e0; font-weight:700;">${j.client} (#${j.qNum})<br><span style="font-weight:400; font-size:12px;">${j.phone || ''} ${j.address ? '| ' + j.address : ''}</span></td>
+                    <td style="padding:8px; border:1px solid #cbd5e0;">${st}</td>
+                    <td style="padding:8px; border:1px solid #cbd5e0; text-align:center;">${j.targetDate ? new Date(j.targetDate).toLocaleDateString('he-IL') : '-'}</td>
+                    <td style="padding:8px; border:1px solid #cbd5e0;">${total.toLocaleString('he-IL')} ₪</td>
+                    <td style="padding:8px; border:1px solid #cbd5e0; color:#22543d;">${paid.toLocaleString('he-IL')} ₪</td>
+                    <td style="padding:8px; border:1px solid #cbd5e0; font-weight:700; color:${bal > 0 ? '#c53030' : '#22543d'};">${bal.toLocaleString('he-IL')} ₪</td>
+                </tr>
+            `;
+        }).join('');
+
+        const htmlContent = `
+            <div style="font-family:'Rubik',sans-serif; direction:rtl; color:#1a202c;">
+                <h1 style="color:#0d47a1; text-align:center; margin-bottom:16px;">יהונתן אלומיניום - דוח יומן עבודה מרוכז (${new Date().toLocaleDateString('he-IL')})</h1>
+                <table style="width:100%; border-collapse:collapse; font-size:13px; text-align:right;">
+                    <thead>
+                        <tr style="background:#0d47a1; color:white;">
+                            <th style="padding:8px; border:1px solid #cbd5e0;">#</th>
+                            <th style="padding:8px; border:1px solid #cbd5e0;">לקוח וכתובת</th>
+                            <th style="padding:8px; border:1px solid #cbd5e0;">סטטוס</th>
+                            <th style="padding:8px; border:1px solid #cbd5e0;">יעד התקנה</th>
+                            <th style="padding:8px; border:1px solid #cbd5e0;">סכום עסקה</th>
+                            <th style="padding:8px; border:1px solid #cbd5e0;">שולם</th>
+                            <th style="padding:8px; border:1px solid #cbd5e0;">יתרה לגבייה</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>
+        `;
+        document.getElementById('printArea').innerHTML = htmlContent;
+        document.getElementById('printModalTitle').innerText = "דוח יומן עבודה מרוכז (PDF)";
+        document.getElementById('printPreviewBody').innerHTML = htmlContent;
+        document.getElementById('printPreviewModal').style.display = 'flex';
+    }
+
+    // =========================================================================
+    // מודול 2: יומן הוצאות והכנסות (ללא נתוני דמו, מסונכרן עם יומן העבודה)
+    // =========================================================================
+    function getFinanceEntries() {
+        try {
+            return JSON.parse(safeGetStorage('myAlumFinanceLog', '[]') || '[]');
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveFinanceEntries(entries) {
+        safeSetStorage('myAlumFinanceLog', JSON.stringify(entries));
+    }
+
+    function openFinanceModal() {
+        const todayIso = new Date().toISOString().split('T')[0];
+        const dateInp = document.getElementById('finEntryDate');
+        if (dateInp && !dateInp.value) dateInp.value = todayIso;
+
+        const monthInp = document.getElementById('finMonthFilter');
+        if (monthInp && !monthInp.value) monthInp.value = todayIso.slice(0, 7);
+
+        populateFinanceJobSelects();
+        renderFinanceView();
+        document.getElementById('financeModal').style.display = 'flex';
+    }
+
+    function populateFinanceJobSelects() {
+        const jobs = getWorkLogJobs();
+        const entrySelect = document.getElementById('finEntryJobId');
+        const filterSelect = document.getElementById('finProjectFilter');
+
+        if (entrySelect) {
+            const cur = entrySelect.value;
+            entrySelect.innerHTML = `<option value="">הוצאה / הכנסה כללית בעסק</option>` +
+                jobs.map(j => `<option value="${j.id}">${j.client} (הצעה #${j.qNum})</option>`).join('');
+            entrySelect.value = cur;
+        }
+        if (filterSelect) {
+            const curF = filterSelect.value || 'all';
+            filterSelect.innerHTML = `<option value="all">כל הפרויקטים והעסק</option>` +
+                jobs.map(j => `<option value="${j.id}">${j.client} (הצעה #${j.qNum})</option>`).join('');
+            filterSelect.value = curF;
+        }
+    }
+
+    function switchFinanceTab(tab) {
+        currentFinanceTab = tab;
+        document.getElementById('finTabTransBtn').classList.toggle('active', tab === 'transactions');
+        document.getElementById('finTabProjBtn').classList.toggle('active', tab === 'projects');
+        document.getElementById('financeTransactionsContainer').style.display = (tab === 'transactions') ? 'block' : 'none';
+        document.getElementById('financeProjectsContainer').style.display = (tab === 'projects') ? 'block' : 'none';
+    }
+
+    function addFinanceEntry() {
+        const type = document.getElementById('finEntryType').value;
+        const category = document.getElementById('finEntryCategory').value;
+        const jobId = document.getElementById('finEntryJobId').value;
+        const amount = parseFloat(document.getElementById('finEntryAmount').value) || 0;
+        const date = document.getElementById('finEntryDate').value || new Date().toISOString().split('T')[0];
+        const desc = (document.getElementById('finEntryDesc').value || '').trim();
+
+        if (amount <= 0) {
+            showToast("נא להזין סכום חיובי");
+            return;
+        }
+
+        const jobs = getWorkLogJobs();
+        const linkedJob = jobs.find(j => j.id === jobId);
+        const jobLabel = linkedJob ? `${linkedJob.client} (הצעה #${linkedJob.qNum})` : 'כללי בעסק';
+
+        const entries = getFinanceEntries();
+        entries.unshift({
+            id: 'fin_' + Date.now(),
+            type,
+            category,
+            jobId: jobId || '',
+            jobLabel,
+            amount,
+            date,
+            desc
+        });
+        saveFinanceEntries(entries);
+
+        document.getElementById('finEntryAmount').value = '';
+        document.getElementById('finEntryDesc').value = '';
+        renderFinanceView();
+        showToast(type === 'expense' ? "ההוצאה נרשמה ביומן" : "ההכנסה נרשמה ביומן");
+    }
+
+    function deleteFinanceEntry(entryId) {
+        let entries = getFinanceEntries();
+        const target = entries.find(e => e.id === entryId);
+        if (target && target.autoPayId && target.autoJobId) {
+            const jobs = getWorkLogJobs();
+            const job = jobs.find(j => j.id === target.autoJobId);
+            if (job && Array.isArray(job.payments)) {
+                job.payments = job.payments.filter(p => p.id !== target.autoPayId);
+                saveWorkLogJobs(jobs);
+            }
+        }
+        entries = entries.filter(e => e.id !== entryId);
+        saveFinanceEntries(entries);
+        renderFinanceView();
+        showToast("התנועה נמחקה מהיומן");
+    }
+
+    function getFilteredFinanceEntries() {
+        const entries = getFinanceEntries();
+        const periodMode = document.getElementById('finPeriodMode') ? document.getElementById('finPeriodMode').value : 'all';
+        const monthVal = document.getElementById('finMonthFilter') ? document.getElementById('finMonthFilter').value : '';
+        const projVal = document.getElementById('finProjectFilter') ? document.getElementById('finProjectFilter').value : 'all';
+
+        return entries.filter(e => {
+            if (periodMode === 'month' && monthVal) {
+                if (!(e.date || '').startsWith(monthVal)) return false;
+            }
+            if (projVal !== 'all') {
+                if (e.jobId !== projVal) return false;
+            }
+            return true;
+        });
+    }
+
+    function renderFinanceView() {
+        const filtered = getFilteredFinanceEntries();
+        let totalInc = 0;
+        let totalExp = 0;
+
+        filtered.forEach(e => {
+            const amt = parseFloat(e.amount) || 0;
+            if (e.type === 'income') totalInc += amt;
+            else totalExp += amt;
+        });
+
+        const netProfit = totalInc - totalExp;
+        const vatFromInc = totalInc - (totalInc / 1.18);
+        const vatFromExp = totalExp - (totalExp / 1.18);
+        const netVat = Math.round(vatFromInc - vatFromExp);
+
+        document.getElementById('finTotalIncome').innerText = totalInc.toLocaleString('he-IL') + ' ₪';
+        document.getElementById('finTotalExpense').innerText = totalExp.toLocaleString('he-IL') + ' ₪';
+        const netEl = document.getElementById('finNetProfit');
+        netEl.innerText = netProfit.toLocaleString('he-IL') + ' ₪';
+        netEl.style.color = netProfit >= 0 ? '#22543d' : '#c53030';
+        document.getElementById('finVatBalance').innerText = netVat.toLocaleString('he-IL') + ' ₪';
+
+        const transContainer = document.getElementById('financeTransactionsContainer');
+        if (filtered.length === 0) {
+            transContainer.innerHTML = `
+                <div style="text-align:center; padding:26px; color:var(--text-muted); background:#f8fafc; border-radius:10px; border:1px dashed var(--border);">
+                    אין תנועות כספיות רשומות לתקופה זו. כל תשלום שתעדכן ביומן העבודה יופיע כאן אוטומטית כהכנסה, וניתן להוסיף הוצאות בטופס למעלה.
+                </div>`;
+        } else {
+            transContainer.innerHTML = filtered.map(e => {
+                const isInc = e.type === 'income';
+                return `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border:1px solid var(--border); border-radius:10px; margin-bottom:8px; background:#fff; gap:8px; flex-wrap:wrap;">
+                        <div style="flex:1; min-width:200px;">
+                            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                                <span class="status-badge" style="background:${isInc ? '#c6f6d5' : '#fed7d7'}; color:${isInc ? '#22543d' : '#9b2c2c'};">${isInc ? '📥 הכנסה' : '📤 הוצאה'}</span>
+                                <strong style="font-size:14.5px; color:var(--text-dark);">${e.category || ''}</strong>
+                                <span style="font-size:12.5px; color:var(--primary); font-weight:600;">| ${e.jobLabel || 'כללי בעסק'}</span>
+                            </div>
+                            <div style="font-size:12.5px; color:var(--text-muted); margin-top:3px;">
+                                תאריך: ${e.date ? new Date(e.date).toLocaleDateString('he-IL') : ''} ${e.desc ? `| ${e.desc}` : ''}
+                            </div>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span style="font-size:16px; font-weight:800; color:${isInc ? '#22543d' : '#c53030'};">${isInc ? '+' : '-'}${(parseFloat(e.amount)||0).toLocaleString('he-IL')} ₪</span>
+                            <button type="button" class="btn-delete" onclick="deleteFinanceEntry('${e.id}')">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        const projContainer = document.getElementById('financeProjectsContainer');
+        const jobs = getWorkLogJobs();
+        const allEntries = getFinanceEntries();
+        if (jobs.length === 0) {
+            projContainer.innerHTML = `<div style="text-align:center; padding:26px; color:var(--text-muted);">אין עדיין פרויקטים ביומן העבודה לחישוב רווחיות.</div>`;
+        } else {
+            projContainer.innerHTML = jobs.map(j => {
+                const dealTotal = parseFloat(j.totalAmount) || 0;
+                const paid = getJobPaidSum(j);
+                const jobExpenses = allEntries
+                    .filter(e => e.type === 'expense' && e.jobId === j.id)
+                    .reduce((acc, e) => acc + (parseFloat(e.amount) || 0), 0);
+                const actualProfitNow = paid - jobExpenses;
+                const expectedFinalProfit = dealTotal - jobExpenses;
+
+                return `
+                    <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:8px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-wrap:wrap;">
+                            <strong style="color:var(--primary); font-size:15px;">${j.client} (הצעה #${j.qNum})</strong>
+                            <span style="font-size:13px; font-weight:700; color:${expectedFinalProfit >= 0 ? '#22543d' : '#c53030'};">
+                                רווח נקי צפוי בעבודה: ${expectedFinalProfit.toLocaleString('he-IL')} ₪
+                            </span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:13px; color:var(--text-dark); background:#f8fafc; padding:8px 10px; border-radius:8px;">
+                            <span>סכום עסקה: <strong>${dealTotal.toLocaleString('he-IL')} ₪</strong></span>
+                            <span style="color:#22543d;">שולם בפועל: <strong>${paid.toLocaleString('he-IL')} ₪</strong></span>
+                            <span style="color:#c53030;">הוצאות משויכות: <strong>${jobExpenses.toLocaleString('he-IL')} ₪</strong></span>
+                            <span>תזרים נוכחי: <strong>${actualProfitNow.toLocaleString('he-IL')} ₪</strong></span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+
+    function exportFinanceCSV() {
+        const filtered = getFilteredFinanceEntries();
+        if (filtered.length === 0) {
+            showToast("אין נתונים לייצוא");
+            return;
+        }
+        let csv = '\uFEFFתאריך,סוג תנועה,קטגוריה,פרויקט משויך,פירוט / ספק,סכום (ש"ח)\n';
+        filtered.forEach(e => {
+            const t = e.type === 'income' ? 'הכנסה' : 'הוצאה';
+            const cleanDesc = String(e.desc || '').replace(/"/g, '""');
+            const cleanJob = String(e.jobLabel || '').replace(/"/g, '""');
+            csv += `"${e.date || ''}","${t}","${e.category || ''}","${cleanJob}","${cleanDesc}","${e.amount || 0}"\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Yehonatan_Finance_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+        showToast("קובץ האקסל (CSV) הורד למכשיר");
+    }
+
+    function printFinanceReport() {
+        const filtered = getFilteredFinanceEntries();
+        let totalInc = 0, totalExp = 0;
+        const rows = filtered.map((e, i) => {
+            const isInc = e.type === 'income';
+            const amt = parseFloat(e.amount) || 0;
+            if (isInc) totalInc += amt; else totalExp += amt;
+            return `
+                <tr>
+                    <td style="padding:7px; border:1px solid #cbd5e0; text-align:center;">${i + 1}</td>
+                    <td style="padding:7px; border:1px solid #cbd5e0;">${e.date ? new Date(e.date).toLocaleDateString('he-IL') : ''}</td>
+                    <td style="padding:7px; border:1px solid #cbd5e0; font-weight:700; color:${isInc ? '#22543d' : '#c53030'};">${isInc ? 'הכנסה' : 'הוצאה'}</td>
+                    <td style="padding:7px; border:1px solid #cbd5e0;">${e.category || ''}</td>
+                    <td style="padding:7px; border:1px solid #cbd5e0;">${e.jobLabel || 'כללי'}</td>
+                    <td style="padding:7px; border:1px solid #cbd5e0;">${e.desc || ''}</td>
+                    <td style="padding:7px; border:1px solid #cbd5e0; font-weight:700; color:${isInc ? '#22543d' : '#c53030'};">${isInc ? '+' : '-'}${amt.toLocaleString('he-IL')} ₪</td>
+                </tr>
+            `;
+        }).join('');
+        const net = totalInc - totalExp;
+        const htmlContent = `
+            <div style="font-family:'Rubik',sans-serif; direction:rtl; color:#1a202c;">
+                <h1 style="color:#0d47a1; text-align:center; margin-bottom:10px;">יהונתן אלומיניום - דוח הוצאות והכנסות</h1>
+                <div style="display:flex; justify-content:space-around; background:#f8fafc; border:1px solid #cbd5e0; padding:12px; border-radius:8px; margin-bottom:16px; font-weight:700;">
+                    <span style="color:#22543d;">סה"כ הכנסות: ${totalInc.toLocaleString('he-IL')} ₪</span>
+                    <span style="color:#c53030;">סה"כ הוצאות: ${totalExp.toLocaleString('he-IL')} ₪</span>
+                    <span style="color:#0d47a1;">רווח נקי: ${net.toLocaleString('he-IL')} ₪</span>
+                </div>
+                <table style="width:100%; border-collapse:collapse; font-size:13px; text-align:right;">
+                    <thead>
+                        <tr style="background:#0d47a1; color:white;">
+                            <th style="padding:7px; border:1px solid #cbd5e0;">#</th>
+                            <th style="padding:7px; border:1px solid #cbd5e0;">תאריך</th>
+                            <th style="padding:7px; border:1px solid #cbd5e0;">סוג</th>
+                            <th style="padding:7px; border:1px solid #cbd5e0;">קטגוריה</th>
+                            <th style="padding:7px; border:1px solid #cbd5e0;">פרויקט</th>
+                            <th style="padding:7px; border:1px solid #cbd5e0;">פירוט</th>
+                            <th style="padding:7px; border:1px solid #cbd5e0;">סכום</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>
+        `;
+        document.getElementById('printArea').innerHTML = htmlContent;
+        document.getElementById('printModalTitle').innerText = "דוח הוצאות והכנסות (PDF)";
+        document.getElementById('printPreviewBody').innerHTML = htmlContent;
+        document.getElementById('printPreviewModal').style.display = 'flex';
+    }
+
+    // =========================================================================
+    // מודול 3: חתימה דיגיטלית ללקוח (חתימה במקום + שליחת קישור לחתימה מרחוק)
+    // =========================================================================
+    function initSignPadCanvas(canvasId) {
+        const cnv = document.getElementById(canvasId);
+        if (!cnv) return;
+        const c = cnv.getContext('2d');
+        if (!signPadsState[canvasId]) {
+            signPadsState[canvasId] = { drawing: false, hasInk: false };
+            const getPos = (e) => {
+                const rect = cnv.getBoundingClientRect();
+                const scaleX = cnv.width / (rect.width || 1);
+                const scaleY = cnv.height / (rect.height || 1);
+                const cx = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : e.clientX;
+                const cy = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : e.clientY;
+                return { x: (cx - rect.left) * scaleX, y: (cy - rect.top) * scaleY };
+            };
+            const start = (e) => {
+                if (e.cancelable) e.preventDefault();
+                signPadsState[canvasId].drawing = true;
+                signPadsState[canvasId].hasInk = true;
+                const p = getPos(e);
+                c.beginPath();
+                c.moveTo(p.x, p.y);
+            };
+            const move = (e) => {
+                if (!signPadsState[canvasId].drawing) return;
+                if (e.cancelable) e.preventDefault();
+                const p = getPos(e);
+                c.lineTo(p.x, p.y);
+                c.stroke();
+            };
+            const end = () => {
+                signPadsState[canvasId].drawing = false;
+                c.beginPath();
+            };
+            cnv.addEventListener('touchstart', start, { passive: false });
+            cnv.addEventListener('touchmove', move, { passive: false });
+            cnv.addEventListener('touchend', end);
+            cnv.addEventListener('mousedown', start);
+            cnv.addEventListener('mousemove', move);
+            cnv.addEventListener('mouseup', end);
+            cnv.addEventListener('mouseleave', end);
+        }
+        clearSignPad(canvasId);
+    }
+
+    function clearSignPad(canvasId) {
+        const cnv = document.getElementById(canvasId);
+        if (!cnv) return;
+        const c = cnv.getContext('2d');
+        c.fillStyle = "#ffffff";
+        c.fillRect(0, 0, cnv.width, cnv.height);
+        c.strokeStyle = "#0d47a1";
+        c.lineWidth = 3.2;
+        c.lineCap = "round";
+        c.lineJoin = "round";
+        c.beginPath();
+        if (signPadsState[canvasId]) signPadsState[canvasId].hasInk = false;
+    }
+
+    function encodeUtf8Base64Url(obj) {
+        const jsonStr = JSON.stringify(obj);
+        const bytes = new TextEncoder().encode(jsonStr);
+        let binary = '';
+        bytes.forEach(b => binary += String.fromCharCode(b));
+        return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    function decodeUtf8Base64Url(b64url) {
+        let b64 = String(b64url || '').replace(/-/g, '+').replace(/_/g, '/');
+        while (b64.length % 4) b64 += '=';
+        const binary = atob(b64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        const jsonStr = new TextDecoder().decode(bytes);
+        return JSON.parse(jsonStr);
+    }
+
+    function buildCompactShareableQuotePayload() {
+        calculateAll(false);
+        const items = [];
+        document.querySelectorAll('.item-card').forEach(card => {
+            const info = getItemFullDetails(card);
+            items.push({
+                t: info.title,
+                s: info.specsLines,
+                d: info.dimsText,
+                q: info.qty,
+                p: info.price,
+                tot: info.total
+            });
+        });
+        return {
+            c: document.getElementById('clientName').value || 'לקוח',
+            ph: document.getElementById('clientPhone').value || '',
+            qd: document.getElementById('quoteDate').value || new Date().toISOString().split('T')[0],
+            qn: document.getElementById('quoteNumber').value || '1',
+            ins: parseFloat(document.getElementById('installationCost').value) || 0,
+            dis: parseFloat(document.getElementById('discountCost').value) || 0,
+            nt: (document.getElementById('generalNotes').value || '').trim(),
+            it: items
+        };
+    }
+
+    function openSignatureHubModal() {
+        calculateAll(false);
+        const payload = buildCompactShareableQuotePayload();
+        const encoded = encodeUtf8Base64Url(payload);
+        const baseUrl = window.location.origin + window.location.pathname;
+        const shareUrl = `${baseUrl}?clientquote=${encoded}`;
+
+        const urlInp = document.getElementById('remoteSignUrlInput');
+        if (urlInp) urlInp.value = shareUrl;
+
+        const nameInp = document.getElementById('localSignerName');
+        if (nameInp) nameInp.value = document.getElementById('clientName').value || '';
+        const idInp = document.getElementById('localSignerId');
+        if (idInp) idInp.value = '';
+
+        document.getElementById('signatureHubModal').style.display = 'flex';
+        setTimeout(() => initSignPadCanvas('localSignPad'), 60);
+    }
+
+    function copyRemoteSignLink() {
+        const inp = document.getElementById('remoteSignUrlInput');
+        if (!inp) return;
+        inp.select();
+        try {
+            document.execCommand('copy');
+            showToast("הקישור לחתימת הלקוח הועתק ללוח!");
+        } catch (e) {
+            showToast("לא ניתן להעתיק אוטומטית");
+        }
+    }
+
+    function sendRemoteSignWhatsapp() {
+        const shareUrl = document.getElementById('remoteSignUrlInput').value;
+        const client = document.getElementById('clientName').value || 'לקוח יקר';
+        const qNum = document.getElementById('quoteNumber').value || '1';
+        const total = document.getElementById('totalFinal').innerText;
+
+        let msg = `שלום ${client},\nמצורף קישור לצפייה ואישור דיגיטלי של הצעת מחיר מס' ${qNum} מבית *יהונתן אלומיניום* (סה"כ: ${total}).\n\n`;
+        msg += `לצפייה במפרט המלא וחתימה דיגיטלית על המסך לחץ כאן:\n${shareUrl}`;
+
+        const rawPhone = (document.getElementById('clientPhone').value || '').replace(/\D/g, '');
+        let intlPhone = '';
+        if (rawPhone.length >= 9) {
+            intlPhone = rawPhone.startsWith('0') ? ('972' + rawPhone.slice(1)) : rawPhone;
+        }
+        const waUrl = intlPhone ? `https://wa.me/${intlPhone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+        window.open(waUrl, '_blank');
+    }
+
+    function saveLocalSignature() {
+        const state = signPadsState['localSignPad'];
+        if (!state || !state.hasInk) {
+            showToast("נא לחתום על גבי הלוח לפני השמירה");
+            return;
+        }
+        const cnv = document.getElementById('localSignPad');
+        const signerName = (document.getElementById('localSignerName').value || document.getElementById('clientName').value || 'לקוח').trim();
+        const signerId = (document.getElementById('localSignerId').value || '').trim();
+
+        window.currentQuoteSignatureData = {
+            name: signerName,
+            idNum: signerId,
+            signedAt: new Date().toLocaleString('he-IL'),
+            img: cnv.toDataURL('image/png')
+        };
+        updateSignedIndicatorUI();
+        saveDraft();
+        closeModal('signatureHubModal');
+        printInvoice();
+        showToast("חתימת הלקוח נשמרה והוטמעה בהצעת המחיר!");
+    }
+
+    let activeRemoteQuotePayload = null;
+    let activeRemoteSignatureObj = null;
+
+    function buildClientQuoteDocumentHtml(p, sigObj) {
+        const qDate = p.qd ? new Date(p.qd).toLocaleDateString('he-IL') : new Date().toLocaleDateString('he-IL');
+        let itemsSum = 0;
+        const rowsHtml = (p.it || []).map((item, idx) => {
+            itemsSum += (parseFloat(item.tot) || 0);
+            const bgColor = (idx + 1) % 2 === 0 ? 'background-color:#f8fafc;' : '';
+            const specsHtml = (item.s || []).map(l => `<div style="line-height:1.45;">• ${l}</div>`).join('');
+            return `
+                <tr style="${bgColor}">
+                    <td style="padding:9px; border:1px solid #cbd5e0; text-align:center; font-weight:700;">${idx + 1}</td>
+                    <td style="padding:9px; border:1px solid #cbd5e0;"><div style="font-weight:700; color:#0d47a1; margin-bottom:3px;">${item.t}</div>${specsHtml}</td>
+                    <td style="padding:9px; border:1px solid #cbd5e0; text-align:center; font-weight:600;">${item.d || '-'}</td>
+                    <td style="padding:9px; border:1px solid #cbd5e0; text-align:center;">${item.q}</td>
+                    <td style="padding:9px; border:1px solid #cbd5e0;">${(parseFloat(item.p)||0).toLocaleString('he-IL')} ₪</td>
+                    <td style="padding:9px; border:1px solid #cbd5e0; font-weight:700;">${(parseFloat(item.tot)||0).toLocaleString('he-IL')} ₪</td>
+                </tr>
+            `;
+        }).join('');
+
+        const install = parseFloat(p.ins) || 0;
+        const discount = parseFloat(p.dis) || 0;
+        const totalBeforeVat = Math.max(0, itemsSum + install - discount);
+        const vat = Math.round(totalBeforeVat * 0.18 * 100) / 100;
+        const finalTotal = totalBeforeVat + vat;
+
+        return `
+            <div style="font-family:'Rubik',sans-serif; direction:rtl; color:#1a202c;">
+                <div style="text-align:center; margin-bottom:20px; border-bottom:3px solid #0d47a1; padding-bottom:14px;">
+                    <h1 style="margin:0; color:#0d47a1; font-size:26px;">יהונתן אלומיניום</h1>
+                    <p style="margin:4px 0 0; font-size:15px; color:#555;">הצעת מחיר ומפרט טכני לאישור הלקוח</p>
+                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:16px; font-weight:700; font-size:14px; background:#f8fafc; padding:10px 14px; border-radius:8px; border:1px solid #e2e8f0;">
+                        <span>לקוח: ${p.c}${p.ph ? ` (${p.ph})` : ''}</span>
+                        <span>תאריך: ${qDate}</span>
+                        <span>מס' הצעה: ${p.qn}</span>
+                    </div>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse; margin-bottom:18px; text-align:right; font-size:13.5px;">
+                        <thead>
+                            <tr style="background:#0d47a1; color:white;">
+                                <th style="padding:8px; border:1px solid #cbd5e0;">#</th>
+                                <th style="padding:8px; border:1px solid #cbd5e0;">תיאור מוצר ומפרט</th>
+                                <th style="padding:8px; border:1px solid #cbd5e0; text-align:center;">מידות (ס"מ)</th>
+                                <th style="padding:8px; border:1px solid #cbd5e0; text-align:center;">כמות</th>
+                                <th style="padding:8px; border:1px solid #cbd5e0;">מחיר יח'</th>
+                                <th style="padding:8px; border:1px solid #cbd5e0;">סה"כ</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                    </table>
+                </div>
+                ${p.nt ? `<div style="background:#fffaf0; border:1px solid #fbd38d; padding:10px 14px; border-radius:8px; margin-bottom:16px; font-size:13.5px;"><strong>הערות להצעה:</strong> ${p.nt}</div>` : ''}
+                <div style="width:320px; max-width:100%; margin-right:auto; background:#f8fafc; padding:14px; border:1px solid #cbd5e0; border-radius:10px;">
+                    <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #e2e8f0; font-size:14px;"><span>סה"כ מוצרים:</span><span>${itemsSum.toLocaleString('he-IL')} ₪</span></div>
+                    ${install > 0 ? `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #e2e8f0; font-size:14px;"><span>הובלה והתקנה:</span><span>${install.toLocaleString('he-IL')} ₪</span></div>` : ''}
+                    ${discount > 0 ? `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #e2e8f0; font-size:14px; color:#2f855a;"><span>הנחה:</span><span>-${discount.toLocaleString('he-IL')} ₪</span></div>` : ''}
+                    <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #e2e8f0; font-size:14px; font-weight:600;"><span>סה"כ לפני מע"מ:</span><span>${totalBeforeVat.toLocaleString('he-IL')} ₪</span></div>
+                    <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #e2e8f0; font-size:14px;"><span>מע"מ (18%):</span><span>${vat.toLocaleString('he-IL')} ₪</span></div>
+                    <div style="display:flex; justify-content:space-between; padding:10px 0 0 0; margin-top:6px; border-top:2px solid #0d47a1; font-size:17px; font-weight:800; color:#0d47a1;"><span>סה"כ לתשלום:</span><span>${finalTotal.toLocaleString('he-IL')} ₪</span></div>
+                </div>
+                <div style="margin-top:28px; font-size:12px; color:#4a5568; border-top:1px solid #cbd5e0; padding-top:12px; line-height:1.7; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;">
+                    <div>
+                        * המחיר כולל הובלה והתקנה (אלא אם צוין אחרת).<br>
+                        * הצעת מחיר זאת משמשת כחוזה עבודה עם אישורה.<br>
+                        * הסחורה בבעלות יהונתן אלומיניום עד התשלום המלא.<br>
+                        * הצעת מחיר תקפה ל-14 ימי עסקים.<br>
+                        <strong>בכבוד רב, יהונתן אלומיניום</strong>
+                    </div>
+                    <div style="text-align:center; min-width:200px;">
+                        ${sigObj ? `
+                            <div style="border-bottom:1px solid #333; padding-bottom:4px; margin-bottom:4px;">
+                                ${sigObj.img ? `<img src="${sigObj.img}" style="max-height:60px; max-width:190px; display:block; margin:0 auto;" alt="חתימת הלקוח">` : `<div style="font-weight:800; color:#22543d;">✓ אושר דיגיטלית</div>`}
+                            </div>
+                            <div style="font-weight:700; color:#1a202c;">חתימת הלקוח: ${sigObj.name}${sigObj.idNum ? ` (ת.ז. ${sigObj.idNum})` : ''}</div>
+                            <div style="font-size:11px; color:#4a5568;">נחתם דיגיטלית: ${sigObj.signedAt}</div>
+                        ` : `
+                            <div style="border-bottom:1px solid #333; height:30px; margin-bottom:4px;"></div>
+                            <div>ממתין לחתימת הלקוח</div>
+                        `}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function confirmRemoteClientSignature() {
+        const state = signPadsState['remoteSignPad'];
+        if (!state || !state.hasInk) {
+            showToast("נא לחתום באצבע או בעכבר בתיבת החתימה");
+            return;
+        }
+        const signerName = (document.getElementById('remoteSignerName').value || (activeRemoteQuotePayload ? activeRemoteQuotePayload.c : 'לקוח')).trim();
+        const signerId = (document.getElementById('remoteSignerId').value || '').trim();
+        const cnv = document.getElementById('remoteSignPad');
+
+        activeRemoteSignatureObj = {
+            name: signerName,
+            idNum: signerId,
+            signedAt: new Date().toLocaleString('he-IL'),
+            img: cnv.toDataURL('image/png')
+        };
+
+        const signedDocHtml = buildClientQuoteDocumentHtml(activeRemoteQuotePayload, activeRemoteSignatureObj);
+        document.getElementById('clientPortalQuoteView').innerHTML = signedDocHtml;
+        document.getElementById('printArea').innerHTML = signedDocHtml;
+        document.getElementById('clientPortalSignSection').style.display = 'none';
+        document.getElementById('remoteSignedSuccessBox').style.display = 'block';
+        showToast("ההצעה נחתמה בהצלחה!");
+    }
+
+    function sendSignedConfirmationBackToYehonatan() {
+        if (!activeRemoteQuotePayload || !activeRemoteSignatureObj) return;
+        const p = activeRemoteQuotePayload;
+        const s = activeRemoteSignatureObj;
+        const confirmData = encodeUtf8Base64Url({
+            qn: p.qn,
+            c: p.c,
+            signer: s.name,
+            idNum: s.idNum,
+            signedAt: s.signedAt
+        });
+        const returnUrl = `${window.location.origin}${window.location.pathname}?signedconfirm=${confirmData}`;
+        let msg = `שלום יהונתן אלומיניום,\nאישרתי וחתמתי דיגיטלית על הצעת מחיר מס' *${p.qn}*.\n`;
+        msg += `שם החותם: *${s.name}*${s.idNum ? ` (ת.ז. ${s.idNum})` : ''}\n`;
+        msg += `תאריך ושעת חתימה: ${s.signedAt}\n\n`;
+        msg += `לקליטת האישור במערכת לחץ כאן:\n${returnUrl}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateWorkLogBadge();
+        const params = new URLSearchParams(window.location.search);
+        const clientQuoteParam = params.get('clientquote');
+        const signedConfirmParam = params.get('signedconfirm');
+
+        if (clientQuoteParam) {
+            try {
+                activeRemoteQuotePayload = decodeUtf8Base64Url(clientQuoteParam);
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'none';
+                document.getElementById('bottomNav').style.display = 'none';
+                document.getElementById('topToolbar').style.display = 'none';
+
+                const portal = document.getElementById('clientPortalScreen');
+                portal.style.display = 'block';
+                const docHtml = buildClientQuoteDocumentHtml(activeRemoteQuotePayload, null);
+                document.getElementById('clientPortalQuoteView').innerHTML = docHtml;
+                document.getElementById('printArea').innerHTML = docHtml;
+                document.getElementById('remoteSignerName').value = activeRemoteQuotePayload.c || '';
+                setTimeout(() => initSignPadCanvas('remoteSignPad'), 100);
+            } catch (e) {
+                showToast("הקישור להצעת המחיר אינו תקין");
+            }
+        } else if (signedConfirmParam) {
+            try {
+                const conf = decodeUtf8Base64Url(signedConfirmParam);
+                let archive = [];
+                try { archive = JSON.parse(safeGetStorage('myAlumQuotesArchive', '[]') || '[]'); } catch(e) { archive = []; }
+                archive.forEach(q => {
+                    if (String(q.qNum) === String(conf.qn)) {
+                        q.signatureData = {
+                            name: conf.signer || conf.c,
+                            idNum: conf.idNum || '',
+                            signedAt: conf.signedAt || new Date().toLocaleString('he-IL'),
+                            img: ''
+                        };
+                    }
+                });
+                safeSetStorage('myAlumQuotesArchive', JSON.stringify(archive));
+                setTimeout(() => {
+                    showToast(`נקלט אישור חתימה דיגיטלית להצעה #${conf.qn} מאת ${conf.signer}!`);
+                }, 600);
+            } catch (e) {}
+        }
+    });
+
 </script>
 </body>
 </html>
