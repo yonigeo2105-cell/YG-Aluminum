@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -657,8 +656,8 @@
             </div>
         </div>
         <div class="row">
-            <div style="flex:1"><label>תאריך:</label><input type="date" id="quoteDate"></div>
-            <div style="flex:1"><label>מס' הצעה:</label><input type="number" id="quoteNumber" style="font-weight:700;text-align:center" min="1"></div>
+            <div style="flex:1"><label>תאריך:</label><input type="date" id="quoteDate" onchange="syncQuoteMonthPrefix()"></div>
+            <div style="flex:1"><label>מס' הצעה:</label><input type="text" id="quoteNumber" dir="ltr" placeholder="10-200" style="font-weight:700;text-align:center" onchange="onQuoteNumberManualChange()"></div>
         </div>
     </div>
     
@@ -1166,16 +1165,66 @@
     let itemCount = 0;
     let activeDrawingBtn = null;
     let canvas, ctx, isDrawing = false, canvasInitialized = false;
+    window.editingWorkLogJobId = null;
+    window.pendingOpenWorkLogAfterLogin = null;
+
+    function getMonthNumberForQuote(dateVal) {
+        let d = dateVal ? new Date(dateVal) : null;
+        if (!d || isNaN(d.getTime())) {
+            const inp = document.getElementById('quoteDate');
+            d = (inp && inp.value) ? new Date(inp.value) : new Date();
+        }
+        if (isNaN(d.getTime())) d = new Date();
+        return d.getMonth() + 1;
+    }
+
+    function extractSeqFromQuoteNum(qVal) {
+        const str = String(qVal || '').trim();
+        if (!str) return 200;
+        if (str.includes('-')) {
+            const parts = str.split('-');
+            const last = parseInt(parts[parts.length - 1], 10);
+            if (!isNaN(last) && last > 0) return last;
+        }
+        const num = parseInt(str.replace(/[^0-9]/g, ''), 10);
+        return (!isNaN(num) && num > 0) ? num : 200;
+    }
+
+    function formatMonthQuoteNum(seqNum, dateVal) {
+        const m = getMonthNumberForQuote(dateVal);
+        const s = (!isNaN(seqNum) && seqNum > 0) ? seqNum : 200;
+        return `${m}-${s}`;
+    }
+
+    function syncQuoteMonthPrefix() {
+        const qInp = document.getElementById('quoteNumber');
+        if (!qInp) return;
+        const seq = extractSeqFromQuoteNum(qInp.value);
+        qInp.value = formatMonthQuoteNum(seq);
+    }
+
+    function onQuoteNumberManualChange() {
+        const qInp = document.getElementById('quoteNumber');
+        if (!qInp) return;
+        const raw = (qInp.value || '').trim();
+        const seq = extractSeqFromQuoteNum(raw);
+        if (!raw.includes('-')) {
+            qInp.value = formatMonthQuoteNum(seq);
+        }
+        safeSetStorage('quoteCounter', seq);
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('quoteDate').valueAsDate = new Date();
-        const savedNum = parseInt(safeGetStorage('quoteCounter', '1'), 10);
-        document.getElementById('quoteNumber').value = (!isNaN(savedNum) && savedNum > 0) ? savedNum : 1;
+        const today = new Date();
+        document.getElementById('quoteDate').valueAsDate = today;
+        let savedNum = parseInt(safeGetStorage('quoteCounter', '200'), 10);
+        if (isNaN(savedNum) || savedNum <= 1) savedNum = 200;
+        document.getElementById('quoteNumber').value = formatMonthQuoteNum(savedNum, today);
         if (safeGetStorage('myAlumDraft')) {
             document.getElementById('draftBtnContainer').style.display = 'block';
         }
         initCanvasOnce();
-        addItem();
+        calculateAll(false);
     });
 
     function checkLogin(shouldLoadDraft) {
@@ -1193,32 +1242,44 @@
                 } else {
                     calculateAll(false);
                 }
+                if (window.pendingOpenWorkLogAfterLogin) {
+                    const signedQNum = window.pendingOpenWorkLogAfterLogin;
+                    window.pendingOpenWorkLogAfterLogin = null;
+                    openWorkLogModal();
+                    showToast(`הצעה #${signedQNum} החתומה הועברה אוטומטית ליומן העבודה ונמחקה מהארכיון!`);
+                }
             }, 300);
         } else {
             document.getElementById('loginError').style.display = 'block';
         }
     }
 
-    function startNewQuote() {
-        const currentNum = parseInt(document.getElementById('quoteNumber').value, 10) || 1;
-        const savedMax = parseInt(safeGetStorage('quoteCounter', '1'), 10) || 1;
-        const nextNum = Math.max(currentNum, savedMax) + 1;
-        safeSetStorage('quoteCounter', nextNum);
+    function resetQuoteScreenAfterAction(advanceCounter = true) {
+        const currentSeq = extractSeqFromQuoteNum(document.getElementById('quoteNumber').value);
+        const savedMax = parseInt(safeGetStorage('quoteCounter', '200'), 10) || 200;
+        const nextSeq = advanceCounter ? (Math.max(currentSeq, savedMax) + 1) : Math.max(currentSeq, savedMax);
+        safeSetStorage('quoteCounter', nextSeq);
 
+        const today = new Date();
         document.getElementById('clientName').value = '';
         document.getElementById('clientPhone').value = '';
-        document.getElementById('quoteDate').valueAsDate = new Date();
-        document.getElementById('quoteNumber').value = nextNum;
+        document.getElementById('quoteDate').valueAsDate = today;
+        document.getElementById('quoteNumber').value = formatMonthQuoteNum(nextSeq, today);
         document.getElementById('installationCost').value = '';
         document.getElementById('discountCost').value = '';
         document.getElementById('generalNotes').value = '';
         window.currentQuoteSignatureData = null;
+        window.editingWorkLogJobId = null;
         updateSignedIndicatorUI();
         document.getElementById('itemsContainer').innerHTML = '';
         itemCount = 0;
-        addItem();
         calculateAll(false);
-        showToast(`נפתחה הצעת מחיר חדשה מס' ${nextNum}`);
+    }
+
+    function startNewQuote() {
+        resetQuoteScreenAfterAction(true);
+        const newFormatted = document.getElementById('quoteNumber').value;
+        showToast(`נפתחה הצעת מחיר חדשה מס' ${newFormatted}`);
     }
 
     // --- קריאה וכתיבה של נתוני כרטיסיית מוצר כ-JSON נקי ---
@@ -1400,24 +1461,22 @@
         };
     }
 
-    function saveDraft() {
+    function archiveQuoteSilently() {
         calculateAll(false);
         const data = serializeCurrentQuote();
         safeSetStorage('myAlumDraft', JSON.stringify(data));
 
-        // עדכון מונה הצעות אוטומטי
-        const qNumInt = parseInt(data.qNum, 10) || 1;
-        const savedMax = parseInt(safeGetStorage('quoteCounter', '1'), 10) || 1;
+        const qNumInt = extractSeqFromQuoteNum(data.qNum);
+        const savedMax = parseInt(safeGetStorage('quoteCounter', '200'), 10) || 200;
         if (qNumInt >= savedMax) {
             safeSetStorage('quoteCounter', qNumInt);
         }
 
-        // שמירה בארכיון הצעות מחיר
         let archive = [];
         try {
             archive = JSON.parse(safeGetStorage('myAlumQuotesArchive', '[]') || '[]');
         } catch (e) { archive = []; }
-        const existingIdx = archive.findIndex(x => String(x.qNum) === String(data.qNum) && x.client === data.client);
+        const existingIdx = archive.findIndex(x => String(x.qNum) === String(data.qNum));
         if (existingIdx >= 0) {
             archive[existingIdx] = data;
         } else {
@@ -1425,6 +1484,20 @@
             if (archive.length > 35) archive.pop();
         }
         safeSetStorage('myAlumQuotesArchive', JSON.stringify(archive));
+        return data;
+    }
+
+    function removeQuoteFromArchiveByNum(qNum) {
+        let archive = [];
+        try {
+            archive = JSON.parse(safeGetStorage('myAlumQuotesArchive', '[]') || '[]');
+        } catch (e) { archive = []; }
+        const filtered = archive.filter(x => String(x.qNum) !== String(qNum));
+        safeSetStorage('myAlumQuotesArchive', JSON.stringify(filtered));
+    }
+
+    function saveDraft() {
+        const data = archiveQuoteSilently();
         showToast(`ההצעה נשמרה בהצלחה (הצעה מס' ${data.qNum})`);
     }
 
@@ -1432,8 +1505,9 @@
         if (!data) return;
         document.getElementById('clientName').value = data.client || '';
         document.getElementById('clientPhone').value = data.phone || '';
-        document.getElementById('quoteDate').value = data.qDate || '';
-        document.getElementById('quoteNumber').value = data.qNum || '1';
+        document.getElementById('quoteDate').value = data.qDate || new Date().toISOString().split('T')[0];
+        const rawQNum = data.qNum || formatMonthQuoteNum(200, data.qDate);
+        document.getElementById('quoteNumber').value = String(rawQNum).includes('-') ? rawQNum : formatMonthQuoteNum(extractSeqFromQuoteNum(rawQNum), data.qDate);
         document.getElementById('installationCost').value = data.install || '';
         document.getElementById('discountCost').value = data.discount || '';
         document.getElementById('generalNotes').value = data.notes || '';
@@ -1450,11 +1524,8 @@
                 applyCardData(card, itemData);
             });
         } else if (data.html) {
-            // תמיכה לאחור בטיוטה מהגרסה הישנה
             container.innerHTML = data.html;
             renumberItems();
-        } else {
-            addItem(true);
         }
         calculateAll(false);
     }
@@ -3313,8 +3384,8 @@
         });
         const totalIncVat = parseNumericTotal(document.getElementById('totalFinal').innerText);
         return {
-            id: 'job_' + Date.now(),
-            qNum: qData.qNum || '1',
+            id: window.editingWorkLogJobId || ('job_' + Date.now()),
+            qNum: qData.qNum || formatMonthQuoteNum(200),
             client: qData.client || 'לקוח',
             phone: qData.phone || '',
             address: '',
@@ -3325,30 +3396,50 @@
             notes: qData.notes || '',
             fieldNotes: '',
             signatureData: window.currentQuoteSignatureData || null,
+            rawQuoteData: qData,
             items: detailedItems,
             payments: []
         };
     }
 
-    function convertCurrentQuoteToWorkLog() {
-        saveDraft();
-        const newJob = buildWorkJobFromCurrentDOM();
+    function upsertJobIntoWorkLogAndRemoveFromArchive(newJob) {
         const jobs = getWorkLogJobs();
-        const existingIdx = jobs.findIndex(j => String(j.qNum) === String(newJob.qNum) && j.client === newJob.client);
+        const existingIdx = jobs.findIndex(j =>
+            (window.editingWorkLogJobId && j.id === window.editingWorkLogJobId) ||
+            (String(j.qNum) === String(newJob.qNum))
+        );
         if (existingIdx >= 0) {
-            newJob.id = jobs[existingIdx].id;
-            newJob.payments = jobs[existingIdx].payments || [];
-            newJob.address = jobs[existingIdx].address || '';
-            newJob.targetDate = jobs[existingIdx].targetDate || '';
-            newJob.status = jobs[existingIdx].status || 'measure';
-            newJob.fieldNotes = jobs[existingIdx].fieldNotes || '';
+            const prev = jobs[existingIdx];
+            newJob.id = prev.id;
+            newJob.payments = prev.payments || [];
+            newJob.address = prev.address || '';
+            newJob.targetDate = prev.targetDate || '';
+            newJob.status = prev.status || 'measure';
+            newJob.fieldNotes = prev.fieldNotes || '';
+            if (Array.isArray(prev.items) && Array.isArray(newJob.items)) {
+                newJob.items.forEach((it, i) => {
+                    if (prev.items[i] && prev.items[i].prodNote && !it.prodNote) {
+                        it.prodNote = prev.items[i].prodNote;
+                    }
+                });
+            }
             jobs[existingIdx] = newJob;
-            saveWorkLogJobs(jobs);
-            showToast(`יומן העבודה עודכן עבור הצעה #${newJob.qNum}`);
         } else {
             jobs.unshift(newJob);
-            saveWorkLogJobs(jobs);
-            showToast(`הצעה #${newJob.qNum} הועברה ליומן העבודה בהצלחה!`);
+        }
+        saveWorkLogJobs(jobs);
+        removeQuoteFromArchiveByNum(newJob.qNum);
+        return existingIdx >= 0;
+    }
+
+    function convertCurrentQuoteToWorkLog() {
+        const newJob = buildWorkJobFromCurrentDOM();
+        const wasUpdated = upsertJobIntoWorkLogAndRemoveFromArchive(newJob);
+        resetQuoteScreenAfterAction(true);
+        if (wasUpdated) {
+            showToast(`יומן העבודה עודכן עבור הצעה #${newJob.qNum}`);
+        } else {
+            showToast(`הצעה #${newJob.qNum} הועברה ליומן העבודה ונמחקה מהארכיון!`);
         }
         openWorkLogModal();
     }
@@ -3363,6 +3454,44 @@
         loadQuoteDataObject(q);
         closeModal('archiveModal');
         convertCurrentQuoteToWorkLog();
+    }
+
+    function loadJobFromWorkLogForEdit(jobId) {
+        const jobs = getWorkLogJobs();
+        const job = jobs.find(j => j.id === jobId);
+        if (!job) return;
+        window.editingWorkLogJobId = job.id;
+
+        if (job.rawQuoteData && Array.isArray(job.rawQuoteData.items)) {
+            const cloneData = JSON.parse(JSON.stringify(job.rawQuoteData));
+            cloneData.signatureData = null;
+            loadQuoteDataObject(cloneData);
+        } else {
+            const fallbackItems = (job.items || []).map(it => ({
+                type: 'joker',
+                jokerTitle: it.title || 'מוצר',
+                jokerDesc: (it.specs ? it.specs + (it.quoteDims && it.quoteDims !== '-' ? ` | מידות: ${it.quoteDims}` : '') : ''),
+                qtyJoker: String(it.qty || 1),
+                priceJoker: String(it.price || 0)
+            }));
+            loadQuoteDataObject({
+                client: job.client || '',
+                phone: job.phone || '',
+                qDate: new Date().toISOString().split('T')[0],
+                qNum: job.qNum || formatMonthQuoteNum(200),
+                install: '',
+                discount: '',
+                notes: job.notes || '',
+                signatureData: null,
+                items: fallbackItems
+            });
+        }
+        window.currentQuoteSignatureData = null;
+        updateSignedIndicatorUI();
+        closeModal('workJobDetailModal');
+        closeModal('workLogModal');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showToast(`הצעה #${job.qNum} (${job.client}) נטענה לעריכה וחתימה מחדש`);
     }
 
     function openWorkLogModal() {
@@ -3554,6 +3683,7 @@
                     <div class="quick-actions-bar" style="justify-content:space-between; margin-bottom:0; margin-top:10px;">
                         <div style="display:flex; gap:6px; flex-wrap:wrap;">
                             <button type="button" class="btn-mini-action" style="background:var(--primary); color:white; border-color:var(--primary);" onclick="openJobDetailModal('${j.id}')">📐 מידות ייצור, כרטיס מתקין ותשלומים</button>
+                            <button type="button" class="btn-mini-action" style="background:#fffaf0; color:#c05621; border-color:#fbd38d;" onclick="loadJobFromWorkLogForEdit('${j.id}')">✏️ טען לעריכה וחתימה מחדש</button>
                             ${j.phone ? `<a href="tel:${cleanPhone}" class="btn-mini-action">📞 חיוג</a>` : ''}
                             ${intlPhone ? `<a href="https://wa.me/${intlPhone}" target="_blank" class="btn-mini-action" style="background:#f0fff4; color:#22543d; border-color:#9ae6b4;">💬 וואטסאפ</a>` : ''}
                             ${wazeUrl ? `<a href="${wazeUrl}" target="_blank" class="btn-mini-action" style="background:#ebf8ff; color:#0d47a1; border-color:#90caf9;">🚗 ניווט Waze</a>` : ''}
@@ -4180,8 +4310,21 @@
         if (signPadsState[canvasId]) signPadsState[canvasId].hasInk = false;
     }
 
+    const COMPACT_DICT = [
+        ["פרופיל: ", "~A"], ["גוון: ", "~B"], ["זכוכית: ", "~C"], ["כיוון פתיחה: ", "~D"],
+        ["מבנה: ", "~E"], ["כנפיים", "~F"], ["צד לצד", "~G"], ["מפגש מרכזי", "~H"],
+        ["תריס מונובלוק: ", "~I"], ["שלב אור", "~J"], ["מוקצף", "~K"], ["חשמלי", "~L"],
+        ["קליל ", "~M"], ["טריפלקס ", "~N"], ["בידודית ", "~O"], ["מחוסמת ", "~P"],
+        ["שקוף (Clear)", "~Q"], ["חלבי (Matte)", "~R"], ["חלון הזזה", "~S"], ["חלון ציר (רגיל)", "~T"],
+        ["חלון קיפ (פתיחה עליונה)", "~U"], ["חלון דריי-קיפ (משולב)", "~V"], ["חלון קבוע (FIX)", "~W"],
+        ["לפי בחירה", "~X"], ["תוספות: ", "~Y"], ["התקנה: ", "~Z"]
+    ];
+
     function encodeUtf8Base64Url(obj) {
-        const jsonStr = JSON.stringify(obj);
+        let jsonStr = JSON.stringify(obj);
+        COMPACT_DICT.forEach(([full, tok]) => {
+            jsonStr = jsonStr.split(full).join(tok);
+        });
         const bytes = new TextEncoder().encode(jsonStr);
         let binary = '';
         bytes.forEach(b => binary += String.fromCharCode(b));
@@ -4189,12 +4332,16 @@
     }
 
     function decodeUtf8Base64Url(b64url) {
-        let b64 = String(b64url || '').replace(/-/g, '+').replace(/_/g, '/');
+        let clean = String(b64url || '').trim().replace(/[^A-Za-z0-9\-_]/g, '');
+        let b64 = clean.replace(/-/g, '+').replace(/_/g, '/');
         while (b64.length % 4) b64 += '=';
         const binary = atob(b64);
         const bytes = new Uint8Array(binary.length);
         for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-        const jsonStr = new TextDecoder().decode(bytes);
+        let jsonStr = new TextDecoder().decode(bytes);
+        COMPACT_DICT.forEach(([full, tok]) => {
+            jsonStr = jsonStr.split(tok).join(full);
+        });
         return JSON.parse(jsonStr);
     }
 
@@ -4216,10 +4363,11 @@
             c: document.getElementById('clientName').value || 'לקוח',
             ph: document.getElementById('clientPhone').value || '',
             qd: document.getElementById('quoteDate').value || new Date().toISOString().split('T')[0],
-            qn: document.getElementById('quoteNumber').value || '1',
+            qn: document.getElementById('quoteNumber').value || formatMonthQuoteNum(200),
             ins: parseFloat(document.getElementById('installationCost').value) || 0,
             dis: parseFloat(document.getElementById('discountCost').value) || 0,
             nt: (document.getElementById('generalNotes').value || '').trim(),
+            jid: window.editingWorkLogJobId || '',
             it: items
         };
     }
@@ -4246,31 +4394,41 @@
     function copyRemoteSignLink() {
         const inp = document.getElementById('remoteSignUrlInput');
         if (!inp) return;
+        archiveQuoteSilently();
         inp.select();
         try {
             document.execCommand('copy');
-            showToast("הקישור לחתימת הלקוח הועתק ללוח!");
+            showToast("הקישור הועתק וההצעה נשמרה בארכיון!");
         } catch (e) {
             showToast("לא ניתן להעתיק אוטומטית");
         }
+        closeModal('signatureHubModal');
+        resetQuoteScreenAfterAction(true);
     }
 
     function sendRemoteSignWhatsapp() {
         const shareUrl = document.getElementById('remoteSignUrlInput').value;
         const client = document.getElementById('clientName').value || 'לקוח יקר';
-        const qNum = document.getElementById('quoteNumber').value || '1';
+        const qNum = document.getElementById('quoteNumber').value || formatMonthQuoteNum(200);
         const total = document.getElementById('totalFinal').innerText;
+        const rawPhone = (document.getElementById('clientPhone').value || '').replace(/\D/g, '');
+
+        // שמירת ההצעה בארכיון לפני איפוס המסך
+        archiveQuoteSilently();
 
         let msg = `שלום ${client},\nמצורף קישור לצפייה ואישור דיגיטלי של הצעת מחיר מס' ${qNum} מבית *יהונתן אלומיניום* (סה"כ: ${total}).\n\n`;
         msg += `לצפייה במפרט המלא וחתימה דיגיטלית על המסך לחץ כאן:\n${shareUrl}`;
 
-        const rawPhone = (document.getElementById('clientPhone').value || '').replace(/\D/g, '');
         let intlPhone = '';
         if (rawPhone.length >= 9) {
             intlPhone = rawPhone.startsWith('0') ? ('972' + rawPhone.slice(1)) : rawPhone;
         }
         const waUrl = intlPhone ? `https://wa.me/${intlPhone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
         window.open(waUrl, '_blank');
+
+        closeModal('signatureHubModal');
+        resetQuoteScreenAfterAction(true);
+        showToast(`ההצעה נשלחה לחתימה, נשמרה בארכיון והמסך אופס להצעה הבאה`);
     }
 
     function saveLocalSignature() {
@@ -4290,10 +4448,14 @@
             img: cnv.toDataURL('image/png')
         };
         updateSignedIndicatorUI();
-        saveDraft();
         closeModal('signatureHubModal');
         printInvoice();
-        showToast("חתימת הלקוח נשמרה והוטמעה בהצעת המחיר!");
+
+        // העברה אוטומטית ליומן העבודה, מחיקה מהארכיון ואיפוס מסך ההזנה
+        const signedJob = buildWorkJobFromCurrentDOM();
+        upsertJobIntoWorkLogAndRemoveFromArchive(signedJob);
+        resetQuoteScreenAfterAction(true);
+        showToast("חתימת הלקוח הוטמעה, העבודה הועברה ליומן העבודה והמסך אופס!");
     }
 
     let activeRemoteQuotePayload = null;
@@ -4418,59 +4580,143 @@
             c: p.c,
             signer: s.name,
             idNum: s.idNum,
-            signedAt: s.signedAt
+            signedAt: s.signedAt,
+            p: p
         });
         const returnUrl = `${window.location.origin}${window.location.pathname}?signedconfirm=${confirmData}`;
         let msg = `שלום יהונתן אלומיניום,\nאישרתי וחתמתי דיגיטלית על הצעת מחיר מס' *${p.qn}*.\n`;
         msg += `שם החותם: *${s.name}*${s.idNum ? ` (ת.ז. ${s.idNum})` : ''}\n`;
         msg += `תאריך ושעת חתימה: ${s.signedAt}\n\n`;
-        msg += `לקליטת האישור במערכת לחץ כאן:\n${returnUrl}`;
+        msg += `לקליטת ההצעה החתומה ביומן העבודה לחץ כאן:\n${returnUrl}`;
         window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
         updateWorkLogBadge();
         const params = new URLSearchParams(window.location.search);
-        const clientQuoteParam = params.get('clientquote');
-        const signedConfirmParam = params.get('signedconfirm');
+        const hashParams = new URLSearchParams((window.location.hash || '').replace(/^#\??/, ''));
+        const clientQuoteParam = params.get('clientquote') || hashParams.get('clientquote');
+        const signedConfirmParam = params.get('signedconfirm') || hashParams.get('signedconfirm');
 
-        if (clientQuoteParam) {
+        if (clientQuoteParam !== null && clientQuoteParam !== undefined && clientQuoteParam !== '') {
+            // הסתרה מיידית ומוחלטת של מסך הסיסמה לפני פענוח הנתונים כדי שלקוח לעולם לא יראה מסך כניסה
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('bottomNav').style.display = 'none';
+            document.getElementById('topToolbar').style.display = 'none';
+            const portal = document.getElementById('clientPortalScreen');
+            portal.style.display = 'block';
+
             try {
                 activeRemoteQuotePayload = decodeUtf8Base64Url(clientQuoteParam);
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainApp').style.display = 'none';
-                document.getElementById('bottomNav').style.display = 'none';
-                document.getElementById('topToolbar').style.display = 'none';
-
-                const portal = document.getElementById('clientPortalScreen');
-                portal.style.display = 'block';
                 const docHtml = buildClientQuoteDocumentHtml(activeRemoteQuotePayload, null);
                 document.getElementById('clientPortalQuoteView').innerHTML = docHtml;
                 document.getElementById('printArea').innerHTML = docHtml;
                 document.getElementById('remoteSignerName').value = activeRemoteQuotePayload.c || '';
                 setTimeout(() => initSignPadCanvas('remoteSignPad'), 100);
             } catch (e) {
-                showToast("הקישור להצעת המחיר אינו תקין");
+                document.getElementById('clientPortalSignSection').style.display = 'none';
+                document.getElementById('clientPortalQuoteView').innerHTML = `
+                    <div style="text-align:center; padding:30px 16px;">
+                        <div style="font-size:38px; margin-bottom:10px;">📄</div>
+                        <h3 style="color:var(--primary); margin:0 0 8px 0;">קישור הצעת המחיר נחתך בהודעה</h3>
+                        <p style="color:var(--text-muted); font-size:14.5px; margin:0;">נא לבקש מיהונתן אלומיניום לשלוח שוב את קישור ההצעה המלא.</p>
+                    </div>
+                `;
             }
         } else if (signedConfirmParam) {
             try {
                 const conf = decodeUtf8Base64Url(signedConfirmParam);
+                const sigObj = {
+                    name: conf.signer || conf.c || 'לקוח',
+                    idNum: conf.idNum || '',
+                    signedAt: conf.signedAt || new Date().toLocaleString('he-IL'),
+                    img: ''
+                };
+
                 let archive = [];
                 try { archive = JSON.parse(safeGetStorage('myAlumQuotesArchive', '[]') || '[]'); } catch(e) { archive = []; }
-                archive.forEach(q => {
-                    if (String(q.qNum) === String(conf.qn)) {
-                        q.signatureData = {
-                            name: conf.signer || conf.c,
-                            idNum: conf.idNum || '',
-                            signedAt: conf.signedAt || new Date().toLocaleString('he-IL'),
-                            img: ''
-                        };
-                    }
+                const archQuote = archive.find(q => String(q.qNum) === String(conf.qn));
+
+                const p = conf.p || {};
+                const pItems = Array.isArray(p.it) ? p.it : [];
+                let itemsSum = 0;
+                const detailedItems = pItems.map(item => {
+                    const tot = parseFloat(item.tot) || 0;
+                    itemsSum += tot;
+                    return {
+                        title: item.t || 'מוצר',
+                        specs: Array.isArray(item.s) ? item.s.join(' | ') : '',
+                        quoteDims: item.d || '-',
+                        finalDims: (item.d && item.d !== '-') ? item.d : '',
+                        qty: item.q || 1,
+                        price: item.p || 0,
+                        total: tot,
+                        prodNote: ''
+                    };
                 });
-                safeSetStorage('myAlumQuotesArchive', JSON.stringify(archive));
+                const ins = parseFloat(p.ins) || (archQuote ? parseFloat(archQuote.install) || 0 : 0);
+                const dis = parseFloat(p.dis) || (archQuote ? parseFloat(archQuote.discount) || 0 : 0);
+                const subTotal = Math.max(0, itemsSum + ins - dis);
+                const finalTotalIncVat = subTotal > 0
+                    ? Math.round(subTotal * 1.18 * 100) / 100
+                    : (archQuote ? parseNumericTotal(archQuote.totalText) : 0);
+
+                if (p.jid) {
+                    window.editingWorkLogJobId = p.jid;
+                }
+
+                const rawQuoteToSave = archQuote ? JSON.parse(JSON.stringify(archQuote)) : {
+                    version: 2,
+                    savedAt: sigObj.signedAt,
+                    client: p.c || conf.c || 'לקוח',
+                    phone: p.ph || '',
+                    qDate: p.qd || new Date().toISOString().split('T')[0],
+                    qNum: conf.qn || formatMonthQuoteNum(200),
+                    install: ins ? String(ins) : '',
+                    discount: dis ? String(dis) : '',
+                    notes: p.nt || '',
+                    totalText: finalTotalIncVat.toLocaleString('he-IL') + ' ₪',
+                    signatureData: sigObj,
+                    items: pItems.map(it => ({
+                        type: 'joker',
+                        jokerTitle: it.t || 'מוצר',
+                        jokerDesc: Array.isArray(it.s) ? it.s.join(' | ') : '',
+                        qtyJoker: String(it.q || 1),
+                        priceJoker: String(it.p || 0)
+                    }))
+                };
+                rawQuoteToSave.signatureData = sigObj;
+
+                const autoJob = {
+                    id: p.jid || ('job_' + Date.now()),
+                    qNum: conf.qn || rawQuoteToSave.qNum || formatMonthQuoteNum(200),
+                    client: rawQuoteToSave.client || conf.c || 'לקוח',
+                    phone: rawQuoteToSave.phone || '',
+                    address: '',
+                    createdAt: new Date().toLocaleDateString('he-IL'),
+                    targetDate: '',
+                    status: 'measure',
+                    totalAmount: finalTotalIncVat,
+                    notes: rawQuoteToSave.notes || '',
+                    fieldNotes: '',
+                    signatureData: sigObj,
+                    rawQuoteData: rawQuoteToSave,
+                    items: detailedItems,
+                    payments: []
+                };
+
+                upsertJobIntoWorkLogAndRemoveFromArchive(autoJob);
+                window.editingWorkLogJobId = null;
+                window.pendingOpenWorkLogAfterLogin = autoJob.qNum;
+
+                try {
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } catch (err) {}
+
                 setTimeout(() => {
-                    showToast(`נקלט אישור חתימה דיגיטלית להצעה #${conf.qn} מאת ${conf.signer}!`);
-                }, 600);
+                    showToast(`נקלטה חתימה להצעה #${autoJob.qNum} (${autoJob.client}) — הועברה ליומן העבודה ונמחקה מהארכיון!`);
+                }, 500);
             } catch (e) {}
         }
     });
@@ -4478,4 +4724,3 @@
 </script>
 </body>
 </html>
-```
