@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>יהונתן אלומיניום PRO</title>
+    <title>יהונתן אלומיניום - מערכות אלומיניום מתקדמות</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
@@ -619,7 +619,8 @@
 <div id="loginScreen">
     <div class="login-box">
         <div style="font-size: 38px; margin-bottom: 8px;">🛡️</div>
-        <h2>יהונתן אלומיניום PRO</h2>
+        <h2>יהונתן אלומיניום</h2>
+        <p style="margin-bottom:6px; font-weight:600; color:#2b6cb0;">מערכות אלומיניום מתקדמות</p>
         <p>נא להקיש סיסמה</p>
         <input type="password" id="passwordInput" placeholder="****" inputmode="numeric" onkeydown="if(event.key==='Enter') checkLogin(false)">
         <button type="button" class="btn-login" onclick="checkLogin(false)">היכנס למערכת</button>
@@ -632,7 +633,7 @@
 
 <header>
     <h1>יהונתן אלומיניום</h1>
-    <p>מערכת הצעות מחיר ושרטוטים אדריכליים</p>
+    <p>מערכות אלומיניום מתקדמות</p>
     <div class="header-toolbar" id="topToolbar" style="display:none;">
         <button type="button" class="btn-top-tool" style="background:rgba(47,133,90,0.88); border-color:#9ae6b4;" onclick="openWorkLogModal()">📅 יומן עבודה <span id="workLogCountBadge" style="background:white; color:#22543d; border-radius:10px; padding:1px 7px; font-size:11.5px; font-weight:800; display:none;">0</span></button>
         <button type="button" class="btn-top-tool" style="background:rgba(183,121,31,0.88); border-color:#fbd38d;" onclick="openFinanceModal()">💰 הוצאות והכנסות</button>
@@ -4327,7 +4328,9 @@
         ["קליל ", "~M"], ["טריפלקס ", "~N"], ["בידודית ", "~O"], ["מחוסמת ", "~P"],
         ["שקוף (Clear)", "~Q"], ["חלבי (Matte)", "~R"], ["חלון הזזה", "~S"], ["חלון ציר (רגיל)", "~T"],
         ["חלון קיפ (פתיחה עליונה)", "~U"], ["חלון דריי-קיפ (משולב)", "~V"], ["חלון קבוע (FIX)", "~W"],
-        ["לפי בחירה", "~X"], ["תוספות: ", "~Y"], ["התקנה: ", "~Z"]
+        ["לפי בחירה", "~X"], ["תוספות: ", "~Y"], ["התקנה: ", "~Z"],
+        ["7000 קלאסי", "~0"], ["9000", "~1"], ["9200", "~2"], ["1700 בלגי", "~3"], ["2200 אופיס", "~4"],
+        ["4500 קלאסי", "~5"], ["4300 בלגי", "~6"], ["5500 באוהאוס", "~7"], ["ארגז ", "~8"], ["הפעלה: ", "~9"]
     ];
 
     function encodeUtf8Base64Url(obj) {
@@ -4387,7 +4390,7 @@
         const payload = buildCompactShareableQuotePayload();
         const encoded = encodeUtf8Base64Url(payload);
         const baseUrl = window.location.origin + window.location.pathname;
-        const shareUrl = `${baseUrl}?clientquote=${encoded}`;
+        const shareUrl = `${baseUrl}?q=${encoded}`;
 
         const urlInp = document.getElementById('remoteSignUrlInput');
         if (urlInp) urlInp.value = shareUrl;
@@ -4573,6 +4576,13 @@
             img: cnv.toDataURL('image/png')
         };
 
+        if (activeRemoteQuotePayload && activeRemoteQuotePayload.qn) {
+            safeSetStorage('clientSignedQuote_' + activeRemoteQuotePayload.qn, JSON.stringify({
+                p: activeRemoteQuotePayload,
+                sig: activeRemoteSignatureObj
+            }));
+        }
+
         const signedDocHtml = buildClientQuoteDocumentHtml(activeRemoteQuotePayload, activeRemoteSignatureObj);
         document.getElementById('clientPortalQuoteView').innerHTML = signedDocHtml;
         document.getElementById('printArea').innerHTML = signedDocHtml;
@@ -4585,15 +4595,20 @@
         if (!activeRemoteQuotePayload || !activeRemoteSignatureObj) return;
         const p = activeRemoteQuotePayload;
         const s = activeRemoteSignatureObj;
+        let itemsSum = 0;
+        (p.it || []).forEach(item => { itemsSum += (parseFloat(item.tot) || 0); });
+        const subTotal = Math.max(0, itemsSum + (parseFloat(p.ins) || 0) - (parseFloat(p.dis) || 0));
+        const finalTot = Math.round(subTotal * 1.18);
         const confirmData = encodeUtf8Base64Url({
-            qn: p.qn,
+            q: p.qn,
             c: p.c,
-            signer: s.name,
-            idNum: s.idNum,
-            signedAt: s.signedAt,
-            p: p
+            n: s.name,
+            i: s.idNum || '',
+            t: s.signedAt,
+            j: p.jid || '',
+            tot: finalTot
         });
-        const returnUrl = `${window.location.origin}${window.location.pathname}?signedconfirm=${confirmData}`;
+        const returnUrl = `${window.location.origin}${window.location.pathname}?s=${confirmData}`;
         let msg = `שלום יהונתן אלומיניום,\nאישרתי וחתמתי דיגיטלית על הצעת מחיר מס' *${p.qn}*.\n`;
         msg += `שם החותם: *${s.name}*${s.idNum ? ` (ת.ז. ${s.idNum})` : ''}\n`;
         msg += `תאריך ושעת חתימה: ${s.signedAt}\n\n`;
@@ -4605,8 +4620,8 @@
         updateWorkLogBadge();
         const params = new URLSearchParams(window.location.search);
         const hashParams = new URLSearchParams((window.location.hash || '').replace(/^#\??/, ''));
-        const clientQuoteParam = params.get('clientquote') || hashParams.get('clientquote');
-        const signedConfirmParam = params.get('signedconfirm') || hashParams.get('signedconfirm');
+        const clientQuoteParam = params.get('q') || params.get('clientquote') || hashParams.get('q') || hashParams.get('clientquote');
+        const signedConfirmParam = params.get('s') || params.get('signedconfirm') || hashParams.get('s') || hashParams.get('signedconfirm');
 
         if (clientQuoteParam !== null && clientQuoteParam !== undefined && clientQuoteParam !== '') {
             // הסתרה מיידית ומוחלטת של מסך הסיסמה לפני פענוח הנתונים כדי שלקוח לעולם לא יראה מסך כניסה
@@ -4637,40 +4652,82 @@
         } else if (signedConfirmParam) {
             try {
                 const conf = decodeUtf8Base64Url(signedConfirmParam);
+                const qNumVal = conf.q || conf.qn || formatMonthQuoteNum(1);
                 const sigObj = {
-                    name: conf.signer || conf.c || 'לקוח',
-                    idNum: conf.idNum || '',
-                    signedAt: conf.signedAt || new Date().toLocaleString('he-IL'),
+                    name: conf.n || conf.signer || conf.c || 'לקוח',
+                    idNum: conf.i || conf.idNum || '',
+                    signedAt: conf.t || conf.signedAt || new Date().toLocaleString('he-IL'),
                     img: ''
                 };
 
                 let archive = [];
                 try { archive = JSON.parse(safeGetStorage('myAlumQuotesArchive', '[]') || '[]'); } catch(e) { archive = []; }
-                const archQuote = archive.find(q => String(q.qNum) === String(conf.qn));
+                let archQuote = archive.find(q => String(q.qNum) === String(qNumVal));
+                if (!archQuote) {
+                    const existingJob = getWorkLogJobs().find(j => String(j.qNum) === String(qNumVal) || (conf.j && j.id === conf.j));
+                    if (existingJob && existingJob.rawQuoteData) archQuote = existingJob.rawQuoteData;
+                }
 
-                const p = conf.p || {};
+                let clientCached = null;
+                try {
+                    const rawCached = safeGetStorage('clientSignedQuote_' + qNumVal);
+                    if (rawCached) clientCached = JSON.parse(rawCached);
+                } catch (e) {}
+                if (clientCached && clientCached.sig && clientCached.sig.img) {
+                    sigObj.img = clientCached.sig.img;
+                }
+
+                const p = conf.p || (clientCached ? clientCached.p : {}) || {};
+                if (conf.j && !p.jid) p.jid = conf.j;
+                conf.qn = qNumVal;
                 const pItems = Array.isArray(p.it) ? p.it : [];
                 let itemsSum = 0;
-                const detailedItems = pItems.map(item => {
-                    const tot = parseFloat(item.tot) || 0;
-                    itemsSum += tot;
-                    return {
-                        title: item.t || 'מוצר',
-                        specs: Array.isArray(item.s) ? item.s.join(' | ') : '',
-                        quoteDims: item.d || '-',
-                        finalDims: (item.d && item.d !== '-') ? item.d : '',
-                        qty: item.q || 1,
-                        price: item.p || 0,
-                        total: tot,
-                        prodNote: ''
-                    };
-                });
+                let detailedItems = [];
+                if (pItems.length > 0) {
+                    detailedItems = pItems.map(item => {
+                        const tot = parseFloat(item.tot) || 0;
+                        itemsSum += tot;
+                        return {
+                            title: item.t || 'מוצר',
+                            specs: Array.isArray(item.s) ? item.s.join(' | ') : '',
+                            quoteDims: item.d || '-',
+                            finalDims: (item.d && item.d !== '-') ? item.d : '',
+                            qty: item.q || 1,
+                            price: item.p || 0,
+                            total: tot,
+                            prodNote: ''
+                        };
+                    });
+                } else if (archQuote && Array.isArray(archQuote.items)) {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.style.display = 'none';
+                    document.body.appendChild(tempDiv);
+                    archQuote.items.forEach(itemData => {
+                        const card = addItem(true);
+                        applyCardData(card, itemData);
+                        const info = getItemFullDetails(card);
+                        itemsSum += info.total;
+                        detailedItems.push({
+                            title: info.title,
+                            specs: info.specsLines.join(' | '),
+                            quoteDims: info.dimsText,
+                            finalDims: info.dimsText !== '-' ? info.dimsText : '',
+                            qty: info.qty,
+                            price: info.price,
+                            total: info.total,
+                            prodNote: ''
+                        });
+                        card.remove();
+                    });
+                    tempDiv.remove();
+                    renumberItems();
+                }
                 const ins = parseFloat(p.ins) || (archQuote ? parseFloat(archQuote.install) || 0 : 0);
                 const dis = parseFloat(p.dis) || (archQuote ? parseFloat(archQuote.discount) || 0 : 0);
                 const subTotal = Math.max(0, itemsSum + ins - dis);
                 const finalTotalIncVat = subTotal > 0
                     ? Math.round(subTotal * 1.18 * 100) / 100
-                    : (archQuote ? parseNumericTotal(archQuote.totalText) : 0);
+                    : (conf.tot ? parseFloat(conf.tot) : (archQuote ? parseNumericTotal(archQuote.totalText) : 0));
 
                 if (p.jid) {
                     window.editingWorkLogJobId = p.jid;
