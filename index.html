@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -657,7 +657,7 @@
         </div>
         <div class="row">
             <div style="flex:1"><label>תאריך:</label><input type="date" id="quoteDate" onchange="syncQuoteMonthPrefix()"></div>
-            <div style="flex:1"><label>מס' הצעה:</label><input type="text" id="quoteNumber" dir="ltr" placeholder="10-200" style="font-weight:700;text-align:center" onchange="onQuoteNumberManualChange()"></div>
+            <div style="flex:1"><label>מס' הצעה:</label><input type="text" id="quoteNumber" dir="ltr" placeholder="10-1" style="font-weight:700;text-align:center" oninput="onQuoteNumberManualInput()" onchange="onQuoteNumberManualChange()"></div>
         </div>
     </div>
     
@@ -1180,19 +1180,19 @@
 
     function extractSeqFromQuoteNum(qVal) {
         const str = String(qVal || '').trim();
-        if (!str) return 200;
+        if (!str) return 1;
         if (str.includes('-')) {
             const parts = str.split('-');
             const last = parseInt(parts[parts.length - 1], 10);
             if (!isNaN(last) && last > 0) return last;
         }
         const num = parseInt(str.replace(/[^0-9]/g, ''), 10);
-        return (!isNaN(num) && num > 0) ? num : 200;
+        return (!isNaN(num) && num > 0) ? num : 1;
     }
 
     function formatMonthQuoteNum(seqNum, dateVal) {
         const m = getMonthNumberForQuote(dateVal);
-        const s = (!isNaN(seqNum) && seqNum > 0) ? seqNum : 200;
+        const s = (!isNaN(seqNum) && seqNum > 0) ? seqNum : 1;
         return `${m}-${s}`;
     }
 
@@ -1201,6 +1201,15 @@
         if (!qInp) return;
         const seq = extractSeqFromQuoteNum(qInp.value);
         qInp.value = formatMonthQuoteNum(seq);
+    }
+
+    function onQuoteNumberManualInput() {
+        const qInp = document.getElementById('quoteNumber');
+        if (!qInp) return;
+        const raw = (qInp.value || '').trim();
+        if (!raw) return;
+        const seq = extractSeqFromQuoteNum(raw);
+        safeSetStorage('quoteCounter', seq);
     }
 
     function onQuoteNumberManualChange() {
@@ -1217,8 +1226,12 @@
     document.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         document.getElementById('quoteDate').valueAsDate = today;
-        let savedNum = parseInt(safeGetStorage('quoteCounter', '200'), 10);
-        if (isNaN(savedNum) || savedNum <= 1) savedNum = 200;
+        if (safeGetStorage('quoteCounterResetV2') !== 'true') {
+            safeSetStorage('quoteCounter', '1');
+            safeSetStorage('quoteCounterResetV2', 'true');
+        }
+        let savedNum = parseInt(safeGetStorage('quoteCounter', '1'), 10);
+        if (isNaN(savedNum) || savedNum < 1) savedNum = 1;
         document.getElementById('quoteNumber').value = formatMonthQuoteNum(savedNum, today);
         if (safeGetStorage('myAlumDraft')) {
             document.getElementById('draftBtnContainer').style.display = 'block';
@@ -1230,6 +1243,7 @@
     function checkLogin(shouldLoadDraft) {
         const pwd = document.getElementById('passwordInput').value;
         if (pwd === '1234') {
+            safeSetStorage('isYehonatanAdminDevice', 'true');
             document.getElementById('loginError').style.display = 'none';
             document.getElementById('loginScreen').style.opacity = '0';
             setTimeout(() => {
@@ -1256,8 +1270,7 @@
 
     function resetQuoteScreenAfterAction(advanceCounter = true) {
         const currentSeq = extractSeqFromQuoteNum(document.getElementById('quoteNumber').value);
-        const savedMax = parseInt(safeGetStorage('quoteCounter', '200'), 10) || 200;
-        const nextSeq = advanceCounter ? (Math.max(currentSeq, savedMax) + 1) : Math.max(currentSeq, savedMax);
+        const nextSeq = advanceCounter ? (currentSeq + 1) : currentSeq;
         safeSetStorage('quoteCounter', nextSeq);
 
         const today = new Date();
@@ -1467,10 +1480,7 @@
         safeSetStorage('myAlumDraft', JSON.stringify(data));
 
         const qNumInt = extractSeqFromQuoteNum(data.qNum);
-        const savedMax = parseInt(safeGetStorage('quoteCounter', '200'), 10) || 200;
-        if (qNumInt >= savedMax) {
-            safeSetStorage('quoteCounter', qNumInt);
-        }
+        safeSetStorage('quoteCounter', qNumInt);
 
         let archive = [];
         try {
@@ -1506,7 +1516,7 @@
         document.getElementById('clientName').value = data.client || '';
         document.getElementById('clientPhone').value = data.phone || '';
         document.getElementById('quoteDate').value = data.qDate || new Date().toISOString().split('T')[0];
-        const rawQNum = data.qNum || formatMonthQuoteNum(200, data.qDate);
+        const rawQNum = data.qNum || formatMonthQuoteNum(1, data.qDate);
         document.getElementById('quoteNumber').value = String(rawQNum).includes('-') ? rawQNum : formatMonthQuoteNum(extractSeqFromQuoteNum(rawQNum), data.qDate);
         document.getElementById('installationCost').value = data.install || '';
         document.getElementById('discountCost').value = data.discount || '';
@@ -3385,7 +3395,7 @@
         const totalIncVat = parseNumericTotal(document.getElementById('totalFinal').innerText);
         return {
             id: window.editingWorkLogJobId || ('job_' + Date.now()),
-            qNum: qData.qNum || formatMonthQuoteNum(200),
+            qNum: qData.qNum || formatMonthQuoteNum(1),
             client: qData.client || 'לקוח',
             phone: qData.phone || '',
             address: '',
@@ -3478,7 +3488,7 @@
                 client: job.client || '',
                 phone: job.phone || '',
                 qDate: new Date().toISOString().split('T')[0],
-                qNum: job.qNum || formatMonthQuoteNum(200),
+                qNum: job.qNum || formatMonthQuoteNum(1),
                 install: '',
                 discount: '',
                 notes: job.notes || '',
@@ -4363,7 +4373,7 @@
             c: document.getElementById('clientName').value || 'לקוח',
             ph: document.getElementById('clientPhone').value || '',
             qd: document.getElementById('quoteDate').value || new Date().toISOString().split('T')[0],
-            qn: document.getElementById('quoteNumber').value || formatMonthQuoteNum(200),
+            qn: document.getElementById('quoteNumber').value || formatMonthQuoteNum(1),
             ins: parseFloat(document.getElementById('installationCost').value) || 0,
             dis: parseFloat(document.getElementById('discountCost').value) || 0,
             nt: (document.getElementById('generalNotes').value || '').trim(),
@@ -4409,7 +4419,7 @@
     function sendRemoteSignWhatsapp() {
         const shareUrl = document.getElementById('remoteSignUrlInput').value;
         const client = document.getElementById('clientName').value || 'לקוח יקר';
-        const qNum = document.getElementById('quoteNumber').value || formatMonthQuoteNum(200);
+        const qNum = document.getElementById('quoteNumber').value || formatMonthQuoteNum(1);
         const total = document.getElementById('totalFinal').innerText;
         const rawPhone = (document.getElementById('clientPhone').value || '').replace(/\D/g, '');
 
@@ -4672,7 +4682,7 @@
                     client: p.c || conf.c || 'לקוח',
                     phone: p.ph || '',
                     qDate: p.qd || new Date().toISOString().split('T')[0],
-                    qNum: conf.qn || formatMonthQuoteNum(200),
+                    qNum: conf.qn || formatMonthQuoteNum(1),
                     install: ins ? String(ins) : '',
                     discount: dis ? String(dis) : '',
                     notes: p.nt || '',
@@ -4690,7 +4700,7 @@
 
                 const autoJob = {
                     id: p.jid || ('job_' + Date.now()),
-                    qNum: conf.qn || rawQuoteToSave.qNum || formatMonthQuoteNum(200),
+                    qNum: conf.qn || rawQuoteToSave.qNum || formatMonthQuoteNum(1),
                     client: rawQuoteToSave.client || conf.c || 'לקוח',
                     phone: rawQuoteToSave.phone || '',
                     address: '',
@@ -4708,18 +4718,77 @@
 
                 upsertJobIntoWorkLogAndRemoveFromArchive(autoJob);
                 window.editingWorkLogJobId = null;
-                window.pendingOpenWorkLogAfterLogin = autoJob.qNum;
 
-                try {
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                } catch (err) {}
+                const isAdminDevice = (safeGetStorage('isYehonatanAdminDevice') === 'true') || !!archQuote;
 
-                setTimeout(() => {
-                    showToast(`נקלטה חתימה להצעה #${autoJob.qNum} (${autoJob.client}) — הועברה ליומן העבודה ונמחקה מהארכיון!`);
-                }, 500);
-            } catch (e) {}
+                if (!isAdminDevice) {
+                    // מכשיר של לקוח שלחץ על קישור האישור החוזר - לעולם לא להציג מסך סיסמה, אלא את העותק החתום של ההצעה
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('mainApp').style.display = 'none';
+                    document.getElementById('bottomNav').style.display = 'none';
+                    document.getElementById('topToolbar').style.display = 'none';
+                    const portal = document.getElementById('clientPortalScreen');
+                    portal.style.display = 'block';
+
+                    activeRemoteQuotePayload = p.it ? p : {
+                        c: autoJob.client,
+                        ph: autoJob.phone,
+                        qd: rawQuoteToSave.qDate,
+                        qn: autoJob.qNum,
+                        ins: ins,
+                        dis: dis,
+                        nt: autoJob.notes,
+                        it: pItems
+                    };
+                    activeRemoteSignatureObj = sigObj;
+
+                    const signedDocHtml = buildClientQuoteDocumentHtml(activeRemoteQuotePayload, sigObj);
+                    document.getElementById('clientPortalQuoteView').innerHTML = signedDocHtml;
+                    document.getElementById('printArea').innerHTML = signedDocHtml;
+                    document.getElementById('clientPortalSignSection').style.display = 'none';
+                    const successBox = document.getElementById('remoteSignedSuccessBox');
+                    successBox.style.display = 'block';
+                    if (!document.getElementById('discreetAdminSwitchBtn')) {
+                        const adminLinkWrap = document.createElement('div');
+                        adminLinkWrap.style.cssText = "margin-top:16px; padding-top:10px; border-top:1px dashed #cbd5e0; text-align:center;";
+                        adminLinkWrap.innerHTML = `<button type="button" id="discreetAdminSwitchBtn" onclick="switchToAdminLoginFromSignedLink('${String(autoJob.qNum).replace(/'/g, "")}')" style="background:none; border:none; color:#718096; font-size:12px; cursor:pointer; font-family:inherit; text-decoration:underline;">🔒 כניסת הנהלה לקליטה ביומן העבודה</button>`;
+                        successBox.appendChild(adminLinkWrap);
+                    }
+                } else {
+                    window.pendingOpenWorkLogAfterLogin = autoJob.qNum;
+                    try {
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    } catch (err) {}
+                    setTimeout(() => {
+                        showToast(`נקלטה חתימה להצעה #${autoJob.qNum} (${autoJob.client}) — הועברה ליומן העבודה ונמחקה מהארכיון!`);
+                    }, 500);
+                }
+            } catch (e) {
+                document.getElementById('loginScreen').style.display = 'none';
+                const portal = document.getElementById('clientPortalScreen');
+                portal.style.display = 'block';
+                document.getElementById('clientPortalSignSection').style.display = 'none';
+                document.getElementById('clientPortalQuoteView').innerHTML = `
+                    <div style="text-align:center; padding:30px 16px;">
+                        <div style="font-size:38px; margin-bottom:10px;">📄</div>
+                        <h3 style="color:var(--primary); margin:0 0 8px 0;">קישור ההצעה החתומה נחתך בהודעה</h3>
+                        <p style="color:var(--text-muted); font-size:14.5px; margin:0;">נא לוודא שהקישור המלא נשלח בשלמותו.</p>
+                    </div>
+                `;
+            }
         }
     });
+
+    function switchToAdminLoginFromSignedLink(qNum) {
+        window.pendingOpenWorkLogAfterLogin = qNum;
+        document.getElementById('clientPortalScreen').style.display = 'none';
+        const loginEl = document.getElementById('loginScreen');
+        loginEl.style.opacity = '1';
+        loginEl.style.display = 'flex';
+        try {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (err) {}
+    }
 
 </script>
 </body>
