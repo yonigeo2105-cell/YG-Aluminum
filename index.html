@@ -1245,6 +1245,8 @@
         const pwd = document.getElementById('passwordInput').value;
         if (pwd === '1234') {
             safeSetStorage('isYehonatanAdminDevice', 'true');
+            safeSetStorage('adminLoggedInAt', String(Date.now()));
+            startAdminOpenTabHeartbeat();
             document.getElementById('loginError').style.display = 'none';
             document.getElementById('loginScreen').style.opacity = '0';
             setTimeout(() => {
@@ -4812,13 +4814,60 @@
                         successBox.appendChild(adminLinkWrap);
                     }
                 } else {
-                    window.pendingOpenWorkLogAfterLogin = autoJob.qNum;
                     try {
                         window.history.replaceState({}, document.title, window.location.pathname);
                     } catch (err) {}
-                    setTimeout(() => {
-                        showToast(`נקלטה חתימה להצעה #${autoJob.qNum} (${autoJob.client}) — הועברה ליומן העבודה ונמחקה מהארכיון!`);
-                    }, 500);
+
+                    // בדיקה האם יש כבר לשונית פתוחה של האפליקציה ברקע במכשיר זה
+                    let otherTabIsOpen = false;
+                    const lastHb = parseInt(safeGetStorage('yehonatanAppOpenHeartbeat', '0'), 10) || 0;
+                    if (Date.now() - lastHb < 5000) {
+                        otherTabIsOpen = true;
+                    }
+
+                    // שידור עדכון חי לכל לשונית פתוחה של האפליקציה
+                    try {
+                        if (typeof BroadcastChannel !== 'undefined') {
+                            const bc = new BroadcastChannel('yehonatan_alum_sync');
+                            bc.postMessage({ type: 'SIGNED_QUOTE_IMPORTED', qNum: autoJob.qNum, client: autoJob.client });
+                        }
+                    } catch (err) {}
+                    safeSetStorage('lastSignedImportEvent', JSON.stringify({ qNum: autoJob.qNum, client: autoJob.client, ts: Date.now() }));
+
+                    if (otherTabIsOpen) {
+                        // האפליקציה כבר פתוחה בלשונית אחרת! נציג אישור קליטה מיידי וננסה לסגור את הלשונית הכפולה בלי לפתוח את האפליקציה שוב
+                        document.getElementById('loginScreen').style.display = 'none';
+                        document.getElementById('mainApp').style.display = 'none';
+                        document.getElementById('bottomNav').style.display = 'none';
+                        document.getElementById('topToolbar').style.display = 'none';
+                        const portal = document.getElementById('clientPortalScreen');
+                        portal.style.display = 'block';
+                        document.getElementById('clientPortalSignSection').style.display = 'none';
+                        document.getElementById('remoteSignedSuccessBox').style.display = 'none';
+                        document.getElementById('clientPortalQuoteView').innerHTML = `
+                            <div style="text-align:center; padding:32px 16px;">
+                                <div style="font-size:48px; margin-bottom:10px;">✅</div>
+                                <h2 style="color:#22543d; margin:0 0 8px 0;">הצעה #${autoJob.qNum} (${autoJob.client}) נקלטה ביומן העבודה!</h2>
+                                <p style="color:#2d3748; font-size:15px; margin:0 0 18px 0; line-height:1.5;">
+                                    האפליקציה שלך כבר פתוחה בלשונית הראשית והתעדכנה אוטומטית ביומן העבודה (וההצעה נמחקה מהארכיון).<br>
+                                    ניתן לסגור חלון זה או לחזור לאפליקציה הפתוחה.
+                                </p>
+                                <button type="button" class="btn-login" style="background:var(--success); max-width:260px; margin:0 auto;" onclick="window.close(); openAdminDirectlyAfterSignedLink('${String(autoJob.qNum).replace(/'/g, "")}');">סגור חלון זה / עבור ליומן העבודה</button>
+                            </div>
+                        `;
+                        setTimeout(() => { try { window.close(); } catch (e) {} }, 600);
+                    } else {
+                        // האפליקציה הייתה סגורה - אם המנהל כבר התחבר לאחרונה במכשיר זה, נפתח ישירות את יומן העבודה ללא הקשת סיסמה מחדש
+                        const lastLogin = parseInt(safeGetStorage('adminLoggedInAt', '0'), 10) || 0;
+                        if (Date.now() - lastLogin < 12 * 60 * 60 * 1000) {
+                            openAdminDirectlyAfterSignedLink(autoJob.qNum);
+                        } else {
+                            window.pendingOpenWorkLogAfterLogin = autoJob.qNum;
+                            setTimeout(() => {
+                                showToast(`נקלטה חתימה להצעה #${autoJob.qNum} (${autoJob.client}) — הועברה ליומן העבודה ונמחקה מהארכיון!`);
+                            }, 500);
+                        }
+                    }
                 }
             } catch (e) {
                 document.getElementById('loginScreen').style.display = 'none';
@@ -4846,6 +4895,68 @@
             window.history.replaceState({}, document.title, window.location.pathname);
         } catch (err) {}
     }
+
+    function openAdminDirectlyAfterSignedLink(qNum) {
+        safeSetStorage('isYehonatanAdminDevice', 'true');
+        safeSetStorage('adminLoggedInAt', String(Date.now()));
+        startAdminOpenTabHeartbeat();
+        document.getElementById('clientPortalScreen').style.display = 'none';
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+        document.getElementById('bottomNav').style.display = 'flex';
+        document.getElementById('topToolbar').style.display = 'flex';
+        calculateAll(false);
+        openWorkLogModal();
+        showToast(`הצעה #${qNum} החתומה הועברה אוטומטית ליומן העבודה ונמחקה מהארכיון!`);
+    }
+
+    function startAdminOpenTabHeartbeat() {
+        if (window._adminHeartbeatTimer) return;
+        const beat = () => {
+            if (document.getElementById('mainApp') && document.getElementById('mainApp').style.display === 'block') {
+                safeSetStorage('yehonatanAppOpenHeartbeat', String(Date.now()));
+            }
+        };
+        beat();
+        window._adminHeartbeatTimer = setInterval(beat, 2000);
+        window.addEventListener('beforeunload', () => {
+            safeSetStorage('yehonatanAppOpenHeartbeat', '0');
+        });
+    }
+
+    function handleLiveSignedQuoteSync(qNum, clientName) {
+        if (!document.getElementById('mainApp') || document.getElementById('mainApp').style.display !== 'block') return;
+        updateWorkLogBadge();
+        const wlModal = document.getElementById('workLogModal');
+        if (wlModal && wlModal.style.display === 'flex') {
+            renderWorkLogList();
+        }
+        const archModal = document.getElementById('archiveModal');
+        if (archModal && archModal.style.display === 'flex') {
+            openArchiveModal();
+        }
+        showToast(`✅ הצעה #${qNum} (${clientName || 'לקוח'}) נחתמה והועברה אוטומטית ליומן העבודה!`);
+    }
+
+    try {
+        if (typeof BroadcastChannel !== 'undefined') {
+            const syncChannel = new BroadcastChannel('yehonatan_alum_sync');
+            syncChannel.onmessage = (ev) => {
+                if (ev.data && ev.data.type === 'SIGNED_QUOTE_IMPORTED') {
+                    handleLiveSignedQuoteSync(ev.data.qNum, ev.data.client);
+                }
+            };
+        }
+    } catch (e) {}
+
+    window.addEventListener('storage', (ev) => {
+        if (ev.key === 'lastSignedImportEvent' && ev.newValue) {
+            try {
+                const info = JSON.parse(ev.newValue);
+                handleLiveSignedQuoteSync(info.qNum, info.client);
+            } catch (e) {}
+        }
+    });
 
 </script>
 </body>
